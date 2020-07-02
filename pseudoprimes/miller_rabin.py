@@ -1,7 +1,7 @@
 from sage.all import crt
 from sage.all import inverse_mod
 from sage.all import is_prime
-from sage.all import kronecker
+from sage.all import legendre_symbol
 from sage.all import next_prime
 
 
@@ -10,7 +10,7 @@ def _generate_s(bases, k2, k3):
     for b in bases:
         s_b = set()
         for p in range(1, 4 * b, 2):
-            if kronecker(b, p) == -1:
+            if legendre_symbol(b, p) == -1:
                 s_b.add(p)
 
         s.append(s_b)
