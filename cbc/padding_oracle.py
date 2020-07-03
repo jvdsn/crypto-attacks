@@ -59,7 +59,7 @@ def attack(iv, c):
     :param c: the ciphertext
     :return: the plaintext
     """
-    p = _attack_block(iv, c)
+    p = _attack_block(iv, c[0:16])
     for i in range(16, len(c), 16):
         p += _attack_block(c[i - 16:i], c[i:i + 16])
 
