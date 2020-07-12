@@ -27,6 +27,7 @@ Python implementations of cryptographic attacks and utilities.
 
 ### ElGamal Encryption
 * [x] [Nonce reuse attack](elgamal_encryption/nonce_reuse.py)
+* [x] [Unsafe generator attack](elgamal_encryption/unsafe_generator.py)
 
 ### ElgGamal Signature
 * [ ] Bleichenbacher's attack
@@ -43,7 +44,10 @@ Python implementations of cryptographic attacks and utilities.
 ### GCM
 * [x] [Forbidden attack](gcm/forbidden_attack.py) [More information: Joux A., "Authentication Failures in NIST version of GCM"]
 
-##### OFB
+### IGE
+* [x] [Padding oracle attack](ige/padding_oracle.py)
+
+### OFB
 * [x] [CRIME attack](ofb/crime.py)
 
 ### Pseudoprimes
