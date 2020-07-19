@@ -21,6 +21,7 @@ Python implementations of cryptographic attacks and utilities.
 
 ### CTR
 * [x] [CRIME attack](ctr/crime.py)
+* [x] [Separator oracle attack](ctr/separator_oracle.py)
 
 ### ECB
 * [x] [Plaintext recovery attack](ecb/plaintext_recovery.py)
@@ -49,6 +50,7 @@ Python implementations of cryptographic attacks and utilities.
 
 ### OFB
 * [x] [CRIME attack](ofb/crime.py)
+* [x] [Separator oracle attack](ctr/separator_oracle.py)
 
 ### Pseudoprimes
 * [x] [Generating Miller-Rabin pseudoprimes](pseudoprimes/miller_rabin.py)
