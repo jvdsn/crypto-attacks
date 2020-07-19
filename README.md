@@ -39,7 +39,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Coppersmith factorization](factorization/coppersmith.py)
 * [x] [Fermat factorization](factorization/fermat.py)
 * [x] [Pollard's Rho factorization](factorization/pollard_rho.py)
-* [x] [ROCA](factorization/roca.py) [More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"]
+* [x] [ROCA](factorization/roca.py) [More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"]
 * [x] [Twin primes factorization](factorization/twin_primes.py)
 
 ### GCM
