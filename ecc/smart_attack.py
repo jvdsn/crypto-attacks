@@ -1,0 +1,33 @@
+from sage.all import EllipticCurve
+from sage.all import Qp
+from sage.all import ZZ
+
+
+# Lifts a point to the p-adic numbers.
+def lift_(E, P, gf):
+    x, y = map(ZZ, P.xy())
+    for P_ in E.lift_x(x, all=True):
+        x_, y_ = map(gf, P_.xy())
+        if y == y_:
+            return P_
+
+
+def attack(P, Q):
+    """
+    Solves the discrete logarithm problem using Smart's attack.
+    :param P: the base point
+    :param Q: the point multiplication result
+    :return: k such that k * P == Q
+    """
+    E = P.curve()
+    gf = E.base_ring()
+    p = gf.order()
+    if E.order() != p:
+        raise ValueError(f"Order of curve {E.order()} should be equal to the order of the field {p}.")
+
+    E = EllipticCurve(Qp(p), list(map(lambda a: int(a) + p * ZZ.random_element(1, p), E.a_invariants())))
+    P = p * lift_(E, P, gf)
+    Q = p * lift_(E, Q, gf)
+    Px, Py = P.xy()
+    Qx, Qy = Q.xy()
+    return int(gf((Qx / Qy) / (Px / Py)))

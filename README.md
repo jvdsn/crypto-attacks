@@ -26,6 +26,13 @@ Python implementations of cryptographic attacks and utilities.
 ### ECB
 * [x] [Plaintext recovery attack](ecb/plaintext_recovery.py)
 
+### Elliptic Curve Cryptography
+* [x] [ECDSA nonce reuse attack](ecc/ecdsa_nonce_reuse.py)
+* [ ] Frey-Ruck attack
+* [x] [MOV attack](ecc/mov_attack.py)
+* [ ] Singular curve attack
+* [x] [Smart's attack](ecc/smart_attack.py)
+
 ### ElGamal Encryption
 * [x] [Nonce reuse attack](elgamal_encryption/nonce_reuse.py)
 * [x] [Unsafe generator attack](elgamal_encryption/unsafe_generator.py)
