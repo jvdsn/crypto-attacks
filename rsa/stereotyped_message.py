@@ -17,7 +17,7 @@ def attack(n, e, c, bitsize, msb_known, msb, lsb_known, lsb):
     :param msb: the known most significant bits of the plaintext
     :param lsb_known: the amount of known least significant bits of the plaintext
     :param lsb: the known least significant bits of the plaintext
-    :return: a tuple containing the prime factors
+    :return: the plaintext
     """
     pr = PolynomialRing(Zmod(n), "x")
     x = pr.gen()
