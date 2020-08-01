@@ -73,7 +73,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Extended Wiener's attack](rsa/extended_wiener_attack.py) [More information: Dujella A., "Continued fractions and RSA with small secret exponent"]
 * [x] [Hastad's broadcast attack](rsa/hastad_attack.py)
 * [x] [Low public exponent attack](rsa/low_exponent.py)
-* [ ] LSB oracle attack
+* [x] [LSB oracle attack](rsa/lsb_oracle.py)
 * [ ] Manger's attack
 * [x] [Partial key exposure attack for low public exponents](rsa/partial_key_exposure.py) [More information: Boneh D., Durfee G., Frankel Y., "An Attack on RSA Given a Small Fraction of the Private Key Bits"]
 * [x] [Related message attack](rsa/related_message.py)
