@@ -30,7 +30,8 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [ECDSA nonce reuse attack](ecc/ecdsa_nonce_reuse.py)
 * [ ] Frey-Ruck attack
 * [x] [MOV attack](ecc/mov_attack.py)
-* [ ] Singular curve attack
+* [x] [Singular curve attack (cusp)](ecc/singular_curve_cusp.py)
+* [x] [Singular curve attack (node)](ecc/singular_curve_node.py)
 * [x] [Smart's attack](ecc/smart_attack.py)
 
 ### ElGamal Encryption
