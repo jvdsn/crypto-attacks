@@ -21,14 +21,16 @@ def modular_bivariate(f, modulus, m, t, xbound, ybound):
 
     shifts = []
     monomials = []
+    monomial_set = set()
     logging.debug("Generating x shifts...")
     for i in range(m + 1):
         for j in range(i + 1):
             shift = x ** (i - j) * f ** j * modulus ** (m - j)
             for monomial in shift.monomials():
-                if monomial not in monomials:
+                if monomial not in monomial_set:
                     helpful = shift.monomial_coefficient(monomial) * monomial(xbound, ybound) < modulus ** m
                     monomials.append(monomial)
+                    monomial_set.add(monomial)
 
             if shift not in shifts:
                 shifts.append(shift)
@@ -38,9 +40,10 @@ def modular_bivariate(f, modulus, m, t, xbound, ybound):
         for j in range(m + 1):
             shift = y ** i * f ** j * modulus ** (m - j)
             for monomial in shift.monomials():
-                if monomial not in monomials:
+                if monomial not in monomial_set:
                     helpful = shift.monomial_coefficient(monomial) * monomial(xbound, ybound) < modulus ** m
                     monomials.append(monomial)
+                    monomial_set.add(monomial)
 
             if shift not in shifts and helpful:
                 shifts.append(shift)
@@ -71,6 +74,8 @@ def modular_bivariate(f, modulus, m, t, xbound, ybound):
             if not resultant.is_constant():
                 for xroot in resultant.univariate_polynomial().roots():
                     xroot = int(xroot[0])
-                    for yroot in p1.subs(x=xroot).univariate_polynomial().roots():
-                        yroot = int(yroot[0])
-                        yield xroot, yroot
+                    p = p1.subs(x=xroot)
+                    if not p.is_constant():
+                        for yroot in p.univariate_polynomial().roots():
+                            yroot = int(yroot[0])
+                            yield xroot, yroot
