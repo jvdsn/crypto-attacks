@@ -49,13 +49,13 @@ def modular_bivariate(f, modulus, m, t, xbound, ybound):
                 shifts.append(shift)
 
     logging.debug(f"Filling the lattice ({len(shifts)} x {len(monomials)})...")
-    latticce = Matrix(len(shifts), len(monomials))
+    lattice = Matrix(len(shifts), len(monomials))
     for row, shift in enumerate(shifts):
         for col, monomial in enumerate(monomials):
-            latticce[row, col] = shift.monomial_coefficient(monomial) * monomial(xbound, ybound)
+            lattice[row, col] = shift.monomial_coefficient(monomial) * monomial(xbound, ybound)
 
     logging.debug("Executing the LLL algorithm...")
-    basis = latticce.LLL()
+    basis = lattice.LLL()
 
     logging.debug("Reconstructing polynomials...")
     new_polynomials = []
