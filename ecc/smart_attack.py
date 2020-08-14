@@ -22,8 +22,7 @@ def attack(P, Q):
     E = P.curve()
     gf = E.base_ring()
     p = gf.order()
-    if E.order() != p:
-        raise ValueError(f"Order of curve {E.order()} should be equal to the order of the field {p}.")
+    assert E.order() == P, f"Order of curve {E.order()} should be equal to the order of the field {p}."
 
     E = EllipticCurve(Qp(p), list(map(lambda a: int(a) + p * ZZ.random_element(1, p), E.a_invariants())))
     P = p * lift_(E, P, gf)
