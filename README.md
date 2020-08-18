@@ -44,8 +44,10 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Nonce reuse attack](elgamal_signature/nonce_reuse.py)
 
 ### Factorization
+* [x] [Base conversion factorization](factorization/base_conversion.py)
 * [x] [Coppersmith factorization](factorization/coppersmith.py)
 * [x] [Fermat factorization](factorization/fermat.py)
+* [x] [Known phi factorization](factorization/known_phi.py)
 * [x] [ROCA](factorization/roca.py) [More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"]
 * [x] [Twin primes factorization](factorization/twin_primes.py)
 
