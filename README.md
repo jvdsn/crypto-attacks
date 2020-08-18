@@ -65,7 +65,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Generating Miller-Rabin pseudoprimes](pseudoprimes/miller_rabin.py)
 
 ### RSA
-* [ ] Bleichenbacher's CCA attack
+* [ ] Bleichenbacher's attack
 * [x] [Bleichenbacher's signature forgery attack](rsa/bleichenbacher_signature_forgery.py)
 * [x] [Boneh-Durfee attack](rsa/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
 * [x] [Common modulus attack](rsa/common_modulus.py)
