@@ -4,11 +4,11 @@ from sage.all import Matrix
 from sage.all import ZZ
 
 
-def modular_bivariate(f, modulus, m, t, xbound, ybound):
+def modular_bivariate(p, modulus, m, t, xbound, ybound):
     """
     Computes small modular roots of a bivariate polynomial.
     More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"
-    :param f: the polynomial
+    :param p: the polynomial
     :param modulus: the modulus
     :param m: the amount of normal shifts to use
     :param t: the amount of additional shifts to use
@@ -16,8 +16,8 @@ def modular_bivariate(f, modulus, m, t, xbound, ybound):
     :param ybound: an approximate bound on the y roots
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
-    f = f.change_ring(ZZ)
-    x, y = f.parent().gens()
+    p = p.change_ring(ZZ)
+    x, y = p.parent().gens()
 
     shifts = []
     monomials = []
@@ -25,7 +25,7 @@ def modular_bivariate(f, modulus, m, t, xbound, ybound):
     logging.debug("Generating x shifts...")
     for i in range(m + 1):
         for j in range(i + 1):
-            shift = x ** (i - j) * f ** j * modulus ** (m - j)
+            shift = x ** (i - j) * p ** j * modulus ** (m - j)
             for monomial in shift.monomials():
                 if monomial not in monomial_set:
                     helpful = shift.monomial_coefficient(monomial) * monomial(xbound, ybound) < modulus ** m
@@ -38,7 +38,7 @@ def modular_bivariate(f, modulus, m, t, xbound, ybound):
     logging.debug("Generating y shifts...")
     for i in range(1, t + 1):
         for j in range(m + 1):
-            shift = y ** i * f ** j * modulus ** (m - j)
+            shift = y ** i * p ** j * modulus ** (m - j)
             for monomial in shift.monomials():
                 if monomial not in monomial_set:
                     helpful = shift.monomial_coefficient(monomial) * monomial(xbound, ybound) < modulus ** m
@@ -72,10 +72,10 @@ def modular_bivariate(f, modulus, m, t, xbound, ybound):
         for p2 in new_polynomials:
             resultant = p1.resultant(p2, y)
             if not resultant.is_constant():
-                for xroot in resultant.univariate_polynomial().roots():
-                    xroot = int(xroot[0])
-                    p = p1.subs(x=xroot)
+                for xroot, _ in resultant.univariate_polynomial().roots():
+                    xroot = int(xroot)
+                    p = p1.subs({x: xroot})
                     if not p.is_constant():
-                        for yroot in p.univariate_polynomial().roots():
-                            yroot = int(yroot[0])
+                        for yroot, _ in p.univariate_polynomial().roots():
+                            yroot = int(yroot)
                             yield xroot, yroot

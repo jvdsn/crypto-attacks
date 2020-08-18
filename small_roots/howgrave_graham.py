@@ -4,27 +4,27 @@ from sage.all import Matrix
 from sage.all import ZZ
 
 
-def modular_univariate(f, modulus, m, t, bound):
+def modular_univariate(p, modulus, m, t, bound):
     """
     Computes small modular roots of a univariate polynomial.
     More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods"
-    :param f: the polynomial
+    :param p: the polynomial
     :param modulus: the modulus
     :param m: the amount of normal shifts to use
     :param t: the amount of additional shifts to use
     :param bound: an approximate bound on the roots
     :return: a generator generating small roots of the polynomial
     """
-    f = f.monic().change_ring(ZZ)
-    x = f.parent().gen()
-    d = f.degree()
+    p = p.monic().change_ring(ZZ)
+    x = p.parent().gen()
+    d = p.degree()
 
     lattice = Matrix(d * m + t)
     row = 0
     logging.debug("Generating normal shifts...")
     for i in range(m):
         for j in range(d):
-            shift = (x * bound) ** j * modulus ** (m - i) * f(x * bound) ** i
+            shift = (x * bound) ** j * modulus ** (m - i) * p(x * bound) ** i
             for col in range(row + 1):
                 lattice[row, col] = shift[col]
 
@@ -32,7 +32,7 @@ def modular_univariate(f, modulus, m, t, bound):
 
     logging.debug("Generating additional shifts...")
     for i in range(t):
-        shift = (x * bound) ** i * f(x * bound) ** m
+        shift = (x * bound) ** i * p(x * bound) ** m
         for col in range(row + 1):
             lattice[row, col] = shift[col]
 
@@ -47,5 +47,5 @@ def modular_univariate(f, modulus, m, t, bound):
         for col in range(basis.ncols()):
             new_polynomial += (basis[row, col] // bound ** col) * x ** col
 
-        for root in new_polynomial.roots():
-            yield int(root[0])
+        for xroot, _ in new_polynomial.roots():
+            yield int(xroot)

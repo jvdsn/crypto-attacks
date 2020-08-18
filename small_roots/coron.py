@@ -3,25 +3,25 @@ import logging
 from sage.all import Matrix
 
 
-def integer_bivariate(f, k, xbound, ybound):
+def integer_bivariate(p, k, xbound, ybound):
     """
     Computes small integer roots of a bivariate polynomial.
     More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"
-    :param f: the polynomial
+    :param p: the polynomial
     :param k: the amount of shifts to use
     :param xbound: an approximate bound on the x roots
     :param ybound: an approximate bound on the y roots
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
-    x, y = f.parent().gens()
-    d = max(f.degrees())
+    x, y = p.parent().gens()
+    d = max(p.degrees())
 
     W = 0
     i0 = 0
     j0 = 0
     for i in range(d + 1):
         for j in range(d + 1):
-            w = abs(int(f.coefficient([i, j]))) * xbound ** i * ybound ** j
+            w = abs(int(p.coefficient([i, j]))) * xbound ** i * ybound ** j
             if w > W:
                 W = w
                 i0 = i
@@ -31,7 +31,7 @@ def integer_bivariate(f, k, xbound, ybound):
     S = Matrix(k ** 2)
     for a in range(k):
         for b in range(k):
-            s = x ** a * y ** b * f
+            s = x ** a * y ** b * p
             for i in range(k):
                 for j in range(k):
                     S[a * k + b, i * k + j] = int(s.coefficient([i0 + i, j0 + j]))
@@ -59,7 +59,7 @@ def integer_bivariate(f, k, xbound, ybound):
     logging.debug("Generating normal shifts...")
     for a in range(k):
         for b in range(k):
-            shift = x ** a * y ** b * f
+            shift = x ** a * y ** b * p
             for col, monomial in enumerate(monomials):
                 lattice[row, col] = shift.monomial_coefficient(monomial) * monomial(xbound, ybound)
 
@@ -84,12 +84,12 @@ def integer_bivariate(f, k, xbound, ybound):
         for col, monomial in enumerate(right_monomials):
             new_polynomial += basis[row, col] * monomial // monomial(xbound, ybound)
 
-        resultant = new_polynomial.resultant(f, y)
+        resultant = new_polynomial.resultant(p, y)
         if not resultant.is_constant():
-            for xroot in resultant.univariate_polynomial().roots():
-                xroot = int(xroot[0])
-                p = f.subs(x=xroot)
+            for xroot, _ in resultant.univariate_polynomial().roots():
+                xroot = int(xroot)
+                p = p.subs({x: xroot})
                 if not p.is_constant():
-                    for yroot in f.subs(x=xroot).univariate_polynomial().roots():
-                        yroot = int(yroot[0])
+                    for yroot, _ in p.univariate_polynomial().roots():
+                        yroot = int(yroot)
                         yield xroot, yroot
