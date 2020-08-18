@@ -71,8 +71,8 @@ def integer_bivariate(f, k, xbound, ybound):
         row += 1
 
     logging.debug(f"Lattice size: {lattice.nrows()} x {lattice.ncols()}")
-    logging.debug("Generating Hermite form...")
-    lattice = lattice.hermite_form()
+    logging.debug("Generating Echelon form...")
+    lattice = lattice.echelon_form(algorithm="pari0")
 
     logging.debug(f"Executing the LLL algorithm on the sublattice ({k ** 2} x {k ** 2})...")
     basis = lattice.submatrix(k ** 2, k ** 2, (k + d) ** 2 - k ** 2).LLL()
