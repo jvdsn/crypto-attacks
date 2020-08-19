@@ -32,7 +32,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [MOV attack](ecc/mov_attack.py)
 * [x] [Singular curve attack (cusp)](ecc/singular_curve_cusp.py)
 * [x] [Singular curve attack (node)](ecc/singular_curve_node.py)
-* [x] [Smart's attack](ecc/smart_attack.py)
+* [x] [Smart's attack](ecc/smart_attack.py) [More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"]
 
 ### ElGamal Encryption
 * [x] [Nonce reuse attack](elgamal_encryption/nonce_reuse.py)

@@ -15,6 +15,7 @@ def lift_(E, P, gf):
 def attack(P, Q):
     """
     Solves the discrete logarithm problem using Smart's attack.
+    More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"
     :param P: the base point
     :param Q: the point multiplication result
     :return: k such that k * P == Q
