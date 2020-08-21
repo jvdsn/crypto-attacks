@@ -4,7 +4,7 @@ from sage.all import Matrix
 from sage.all import ZZ
 
 
-def modular_univariate(p, modulus, m, t, bound):
+def modular_univariate(p, modulus, m, t, bound, early_return=True):
     """
     Computes small modular roots of a univariate polynomial.
     More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods"
@@ -13,6 +13,7 @@ def modular_univariate(p, modulus, m, t, bound):
     :param m: the amount of normal shifts to use
     :param t: the amount of additional shifts to use
     :param bound: an approximate bound on the roots
+    :param early_return: try to return as early as possible (default: true)
     :return: a generator generating small roots of the polynomial
     """
     p = p.monic().change_ring(ZZ)
@@ -49,3 +50,6 @@ def modular_univariate(p, modulus, m, t, bound):
 
         for xroot, _ in new_polynomial.roots():
             yield int(xroot)
+
+        if early_return:
+            return

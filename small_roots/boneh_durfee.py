@@ -4,7 +4,7 @@ from sage.all import Matrix
 from sage.all import ZZ
 
 
-def modular_bivariate(p, modulus, m, t, xbound, ybound):
+def modular_bivariate(p, modulus, m, t, xbound, ybound, early_return=True):
     """
     Computes small modular roots of a bivariate polynomial.
     More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"
@@ -14,6 +14,7 @@ def modular_bivariate(p, modulus, m, t, xbound, ybound):
     :param t: the amount of additional shifts to use
     :param xbound: an approximate bound on the x roots
     :param ybound: an approximate bound on the y roots
+    :param early_return: try to return as early as possible (default: true)
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     p = p.change_ring(ZZ)
@@ -71,3 +72,6 @@ def modular_bivariate(p, modulus, m, t, xbound, ybound):
                         for yroot, _ in p.univariate_polynomial().roots():
                             yroot = int(yroot)
                             yield xroot, yroot
+
+                        if early_return:
+                            return

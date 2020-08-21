@@ -5,7 +5,7 @@ from sage.all import PolynomialRing
 from sage.all import ZZ
 
 
-def modular_bivariate(p, modulus, m, t, xbound, ybound):
+def modular_bivariate(p, modulus, m, t, xbound, ybound, early_return=True):
     """
     Computes small modular roots of a bivariate polynomial.
     More information: Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"
@@ -15,6 +15,7 @@ def modular_bivariate(p, modulus, m, t, xbound, ybound):
     :param t: the amount of additional shifts to use
     :param xbound: an approximate bound on the x roots
     :param ybound: an approximate bound on the y roots
+    :param early_return: try to return as early as possible (default: true)
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     pr = PolynomialRing(ZZ, "u, x, y")
@@ -77,4 +78,6 @@ def modular_bivariate(p, modulus, m, t, xbound, ybound):
                         for wroot, _ in p.univariate_polynomial().roots():
                             wroot = int(wroot)
                             yield vroot, wroot
-                        return
+
+                        if early_return:
+                            return

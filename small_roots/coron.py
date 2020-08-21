@@ -3,7 +3,7 @@ import logging
 from sage.all import Matrix
 
 
-def integer_bivariate(p, k, xbound, ybound):
+def integer_bivariate(p, k, xbound, ybound, early_return=True):
     """
     Computes small integer roots of a bivariate polynomial.
     More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"
@@ -11,6 +11,7 @@ def integer_bivariate(p, k, xbound, ybound):
     :param k: the amount of shifts to use
     :param xbound: an approximate bound on the x roots
     :param ybound: an approximate bound on the y roots
+    :param early_return: try to return as early as possible (default: true)
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     x, y = p.parent().gens()
@@ -93,3 +94,6 @@ def integer_bivariate(p, k, xbound, ybound):
                     for yroot, _ in p.univariate_polynomial().roots():
                         yroot = int(yroot)
                         yield xroot, yroot
+
+                        if early_return:
+                            return
