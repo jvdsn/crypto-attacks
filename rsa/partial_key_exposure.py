@@ -8,7 +8,7 @@ from sage.all import var
 from small_roots.howgrave_graham import modular_univariate
 
 
-def attack(n, e, bitsize, lsb_known, lsb):
+def attack(n, e, bitsize, lsb_known, lsb, m_start=1):
     """
     Recovers the prime factors of a modulus and the private exponent using Coppersmith's method if part of the private exponent is known.
     More information: Boneh D., Durfee G., Frankel Y., "An Attack on RSA Given a Small Fraction of the Private Key Bits"
@@ -17,6 +17,7 @@ def attack(n, e, bitsize, lsb_known, lsb):
     :param bitsize: the amount of bits of the prime factors
     :param lsb_known: the amount of known least significant bits of the private exponent
     :param lsb: the known least significant bits of the private exponent
+    :param m_start: the m value to start at for the Howgrave-Graham small roots method (default: 1)
     :return: a tuple containing the prime factors of the modulus and the private exponent
     """
     logging.debug("Generating solutions for k candidates...")
@@ -28,7 +29,7 @@ def attack(n, e, bitsize, lsb_known, lsb):
     pr = PolynomialRing(Zmod(n), "x")
     x = pr.gen()
     bound = 2 ** (bitsize - lsb_known) - 1
-    m = 1
+    m = m_start
     while True:
         t = m
         logging.debug(f"Trying m = {m}, t = {t}...")

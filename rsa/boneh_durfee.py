@@ -8,7 +8,7 @@ from sage.all import Zmod
 from small_roots.herrmann_may import modular_bivariate
 
 
-def attack(n, e, bitsize, lsb_known=0, lsb=0, delta=0.25):
+def attack(n, e, bitsize, lsb_known=0, lsb=0, delta=0.25, m_start=1):
     """
     Recovers the prime factors if the private exponent is too small.
     More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"
@@ -19,6 +19,7 @@ def attack(n, e, bitsize, lsb_known=0, lsb=0, delta=0.25):
     :param lsb_known: the amount of known least significant bits of one of the prime factors
     :param lsb: the known least significant bits of one of the prime factors
     :param delta: a predicted bound on the private exponent (d < n^delta) (default: 0.25)
+    :param m_start: the m value to start at for the Herrmann-May small roots method (default: 1)
     :return: a tuple containing the prime factors
     """
     x, y = PolynomialRing(Zmod(e), "x, y").gens()
@@ -31,7 +32,7 @@ def attack(n, e, bitsize, lsb_known=0, lsb=0, delta=0.25):
 
     xbound = int(e ** RealNumber(delta))
     ybound = int(2 ** (bitsize - lsb_known + 1))
-    m = 1
+    m = m_start
     while True:
         t = int(m * (1 - 2 * delta))
         logging.debug(f"Trying m = {m}, t = {t}...")
