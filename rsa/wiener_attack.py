@@ -1,18 +1,10 @@
-from math import isqrt
-
 from sage.all import Integer
 from sage.all import continued_fraction
 
-
-def _solve_quadratic(a, b, c):
-    d = b ** 2 - 4 * a * c
-    if d < 0:
-        return 0, 0
-    else:
-        return (-b + isqrt(d)) // (2 * a), (-b - isqrt(d)) // (2 * a)
+from factorization import known_phi
 
 
-def wiener_attack(n, e):
+def attack(n, e):
     """
     Recovers the prime factors of a modulus and the private exponent if the private exponent is too small.
     :param n: the modulus
@@ -27,8 +19,8 @@ def wiener_attack(n, e):
             continue
 
         phi = (e * d - 1) // k
-        p, q = _solve_quadratic(1, -n + phi - 1, n)
-        if p * q == n:
-            return p, q, d
+        factors = known_phi.factorize(n, phi)
+        if factors:
+            return *factors, d
 
     raise ValueError("Failed to find private exponent.")

@@ -1,16 +1,8 @@
-from math import isqrt
-
 from sage.all import Integer
 from sage.all import RealNumber
 from sage.all import continued_fraction
 
-
-def _solve_quadratic(a, b, c):
-    d = b ** 2 - 4 * a * c
-    if d < 0:
-        return 0, 0
-    else:
-        return (-b + isqrt(d)) // (2 * a), (-b - isqrt(d)) // (2 * a)
+from factorization import known_phi
 
 
 def attack(n, e, max_s=20000, max_r=100, max_t=100):
@@ -41,9 +33,9 @@ def attack(n, e, max_s=20000, max_r=100, max_t=100):
                 continue
 
             phi = (e * d - 1) // k
-            p, q = _solve_quadratic(1, -n + phi - 1, n)
-            if p * q == n:
-                return p, q, d
+            factors = known_phi.factorize(n, phi)
+            if factors:
+                return *factors, d
 
         for t in range(max_t):
             k = s * convergents[m + 2].numerator() - t * convergents[m + 1].numerator()
@@ -52,8 +44,8 @@ def attack(n, e, max_s=20000, max_r=100, max_t=100):
                 continue
 
             phi = (e * d - 1) // k
-            p, q = _solve_quadratic(1, -n + phi - 1, n)
-            if p * q == n:
-                return p, q, d
+            factors = known_phi.factorize(n, phi)
+            if factors:
+                return *factors, d
 
     raise ValueError(f"Failed to find private exponent (max s = {max_s}, max r = {max_r}, max t = {max_t}).")
