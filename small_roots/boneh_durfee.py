@@ -19,34 +19,26 @@ def modular_bivariate(p, modulus, m, t, xbound, ybound):
     p = p.change_ring(ZZ)
     x, y = p.parent().gens()
 
-    shifts = []
-    monomials = []
-    monomial_set = set()
+    shifts = set()
+    monomials = set()
     logging.debug("Generating x shifts...")
-    for i in range(m + 1):
-        for j in range(i + 1):
-            shift = x ** (i - j) * p ** j * modulus ** (m - j)
+    for k in range(m + 1):
+        for i in range(m - k + 1):
+            shift = x ** i * p ** k * modulus ** (m - k)
+            shifts.add(shift)
             for monomial in shift.monomials():
-                if monomial not in monomial_set:
-                    helpful = shift.monomial_coefficient(monomial) * monomial(xbound, ybound) < modulus ** m
-                    monomials.append(monomial)
-                    monomial_set.add(monomial)
-
-            if shift not in shifts:
-                shifts.append(shift)
+                monomials.add(monomial)
 
     logging.debug("Generating y shifts...")
-    for i in range(1, t + 1):
-        for j in range(m + 1):
-            shift = y ** i * p ** j * modulus ** (m - j)
+    for k in range(m + 1):
+        for j in range(1, t + 1):
+            shift = y ** j * p ** k * modulus ** (m - k)
+            shifts.add(shift)
             for monomial in shift.monomials():
-                if monomial not in monomial_set:
-                    helpful = shift.monomial_coefficient(monomial) * monomial(xbound, ybound) < modulus ** m
-                    monomials.append(monomial)
-                    monomial_set.add(monomial)
+                monomials.add(monomial)
 
-            if shift not in shifts and helpful:
-                shifts.append(shift)
+    shifts = sorted(shifts)
+    monomials = sorted(monomials)
 
     logging.debug(f"Filling the lattice ({len(shifts)} x {len(monomials)})...")
     lattice = Matrix(len(shifts), len(monomials))
