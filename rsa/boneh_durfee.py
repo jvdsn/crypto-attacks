@@ -5,7 +5,7 @@ from sage.all import RealNumber
 from sage.all import ZZ
 from sage.all import Zmod
 
-from small_roots.boneh_durfee import modular_bivariate
+from small_roots.herrmann_may import modular_bivariate
 
 
 def attack(n, e, bitsize, lsb_known=0, lsb=0, delta=0.25):

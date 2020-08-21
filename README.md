@@ -88,5 +88,6 @@ Python implementations of cryptographic attacks and utilities.
 ### Small roots
 * [x] [Boneh-Durfee method](small_roots/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
 * [x] [Coron method](small_roots/coron.py) [More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"]
+* [x] [Herrmann-May method (Boneh-Durfee with unravelled linearization)](small_roots/herrmann_may.py) [Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"]
 * [x] [Howgrave-Graham method](small_roots/howgrave_graham.py) [More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods"]
 * [ ] Jochemsz-May method [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants"]
