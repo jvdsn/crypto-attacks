@@ -54,6 +54,10 @@ Python implementations of cryptographic attacks and utilities.
 ### GCM
 * [x] [Forbidden attack](gcm/forbidden_attack.py) [More information: Joux A., "Authentication Failures in NIST version of GCM"]
 
+### Hidden Number Problem
+* [x] [Lattice-based attack](hnp/lattice_attack.py)
+* [ ] Fourier analysis attack
+
 ### IGE
 * [x] [Padding oracle attack](ige/padding_oracle.py)
 
