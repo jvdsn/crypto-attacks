@@ -23,6 +23,6 @@ def attack(t, a, p, bound):
     basis = basis.LLL()
 
     for row in basis.rows():
-        alpha = ((int(row[-2]) * p) // bound) % p
+        alpha = (int(row[m] * p) // bound) % p
         if alpha != 0:
-            return alpha, list(row[:-2])
+            return alpha, list(map(int, row[:m]))
