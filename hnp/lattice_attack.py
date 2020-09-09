@@ -13,14 +13,14 @@ def attack(t, a, p, bound):
     :return: a tuple containing alpha, and a list of x values
     """
     m = len(t)
-    basis = Matrix(QQ, m + 2, m + 2)
+    lattice = Matrix(QQ, m + 2, m + 2)
     for i in range(m):
-        basis[i, i] = p
+        lattice[i, i] = p
 
-    basis[m] = t + [bound / QQ(p), 0]
-    basis[m + 1] = a + [0, bound]
+    lattice[m] = t + [bound / QQ(p), 0]
+    lattice[m + 1] = a + [0, bound]
 
-    basis = basis.LLL()
+    basis = lattice.LLL()
 
     for row in basis.rows():
         alpha = (int(row[m] * p) // bound) % p
