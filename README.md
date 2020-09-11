@@ -61,6 +61,9 @@ Python implementations of cryptographic attacks and utilities.
 ### IGE
 * [x] [Padding oracle attack](ige/padding_oracle.py)
 
+### Knapsack Cryptosystem
+* [x] [Low density attack](knapsack/low_density.py) [More Information:]
+
 ### OFB
 * [x] [CRIME attack](ofb/crime.py)
 * [x] [Separator oracle attack](ctr/separator_oracle.py)
@@ -84,6 +87,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Related message attack](rsa/related_message.py)
 * [x] [Stereotyped message attack](rsa/stereotyped_message.py)
 * [x] [Wiener's attack](rsa/wiener_attack.py)
+* [ ] Wiener's attack (Heuristic lattice variant) [More information: Nguyen P. Q., "Public-Key Cryptanalysis"]
 
 ### Shamir's Secret Sharing
 * [x] [Deterministic coefficients](shamir_secret_sharing/deterministic_coefficients.py)
