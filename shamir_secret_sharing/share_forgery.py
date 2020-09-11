@@ -7,7 +7,7 @@ def attack(p, s, s_, x, y, xs):
     :param x: the x coordinate of the given share
     :param y: the y coordinate of the given share
     :param xs: the x coordinates of the other participants (excluding the x coordinate of the given share)
-    :return:
+    :return: the forged share
     """
     const = 1
     for i in xs:
