@@ -13,7 +13,7 @@ def attack(a, s, beta=0.5):
     :param a: the a_i values
     :param s: the s value
     :param beta: a parameter beta to tweak the lattice (default: 0.5)
-    :return: the e_i values
+    :return: the e_i values, or None if the e_i values were not found
     """
     n = len(a)
     d = n / log2(max(a))
@@ -49,5 +49,3 @@ def attack(a, s, beta=0.5):
 
             if s_ == s:
                 return es
-
-    raise ValueError("Failed to find e.")

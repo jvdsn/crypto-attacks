@@ -14,7 +14,7 @@ def attack(n, e, max_s=20000, max_r=100, max_t=100):
     :param max_s: the amount of s values to try (default: 20000)
     :param max_r: the amount of r values to try for each s value (default: 100)
     :param max_t: the amount of t values to try for each s value (default: 100)
-    :return: a tuple containing the prime factors of the modulus and the private exponent
+    :return: a tuple containing the prime factors of the modulus and the private exponent, or None if the private exponent was not found
     """
     i_n = Integer(n)
     i_e = Integer(e)
@@ -47,5 +47,3 @@ def attack(n, e, max_s=20000, max_r=100, max_t=100):
             factors = known_phi.factorize(n, phi)
             if factors:
                 return *factors, d
-
-    raise ValueError(f"Failed to find private exponent (max s = {max_s}, max r = {max_r}, max t = {max_t}).")

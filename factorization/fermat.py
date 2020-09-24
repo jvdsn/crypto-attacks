@@ -5,7 +5,7 @@ def factorize(n):
     """
     Recovers the prime factors from a modulus using Fermat's factorization method.
     :param n: the modulus
-    :return: a tuple containing the prime factors
+    :return: a tuple containing the prime factors, or None if the factors were not found
     """
     a = isqrt(n)
     b = a * a - n
@@ -17,5 +17,3 @@ def factorize(n):
     q = n // p
     if p * q == n:
         return p, q
-
-    raise ValueError(f"Failed to factorize.")

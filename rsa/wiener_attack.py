@@ -9,7 +9,7 @@ def attack(n, e):
     Recovers the prime factors of a modulus and the private exponent if the private exponent is too small.
     :param n: the modulus
     :param e: the public exponent
-    :return: a tuple containing the prime factors of the modulus and the private exponent
+    :return: a tuple containing the prime factors of the modulus and the private exponent, or None if the private exponent was not found
     """
     convergents = continued_fraction(Integer(e) / Integer(n)).convergents()
     for c in convergents:
@@ -22,5 +22,3 @@ def attack(n, e):
         factors = known_phi.factorize(n, phi)
         if factors:
             return *factors, d
-
-    raise ValueError("Failed to find private exponent.")
