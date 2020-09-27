@@ -87,7 +87,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Related message attack](rsa/related_message.py)
 * [x] [Stereotyped message attack](rsa/stereotyped_message.py)
 * [x] [Wiener's attack](rsa/wiener_attack.py)
-* [x] Wiener's attack (Heuristic lattice variant) [More information: Nguyen P. Q., "Public-Key Cryptanalysis"]
+* [x] [Wiener's attack (Heuristic lattice variant)](rsa/wiener_attack_lattice.py) [More information: Nguyen P. Q., "Public-Key Cryptanalysis"]
 
 ### Shamir's Secret Sharing
 * [x] [Deterministic coefficients](shamir_secret_sharing/deterministic_coefficients.py)
