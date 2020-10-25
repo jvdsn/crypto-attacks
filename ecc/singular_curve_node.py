@@ -13,7 +13,7 @@ def attack(p, a, b, Px, Py, Qx, Qy):
     :param Py: the base point y value
     :param Qx: the point multiplication result x value
     :param Qy: the point multiplication result y value
-    :return: k such that k * P == Q
+    :return: l such that l * P == Q
     """
     gf = GF(p)
     pr = PolynomialRing(gf, "x")

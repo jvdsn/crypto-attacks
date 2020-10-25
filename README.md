@@ -28,7 +28,7 @@ Python implementations of cryptographic attacks and utilities.
 
 ### Elliptic Curve Cryptography
 * [x] [ECDSA nonce reuse attack](ecc/ecdsa_nonce_reuse.py)
-* [ ] Frey-Ruck attack
+* [x] [Frey-Ruck attack](ecc/frey_ruck_attack.py)
 * [x] [MOV attack](ecc/mov_attack.py)
 * [x] [Singular curve attack (cusp)](ecc/singular_curve_cusp.py)
 * [x] [Singular curve attack (node)](ecc/singular_curve_node.py)

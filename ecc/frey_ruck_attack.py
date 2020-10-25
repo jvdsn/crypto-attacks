@@ -1,10 +1,12 @@
+from math import gcd
+
 from sage.all import EllipticCurve
 from sage.all import GF
 
 
 def attack(P, Q):
     """
-    Solves the discrete logarithm problem using the MOV attack.
+    Solves the discrete logarithm problem using the Frey-Ruck attack.
     :param P: the base point
     :param Q: the point multiplication result
     :return: l such that l * P == Q
@@ -22,10 +24,9 @@ def attack(P, Q):
     Q = E(Q)
     while True:
         R = E.random_point()
-        print(P, Q, R, R.order())
         if R == P or R == Q or R.order() != n ** k:
             continue
 
-        a = P.weil_pairing(R, n)
-        b = Q.weil_pairing(R, n)
+        a = P.tate_pairing(R, n, k)
+        b = Q.tate_pairing(R, n, k)
         return b.log(a)

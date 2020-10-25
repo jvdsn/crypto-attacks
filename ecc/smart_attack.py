@@ -18,7 +18,7 @@ def attack(P, Q):
     More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"
     :param P: the base point
     :param Q: the point multiplication result
-    :return: k such that k * P == Q
+    :return: l such that l * P == Q
     """
     E = P.curve()
     gf = E.base_ring()
