@@ -34,7 +34,7 @@ def _polynomial_inverse(poly, modulus):
 
 def factorize(n, D):
     """
-    Recovers the prime factors from a modulus using Cheng's Elliptic Curve Complex Multiplication method.
+    Recovers the prime factors from a modulus using Cheng's elliptic curve complex multiplication method.
     More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"
     :param n: the modulus
     :param D: the discriminant to use to generate the Hilbert polynomial
