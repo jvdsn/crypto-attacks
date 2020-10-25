@@ -53,7 +53,7 @@ def _greedy_find_primorial_(n, primorial):
 def attack(n, primorial, m):
     """
     Recovers the prime factors from a modulus using the ROCA method.
-    More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"
+    More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"
     :param n: the modulus
     :param primorial: the primorial used to generate the primes
     :param m: the m parameter for Coppersmith's method
