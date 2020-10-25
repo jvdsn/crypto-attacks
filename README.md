@@ -62,7 +62,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Padding oracle attack](ige/padding_oracle.py)
 
 ### Knapsack Cryptosystem
-* [x] [Low density attack](knapsack/low_density.py) [More Information:]
+* [x] [Low density attack](knapsack/low_density.py)
 
 ### OFB
 * [x] [CRIME attack](ofb/crime.py)
