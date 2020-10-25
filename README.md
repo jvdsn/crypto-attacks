@@ -45,6 +45,7 @@ Python implementations of cryptographic attacks and utilities.
 
 ### Factorization
 * [x] [Base conversion factorization](factorization/base_conversion.py)
+* [x] [Elliptic Curve Complex Multiplication factorization](factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
 * [x] [Coppersmith factorization](factorization/coppersmith.py)
 * [x] [Fermat factorization](factorization/fermat.py)
 * [x] [Known phi factorization](factorization/known_phi.py)
