@@ -13,7 +13,7 @@ def _to_gf2e(n):
     return gf2e([(n >> i) & 1 for i in range(127, -1, -1)])
 
 
-# Converts a gfe2 element to an integer, little endian.
+# Converts a gf2e element to an integer, little endian.
 def _from_gf2e(p):
     n = p.integer_representation()
     ans = n & 1
