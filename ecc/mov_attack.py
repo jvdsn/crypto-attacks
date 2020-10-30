@@ -22,10 +22,11 @@ def attack(P, Q):
     Q = E(Q)
     while True:
         R = E.random_point()
-        print(P, Q, R, R.order())
         if R == P or R == Q or R.order() != n ** k:
             continue
 
         a = P.weil_pairing(R, n)
         b = Q.weil_pairing(R, n)
-        return b.log(a)
+        l = b.log(a)
+        if l * P == Q:
+            return l

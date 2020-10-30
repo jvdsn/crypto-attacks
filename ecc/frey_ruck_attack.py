@@ -1,5 +1,3 @@
-from math import gcd
-
 from sage.all import EllipticCurve
 from sage.all import GF
 
@@ -29,4 +27,6 @@ def attack(P, Q):
 
         a = P.tate_pairing(R, n, k)
         b = Q.tate_pairing(R, n, k)
-        return b.log(a)
+        l = b.log(a)
+        if l * P == Q:
+            return l
