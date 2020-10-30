@@ -1,5 +1,4 @@
 from sage.all import GF
-from sage.all import PolynomialRing
 from sage.all import discrete_log
 
 
@@ -16,7 +15,7 @@ def attack(p, a, b, Px, Py, Qx, Qy):
     :return: l such that l * P == Q
     """
     gf = GF(p)
-    pr = PolynomialRing(gf, "x")
+    pr = gf.polynomial_ring("x")
     x = pr.gen()
     f = x ** 3 + a * x + b
 

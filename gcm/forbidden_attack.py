@@ -3,8 +3,7 @@ from Crypto.Util.number import long_to_bytes
 from sage.all import GF
 
 gf2 = GF(2)
-gf2x = gf2.polynomial_ring("x")
-x = gf2x.gen()
+x = gf2.polynomial_ring("x").gen()
 gf2e = GF(2 ** 128, name="y", modulus=x ** 128 + x ** 7 + x ** 2 + x + 1)
 
 
