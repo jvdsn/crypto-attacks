@@ -1,4 +1,3 @@
-from sage.all import PolynomialRing
 from sage.all import ZZ
 
 
@@ -10,7 +9,7 @@ def factorize(n, phi):
     :return: a tuple containing the prime factors, or None if the factors were not found
     """
     s = n + 1 - phi
-    x = PolynomialRing(ZZ, "x").gen()
+    x = ZZ["x"].gen()
     f = x ** 2 - s * x + n
     for p, _ in f.roots():
         p = int(p)

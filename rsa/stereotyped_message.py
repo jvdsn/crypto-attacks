@@ -1,6 +1,5 @@
 import logging
 
-from sage.all import PolynomialRing
 from sage.all import Zmod
 
 from small_roots.howgrave_graham import modular_univariate
@@ -20,8 +19,7 @@ def attack(n, e, c, bitsize, msb_known, msb, lsb_known, lsb, m_start=1):
     :param m_start: the m value to start at for the Howgrave-Graham small roots method (default: 1)
     :return: the plaintext
     """
-    pr = PolynomialRing(Zmod(n), "x")
-    x = pr.gen()
+    x = Zmod(n)["x"].gen()
     f = (msb * 2 ** (bitsize - msb_known) + x * 2 ** lsb_known + lsb) ** e - c
     bound = 2 ** (bitsize - msb_known - lsb_known) - 1
     m = m_start

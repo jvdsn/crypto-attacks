@@ -3,7 +3,7 @@ from Crypto.Util.number import long_to_bytes
 from sage.all import GF
 
 gf2 = GF(2)
-x = gf2.polynomial_ring("x").gen()
+x = gf2["x"].gen()
 gf2e = GF(2 ** 128, name="y", modulus=x ** 128 + x ** 7 + x ** 2 + x + 1)
 
 
@@ -62,7 +62,7 @@ def recover_possible_auth_keys(a1, c1, t1, a2, c2, t2):
     :param t2: the authentication tag of the second message (bytes)
     :return: a generator generating possible authentication keys (gf2e element)
     """
-    h = gf2e.polynomial_ring("h").gen()
+    h = gf2e["h"].gen()
     p1 = _ghash(h, a1, c1) + _to_gf2e(bytes_to_long(t1))
     p2 = _ghash(h, a2, c2) + _to_gf2e(bytes_to_long(t2))
     p = (p1 + p2).monic()

@@ -1,7 +1,6 @@
 import logging
 from math import log2
 
-from sage.all import PolynomialRing
 from sage.all import Zmod
 from sage.all import discrete_log
 from sage.all import factor
@@ -67,8 +66,7 @@ def attack(n, primorial, m):
     order = e.multiplicative_order()
 
     logging.debug("Starting exhaustive a search...")
-    pr = PolynomialRing(Zmod(n), "x")
-    x = pr.gen()
+    x = Zmod(n)["x"].gen()
     bound = int(2 * n ** 0.5 // primorial_)
     for a in range(c // 2, (c + order) // 2 + 1):
         f = x + inverse_primorial_ * int(e ** a)

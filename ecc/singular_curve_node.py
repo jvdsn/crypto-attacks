@@ -15,8 +15,7 @@ def attack(p, a, b, Px, Py, Qx, Qy):
     :return: l such that l * P == Q
     """
     gf = GF(p)
-    pr = gf.polynomial_ring("x")
-    x = pr.gen()
+    x = gf["x"].gen()
     f = x ** 3 + a * x + b
 
     # Move curve if necessary

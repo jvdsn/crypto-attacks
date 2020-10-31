@@ -1,4 +1,3 @@
-from sage.all import PolynomialRing
 from sage.all import Zmod
 
 
@@ -26,8 +25,7 @@ def attack(n, e, c1, c2, f1, f2):
     :param f2: the function encoding the shared secret into the second plaintext
     :return: the shared secret
     """
-    pr = PolynomialRing(Zmod(n), "x")
-    x = pr.gen()
+    x = Zmod(n)["x"].gen()
     g1 = f1(x) ** e - c1
     g2 = f2(x) ** e - c2
     g = -_polynomial_gcd(g1, g2).monic()

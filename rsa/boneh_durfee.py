@@ -1,6 +1,5 @@
 import logging
 
-from sage.all import PolynomialRing
 from sage.all import RealNumber
 from sage.all import ZZ
 from sage.all import Zmod
@@ -22,7 +21,7 @@ def attack(n, e, bitsize, lsb_known=0, lsb=0, delta=0.25, m_start=1):
     :param m_start: the m value to start at for the Herrmann-May small roots method (default: 1)
     :return: a tuple containing the prime factors
     """
-    x, y = PolynomialRing(Zmod(e), "x, y").gens()
+    x, y = Zmod(e)["x, y"].gens()
 
     # Use additional information about factors to speed up Boneh-Durfee
     p_lsb = lsb
@@ -40,7 +39,7 @@ def attack(n, e, bitsize, lsb_known=0, lsb=0, delta=0.25, m_start=1):
             z = xroot * (a + yroot) + pow(2, -lsb_known, e)
             if z % e == 0:
                 s = (n + 1 + pow(xroot, -1, e)) % e
-                p = PolynomialRing(ZZ, "p").gen()
+                p = ZZ["p"].gen()
                 f = p ** 2 - s * p + n
                 for proot, _ in f.roots():
                     proot = int(proot)

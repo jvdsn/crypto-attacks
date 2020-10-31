@@ -1,6 +1,5 @@
 import logging
 
-from sage.all import PolynomialRing
 from sage.all import ZZ
 from sage.all import Zmod
 
@@ -20,8 +19,7 @@ def factorize_univariate(n, bitsize, msb_known, msb, lsb_known, lsb, m_start=1):
     :param m_start: the m value to start at for the Howgrave-Graham small roots method (default: 1)
     :return: a tuple containing the prime factors
     """
-    pr = PolynomialRing(Zmod(n), "x")
-    x = pr.gen()
+    x = Zmod(n)["x"].gen()
     f = msb * 2 ** (bitsize - msb_known) + x * 2 ** lsb_known + lsb
     bound = 2 ** (bitsize - msb_known - lsb_known)
     m = m_start
@@ -54,8 +52,7 @@ def factorize_bivariate(n, p_bitsize, p_msb_known, p_msb, p_lsb_known, p_lsb, q_
     :param k_start: the k value to start at for the Coron small roots method (default: 1)
     :return: a tuple containing the prime factors
     """
-    pr = PolynomialRing(ZZ, "x, y")
-    x, y = pr.gens()
+    x, y = ZZ["x, y"].gens()
     f = (p_msb * 2 ** (p_bitsize - p_msb_known) + x * 2 ** p_lsb_known + p_lsb) * (q_msb * 2 ** (q_bitsize - q_msb_known) + y * 2 ** q_lsb_known + q_lsb) - n
     xbound = 2 ** (p_bitsize - p_msb_known - p_lsb_known)
     ybound = 2 ** (q_bitsize - q_msb_known - q_lsb_known)

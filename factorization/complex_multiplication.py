@@ -1,7 +1,6 @@
 from math import gcd
 
 from sage.all import EllipticCurve
-from sage.all import PolynomialRing
 from sage.all import Zmod
 from sage.all import hilbert_class_polynomial
 
@@ -43,7 +42,7 @@ def factorize(n, D):
     assert D % 8 == 3, "D should be square-free"
 
     zmodn = Zmod(n)
-    pr = PolynomialRing(zmodn, "x")
+    pr = zmodn["x"]
 
     H = pr(hilbert_class_polynomial(-D))
     qr = pr.quotient(H)

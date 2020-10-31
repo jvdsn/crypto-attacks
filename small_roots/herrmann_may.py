@@ -1,7 +1,6 @@
 import logging
 
 from sage.all import Matrix
-from sage.all import PolynomialRing
 from sage.all import ZZ
 
 
@@ -18,7 +17,7 @@ def modular_bivariate(p, modulus, m, t, xbound, ybound, early_return=True):
     :param early_return: try to return as early as possible (default: true)
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
-    pr = PolynomialRing(ZZ, "u, x, y")
+    pr = ZZ["u, x, y"]
     u, x, y = pr.gens()
     qr = pr.quotient(x * y + 1 - u)
     p = qr(p).lift()
@@ -56,7 +55,7 @@ def modular_bivariate(p, modulus, m, t, xbound, ybound, early_return=True):
     basis = lattice.LLL()
 
     logging.debug("Reconstructing polynomials...")
-    v, w = PolynomialRing(ZZ, "v, w").gens()
+    v, w = ZZ["v, w"].gens()
     new_polynomials = []
     for row in range(basis.nrows()):
         # Reconstruct the polynomial from reduced basis

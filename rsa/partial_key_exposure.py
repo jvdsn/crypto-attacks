@@ -1,6 +1,5 @@
 import logging
 
-from sage.all import PolynomialRing
 from sage.all import Zmod
 from sage.all import solve_mod
 from sage.all import var
@@ -26,8 +25,7 @@ def attack(n, e, bitsize, lsb_known, lsb, m_start=1):
     for k in range(1, e + 1):
         solutions += solve_mod(k * x ** 2 + (e * lsb - k * (n + 1) - 1) * x + k * n == 0, 2 ** lsb_known)
 
-    pr = PolynomialRing(Zmod(n), "x")
-    x = pr.gen()
+    x = Zmod(n)["x"].gen()
     bound = 2 ** (bitsize - lsb_known) - 1
     m = m_start
     while True:
