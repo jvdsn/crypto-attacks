@@ -56,7 +56,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Forbidden attack](gcm/forbidden_attack.py) [More information: Joux A., "Authentication Failures in NIST version of GCM"]
 
 ### Hidden Number Problem
-* [x] [Lattice-based attack](hnp/lattice_attack.py)
+* [x] [Lattice-based attack](hnp/lattice_attack.py) [More information: Breitner J., Heninger N., "Biased Nonce Sense: Lattice Attacks against Weak ECDSA Signatures in Cryptocurrencies"]
 * [ ] Fourier analysis attack
 
 ### IGE
