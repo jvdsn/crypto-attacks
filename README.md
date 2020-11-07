@@ -65,6 +65,10 @@ Python implementations of cryptographic attacks and utilities.
 ### Knapsack Cryptosystem
 * [x] [Low density attack](knapsack/low_density.py)
 
+### Linear Congruential Generators
+* [x] [LCG parameter recovery](lcg/parameter_recovery.py)
+* [x] [Truncated LCG state recovery](lcg/truncated_state_recovery.py) [More information: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"]
+
 ### OFB
 * [x] [CRIME attack](ofb/crime.py)
 * [x] [Separator oracle attack](ctr/separator_oracle.py)
