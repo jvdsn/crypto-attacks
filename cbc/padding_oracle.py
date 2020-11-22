@@ -19,7 +19,7 @@ def _attack_block(padding_oracle, iv, c):
 def attack(padding_oracle, iv, c):
     """
     Recovers the plaintext using the padding oracle attack.
-    :param padding_oracle: the padding oracle
+    :param padding_oracle: the padding oracle, returns True if the padding is correct, False otherwise
     :param iv: the initialization vector
     :param c: the ciphertext
     :return: the (padded) plaintext

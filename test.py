@@ -1,7 +1,9 @@
 from unittest import TestCase
+from zlib import compress
 
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
+from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
 from Crypto.Util.Padding import unpad
 
@@ -11,13 +13,13 @@ class TestCBC(TestCase):
     from cbc import iv_recovery
     from cbc import padding_oracle
 
-    def _encrypt_cbc(self, key, p):
+    def _encrypt(self, key, p):
         iv = get_random_bytes(16)
         cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
         c = cipher.encrypt(p)
         return iv, c
 
-    def _decrypt_cbc(self, key, iv, c):
+    def _decrypt(self, key, iv, c):
         cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
         p = cipher.decrypt(c)
         return p
@@ -34,18 +36,18 @@ class TestCBC(TestCase):
         key = get_random_bytes(16)
         p = get_random_bytes(32)
         p_ = get_random_bytes(16)
-        iv, c = self._encrypt_cbc(key, p)
+        iv, c = self._encrypt(key, p)
 
         iv_, c_ = self.bit_flipping.attack(iv, c, 16, p[16:16 + len(p_)], p_)
 
-        p__ = self._decrypt_cbc(key, iv_, c_)
+        p__ = self._decrypt(key, iv_, c_)
         self.assertEqual(p_, p__[16:16 + len(p_)])
 
     def test_iv_recovery(self):
         key = get_random_bytes(16)
         iv = get_random_bytes(16)
 
-        iv_ = self.iv_recovery.attack(lambda c: self._decrypt_cbc(key, iv, c))
+        iv_ = self.iv_recovery.attack(lambda c: self._decrypt(key, iv, c))
         self.assertEqual(iv, iv_)
 
     def test_padding_oracle(self):
@@ -53,7 +55,7 @@ class TestCBC(TestCase):
 
         for i in range(16):
             p = pad(get_random_bytes(i + 1), 16)
-            iv, c = self._encrypt_cbc(key, p)
+            iv, c = self._encrypt(key, p)
             p_ = self.padding_oracle.attack(lambda iv, c: self._valid_padding(key, iv, c), iv, c)
             self.assertEqual(p, p_)
 
@@ -169,3 +171,54 @@ class TestCBCMAC(TestCase):
 
         m3, t3 = self.length_extension.attack(m1, t1, m2, t2)
         self.assertTrue(self._verify(key, m3, t3))
+
+
+class TestCTR(TestCase):
+    from ctr import crime
+    from ctr import separator_oracle
+
+    def _encrypt(self, key, p):
+        return AES.new(key, AES.MODE_CTR, counter=Counter.new(128)).encrypt(p)
+
+    def _valid_separators(self, separator, separator_count, key, c):
+        p = AES.new(key, AES.MODE_CTR, counter=Counter.new(128)).decrypt(c)
+        return p.count(separator) == separator_count
+
+    def test_crime(self):
+        key = get_random_bytes(16)
+        for _ in range(20):
+            s = get_random_bytes(16)
+
+            s_ = self.crime.attack(lambda p: self._encrypt(key, compress(p + s)), len(s))
+            if s_ == s:
+                # CRIME does not work on all secrets.
+                break
+        else:
+            self.fail()
+
+    def test_separator_oracle(self):
+        separator = ord("|")
+        separator_count = 1
+        key = get_random_bytes(16)
+        p = get_random_bytes(16)
+        for _ in range(separator_count):
+            p += bytes([separator]) + get_random_bytes(16)
+
+        c = self._encrypt(key, p)
+
+        p_ = self.separator_oracle.attack(lambda c: self._valid_separators(separator, separator_count, key, c), separator, c)
+        self.assertEqual(p, p_)
+
+
+class TestECB(TestCase):
+    from ecb import plaintext_recovery
+
+    def _encrypt(self, key, p):
+        return AES.new(key, AES.MODE_ECB).encrypt(p)
+
+    def test_plaintext_recovery(self):
+        key = get_random_bytes(16)
+        s = get_random_bytes(16)
+
+        s_ = self.plaintext_recovery.attack(lambda p: self._encrypt(key, pad(p + s, 16)))
+        self.assertEqual(s, s_)

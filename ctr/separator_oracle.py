@@ -1,50 +1,29 @@
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
-from Crypto.Util import Counter
-
-separator = ord("|")
-separator_count = 1
-key = get_random_bytes(16)
-
-
-def _encrypt(p):
-    return AES.new(key, AES.MODE_CTR, counter=Counter.new(128)).encrypt(p)
-
-
-def _invalid_separators(c):
-    p = AES.new(key, AES.MODE_CTR, counter=Counter.new(128)).decrypt(c)
-    separators = 0
-    for b in p:
-        if b == separator:
-            separators += 1
-
-    return separators != separator_count
-
-
-def _find_separator_positions(c):
+def _find_separator_positions(separator_oracle, c):
     separator_positions = []
     c = bytearray(c)
     for i in range(len(c)):
         c[i] ^= 1
-        invalid = _invalid_separators(c)
+        valid = separator_oracle(c)
         c[i] ^= 1
-        if invalid:
+        if not valid:
             c[i] ^= 2
-            invalid = _invalid_separators(c)
+            valid = separator_oracle(c)
             c[i] ^= 2
-            if invalid:
+            if not valid:
                 separator_positions.append(i)
 
     return separator_positions
 
 
-def attack(c):
+def attack(separator_oracle, separator, c):
     """
     Recovers the plaintext using the separator oracle attack.
+    :param separator_oracle: the separator oracle, returns True if the separators are correct, False otherwise
+    :param separator: the separator which is used in the separator oracle
     :param c: the ciphertext
     :return: the plaintext
     """
-    separator_positions = _find_separator_positions(c)
+    separator_positions = _find_separator_positions(separator_oracle, c)
     c = bytearray(c)
     # Ensure that at least 1 separator is missing
     c[separator_positions[0]] ^= 1
@@ -57,11 +36,9 @@ def attack(c):
             # Try every byte until an additional separator is created.
             for b in range(256):
                 c[i] = b
-                if _invalid_separators(c):
-                    continue
-
-                p[i] = c_i ^ c[i] ^ separator
-                break
+                if separator_oracle(c):
+                    p[i] = c_i ^ c[i] ^ separator
+                    break
 
             c[i] = c_i
 
