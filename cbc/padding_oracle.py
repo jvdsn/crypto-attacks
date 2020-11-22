@@ -1,13 +1,13 @@
 from Crypto.Util.strxor import strxor
 
 
-def _attack_block(oracle, iv, c):
+def _attack_block(padding_oracle, iv, c):
     r = bytes()
     for i in reversed(range(16)):
         s = bytes([16 - i] * (16 - i))
         for b in range(256):
             iv_ = bytes(i) + strxor(s, bytes([b]) + r)
-            if oracle(iv_, c):
+            if padding_oracle(iv_, c):
                 r = bytes([b]) + r
                 break
         else:
@@ -16,16 +16,16 @@ def _attack_block(oracle, iv, c):
     return strxor(iv, r)
 
 
-def attack(oracle, iv, c):
+def attack(padding_oracle, iv, c):
     """
     Recovers the plaintext using the padding oracle attack.
-    :param oracle: the padding oracle to check ciphertext padding
+    :param padding_oracle: the padding oracle
     :param iv: the initialization vector
     :param c: the ciphertext
     :return: the (padded) plaintext
     """
-    p = _attack_block(oracle, iv, c[0:16])
+    p = _attack_block(padding_oracle, iv, c[0:16])
     for i in range(16, len(c), 16):
-        p += _attack_block(oracle, c[i - 16:i], c[i:i + 16])
+        p += _attack_block(padding_oracle, c[i - 16:i], c[i:i + 16])
 
     return p
