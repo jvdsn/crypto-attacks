@@ -1,66 +1,31 @@
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
-from Crypto.Util.Padding import pad
-from Crypto.Util.Padding import unpad
-
-key = get_random_bytes(16)
+from Crypto.Util.strxor import strxor
 
 
-def _encrypt(p):
-    iv = get_random_bytes(16)
-    return iv, AES.new(key, AES.MODE_CBC, iv).encrypt(pad(p, 16))
-
-
-def _valid_padding(iv, c):
-    try:
-        unpad(AES.new(key, AES.MODE_CBC, iv).decrypt(c), 16)
-        return True
-    except ValueError:
-        return False
-
-
-def _correct_padding(iv, c, i):
-    if not _valid_padding(iv, c):
-        return False
-
-    # Special handling for last byte of last block
-    if i == 15:
-        iv[14] ^= 1
-        return _valid_padding(iv, c)
-
-    return True
-
-
-def _attack_block(iv, c):
-    dc = bytearray(16)
-    p = bytearray(16)
-    iv_ = bytearray(iv)
+def _attack_block(oracle, iv, c):
+    r = bytes()
     for i in reversed(range(16)):
-        # The padding byte for this position.
-        pb = 16 - i
-        # Apply padding byte to iv.
-        for j in reversed(range(i + 1, 16)):
-            iv_[j] = dc[j] ^ pb
-
-        # Try every byte until padding is correct.
+        s = bytes([16 - i] * (16 - i))
         for b in range(256):
-            iv_[i] = b
-            if _correct_padding(iv_, c, i):
-                dc[i] = b ^ pb
-                p[i] = dc[i] ^ iv[i]
+            iv_ = bytes(i) + strxor(s, bytes([b]) + r)
+            if oracle(iv_, c):
+                r = bytes([b]) + r
+                break
+        else:
+            raise ValueError(f"Unable to find decryption for {iv} and {c}")
 
-    return p
+    return strxor(iv, r)
 
 
-def attack(iv, c):
+def attack(oracle, iv, c):
     """
     Recovers the plaintext using the padding oracle attack.
+    :param oracle: the padding oracle to check ciphertext padding
     :param iv: the initialization vector
     :param c: the ciphertext
-    :return: the plaintext
+    :return: the (padded) plaintext
     """
-    p = _attack_block(iv, c[0:16])
+    p = _attack_block(oracle, iv, c[0:16])
     for i in range(16, len(c), 16):
-        p += _attack_block(c[i - 16:i], c[i:i + 16])
+        p += _attack_block(oracle, c[i - 16:i], c[i:i + 16])
 
-    return unpad(p, 16)
+    return p
