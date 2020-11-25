@@ -1,7 +1,10 @@
+import logging
+
 from Crypto.Util.strxor import strxor
 
 
 def _attack_block(padding_oracle, iv, c):
+    logging.debug(f"Attacking block {c.hex()}...")
     r = bytes()
     for i in reversed(range(16)):
         s = bytes([16 - i] * (16 - i))
