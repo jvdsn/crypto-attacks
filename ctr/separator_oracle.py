@@ -25,7 +25,7 @@ def attack(separator_oracle, separator, c):
     """
     separator_positions = _find_separator_positions(separator_oracle, c)
     c = bytearray(c)
-    # Ensure that at least 1 separator is missing
+    # Ensure that at least 1 separator is missing.
     c[separator_positions[0]] ^= 1
     p = bytearray(len(c))
     for i in range(len(c)):
