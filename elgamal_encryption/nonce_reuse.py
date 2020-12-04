@@ -9,4 +9,4 @@ def attack(p, m1, c1, d1, c2, d2):
     :param d2: the ciphertext of the secret plaintext
     :return: the secret plaintext
     """
-    return pow(d1, -1, p) * d2 * m1 % p
+    return int(pow(d1, -1, p) * d2 * m1 % p)

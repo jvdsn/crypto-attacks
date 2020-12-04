@@ -1,3 +1,4 @@
+from math import gcd
 from random import getrandbits
 from random import randbytes
 from random import randint
@@ -9,6 +10,7 @@ from Crypto.Util.Padding import pad
 from Crypto.Util.Padding import unpad
 from sage.all import EllipticCurve
 from sage.all import GF
+from sage.all import legendre_symbol
 
 
 class TestCBC(TestCase):
@@ -333,3 +335,67 @@ class TestECC(TestCase):
         l_ = self.smart_attack.attack(gen, l * gen)
         self.assertIsInstance(l_, int)
         self.assertEqual(l, l_)
+
+
+class TestElgamalEncryption(TestCase):
+    from elgamal_encryption import nonce_reuse
+    from elgamal_encryption import unsafe_generator
+
+    def test_nonce_reuse(self):
+        # Safe prime.
+        p = 16902648776703029279
+        g = 3
+        d = randint(1, p - 1)
+        h = pow(g, d, p)
+        l = randint(1, p - 1)
+        s = pow(h, p, l)
+        c = pow(g, l, p)
+        m1 = getrandbits(p.bit_length())
+        d1 = m1 * s % p
+        m2 = getrandbits(p.bit_length())
+        d2 = m2 * s % p
+        m2_ = self.nonce_reuse.attack(p, m1, c, d1, c, d2)
+        self.assertIsInstance(m2_, int)
+        self.assertEqual(m2, m2_)
+
+    def test_unsafe_generator(self):
+        # Safe prime.
+        p = 16902648776703029279
+        # Unsafe generator, generates the entire group.
+        g = 7
+        d = randint(1, p - 1)
+        h = pow(g, d, p)
+        l = randint(1, p - 1)
+        s = pow(h, p, l)
+        c1 = pow(g, l, p)
+        m = getrandbits(p.bit_length())
+        c2 = m * s % p
+        k = self.unsafe_generator.attack(p, h, c1, c2)
+        self.assertIsInstance(k, int)
+        self.assertEqual(legendre_symbol(m, p), k)
+
+
+class TestElgamalSignautre(TestCase):
+    from elgamal_signature import nonce_reuse
+
+    def test_nonce_reuse(self):
+        # Safe prime.
+        p = 16902648776703029279
+        g = 3
+        d = randint(1, p - 2)
+        l = p - 1
+        while gcd(l, p - 1) != 1:
+            l = randint(2, p - 2)
+
+        r = pow(g, l, p)
+        m1 = getrandbits(p.bit_length())
+        s1 = pow(l, -1, p - 1) * (m1 - r * d) % (p - 1)
+        m2 = getrandbits(p.bit_length())
+        s2 = pow(l, -1, p - 1) * (m2 - r * d) % (p - 1)
+        for l_, d_ in self.nonce_reuse.attack(p, m1, r, s1, m2, r, s2):
+            self.assertIsInstance(l_, int)
+            self.assertIsInstance(d_, int)
+            if l_ == l and d_ == d:
+                break
+        else:
+            self.fail()

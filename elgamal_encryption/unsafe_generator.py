@@ -10,7 +10,5 @@ def attack(p, h, c1, c2):
     :param c2: the ciphertext
     :return: the Legendre symbol
     """
-    kx = legendre_symbol(h, p)
-    ky = legendre_symbol(c1, p)
     k = legendre_symbol(c2, p)
-    return k if kx == 1 or ky == 1 else -k
+    return int(k) if legendre_symbol(h, p) == 1 or legendre_symbol(c1, p) == 1 else int(-k)
