@@ -280,7 +280,7 @@ class TestECC(TestCase):
         s1 = pow(l, -1, n) * (m1 + r * d) % n
         m2 = getrandbits(n.bit_length())
         s2 = pow(l, -1, n) * (m2 + r * d) % n
-        for l_, d_ in self.ecdsa_nonce_reuse.attack(m1, r, s1, m2, r, s2, n):
+        for l_, d_ in self.ecdsa_nonce_reuse.attack(n, m1, r, s1, m2, r, s2):
             self.assertIsInstance(l_, int)
             self.assertIsInstance(d_, int)
             if l_ == l and d_ == d:
