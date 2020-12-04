@@ -1,32 +1,51 @@
-from sage.all import EllipticCurve
+import logging
+from math import gcd
+from math import lcm
+
 from sage.all import GF
+from sage.all import crt
 
 
-def attack(P, Q):
+def attack(base, multiplication_result):
     """
     Solves the discrete logarithm problem using the Frey-Ruck attack.
-    :param P: the base point
-    :param Q: the point multiplication result
-    :return: l such that l * P == Q
+    :param base: the base point
+    :param multiplication_result: the point multiplication result
+    :return: l such that l * base == multiplication_result
     """
-    E = P.curve()
-    q = E.base_ring().order()
-    n = P.order()
+    curve = base.curve()
+    p = curve.base_ring().order()
+    n = base.order()
 
+    assert gcd(n, p) == 1, "GCD of curve base ring order and generator order should be 1."
+
+    logging.debug("Calculating embedding degree...")
+
+    # Embedding degree k.
     k = 1
-    while (q ** k - 1) % n != 0:
+    while (p ** k - 1) % n != 0:
         k += 1
 
-    E = EllipticCurve(GF(q ** k), E.a_invariants())
-    P = E(P)
-    Q = E(Q)
-    while True:
-        R = E.random_point()
-        if R == P or R == Q or R.order() != n ** k:
-            continue
+    logging.debug(f"Found embedding degree {k}, computing discrete logarithm...")
 
-        a = P.tate_pairing(R, n, k)
-        b = Q.tate_pairing(R, n, k)
-        l = b.log(a)
-        if l * P == Q:
-            return l
+    pairing_curve = curve.base_extend(GF(p ** k))
+    pairing_base = pairing_curve(base)
+    pairing_multiplication_result = pairing_curve(multiplication_result)
+
+    ls = []
+    ds = []
+    while lcm(*ds) != n:
+        rand = pairing_curve.random_point()
+        o = rand.order()
+        d = gcd(o, n)
+        rand = (o // d) * rand
+        assert rand.order() == d
+
+        u = pairing_base.tate_pairing(rand, n, k)
+        v = pairing_multiplication_result.tate_pairing(rand, n, k)
+        l = v.log(u)
+        logging.debug(f"Found discrete log {l} modulo {d}")
+        ls.append(int(l))
+        ds.append(int(d))
+
+    return ls[0] if len(ls) == 1 else int(crt(ls, ds))

@@ -2,8 +2,10 @@
 Python implementations of cryptographic attacks and utilities.
 
 ## Requirements
-* PyCryptodome 
-* SageMath
+* Python 3.9
+* [PyCryptodome](https://pycryptodome.readthedocs.io/)
+* [SageMath](https://www.sagemath.org/)
+* [Hilbert Class Polynomial database](https://doc.sagemath.org/html/en/reference/databases/sage/databases/db_class_polynomials.html)
 
 ## Implementations
 ### CBC
@@ -30,8 +32,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [ECDSA nonce reuse attack](ecc/ecdsa_nonce_reuse.py)
 * [x] [Frey-Ruck attack](ecc/frey_ruck_attack.py)
 * [x] [MOV attack](ecc/mov_attack.py)
-* [x] [Singular curve attack (cusp)](ecc/singular_curve_cusp.py)
-* [x] [Singular curve attack (node)](ecc/singular_curve_node.py)
+* [x] [Singular curve attack](ecc/singular_curve.py)
 * [x] [Smart's attack](ecc/smart_attack.py) [More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"]
 
 ### ElGamal Encryption

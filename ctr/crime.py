@@ -1,19 +1,23 @@
-def attack(encrypt_oracle, secret_len):
+def attack(encrypt_oracle, known_prefix, padding_byte):
     """
     Recovers a secret using the CRIME attack (CTR version).
     :param encrypt_oracle: the encryption oracle
-    :param secret_len: the length of the secret to recover
+    :param known_prefix: a known prefix of the secret to recover
+    :param padding_byte: a byte which is never used in the plaintext
     :return: the secret
     """
-    padding = bytearray(i for i in range(secret_len))
-    s = bytearray()
-    for i in range(secret_len):
-        min = None
-        for j in range(256):
-            l = len(encrypt_oracle(padding + s + bytes([j]) + padding))
-            if min is None or l < min[0]:
-                min = (l, j)
+    known_prefix = bytearray(known_prefix)
+    padding_bytes = bytes([padding_byte])
+    while True:
+        for i in range(256):
+            # Don't try the padding byte.
+            if i == padding_byte:
+                continue
 
-        s.append(min[1])
-
-    return bytes(s)
+            l1 = len(encrypt_oracle(padding_bytes + known_prefix + bytes([i]) + padding_bytes + padding_bytes))
+            l2 = len(encrypt_oracle(padding_bytes + known_prefix + padding_bytes + bytes([i]) + padding_bytes))
+            if l1 < l2:
+                known_prefix.append(i)
+                break
+        else:
+            return known_prefix

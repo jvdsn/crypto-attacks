@@ -15,11 +15,11 @@ def _find_separator_positions(separator_oracle, c):
     return separator_positions
 
 
-def attack(separator_oracle, separator, c):
+def attack(separator_oracle, separator_byte, c):
     """
     Recovers the plaintext using the separator oracle attack.
     :param separator_oracle: the separator oracle, returns True if the separators are correct, False otherwise
-    :param separator: the separator which is used in the separator oracle
+    :param separator_byte: the separator which is used in the separator oracle
     :param c: the ciphertext
     :return: the plaintext
     """
@@ -30,14 +30,14 @@ def attack(separator_oracle, separator, c):
     p = bytearray(len(c))
     for i in range(len(c)):
         if i in separator_positions:
-            p[i] = separator
+            p[i] = separator_byte
         else:
             c_i = c[i]
             # Try every byte until an additional separator is created.
             for b in range(256):
                 c[i] = b
                 if separator_oracle(c):
-                    p[i] = c_i ^ c[i] ^ separator
+                    p[i] = c_i ^ c[i] ^ separator_byte
                     break
 
             c[i] = c_i

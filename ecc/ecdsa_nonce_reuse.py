@@ -2,7 +2,7 @@ from math import gcd
 
 
 # Solves a congruence of the form ax = b mod n
-def solve_congruence(a, b, n):
+def _solve_congruence(a, b, n):
     g = gcd(a, n)
     a //= g
     b //= g
@@ -21,8 +21,8 @@ def attack(m1, r1, s1, m2, r2, s2, n):
     :param r2: the signature of the second message
     :param s2: the signature of the second message
     :param n: the order of the elliptic curve
-    :return: tuples containing the possible nonce and private key
+    :return: generates tuples containing the possible nonce and private key
     """
-    for k in solve_congruence(s1 - s2, m1 - m2, n):
-        for d in solve_congruence(r1, k * s1 - m1, n):
-            yield k, d
+    for l in _solve_congruence(int(s1 - s2), int(m1 - m2), int(n)):
+        for d in _solve_congruence(int(r1), int(l * s1 - m1), int(n)):
+            yield int(l), int(d)
