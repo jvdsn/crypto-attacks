@@ -44,6 +44,13 @@ Python implementations of cryptographic attacks and utilities.
 * [ ] Khadir's attack
 * [x] [Nonce reuse attack](elgamal_signature/nonce_reuse.py)
 
+### Elliptic Curve Generation
+
+* [ ] MNT curves
+* [ ] Prescribed order
+* [ ] Prescribed trace
+* [ ] Supersingular curves
+
 ### Factorization
 * [x] [Base conversion factorization](factorization/base_conversion.py)
 * [x] [Elliptic curve complex multiplication factorization](factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
@@ -59,6 +66,7 @@ Python implementations of cryptographic attacks and utilities.
 ### Hidden Number Problem
 * [x] [Lattice-based attack](hnp/lattice_attack.py) [More information: Breitner J., Heninger N., "Biased Nonce Sense: Lattice Attacks against Weak ECDSA Signatures in Cryptocurrencies"]
 * [ ] Fourier analysis attack
+* [ ] Extended hidden number problem
 
 ### IGE
 * [x] [Padding oracle attack](ige/padding_oracle.py)
