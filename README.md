@@ -1,34 +1,43 @@
 # Crypto attacks
+
 Python implementations of cryptographic attacks and utilities.
 
 ## Requirements
+
 * Python 3.9
 * [PyCryptodome](https://pycryptodome.readthedocs.io/)
 * [SageMath](https://www.sagemath.org/)
 * [Hilbert Class Polynomial database](https://doc.sagemath.org/html/en/reference/databases/sage/databases/db_class_polynomials.html)
 
 ## Implementations
+
 ### CBC
+
 * [x] [Bit flipping attack](cbc/bit_flipping.py)
 * [x] [IV recovery attack](cbc/iv_recovery.py)
 * [x] [Padding oracle attack](cbc/padding_oracle.py)
 
 ### CBC + CBC-MAC
+
 * [x] [Key reuse attack (encrypt-and-MAC)](cbc_and_cbc_mac/eam_key_reuse.py)
 * [x] [Key reuse attack (encrypt-then-MAC)](cbc_and_cbc_mac/eam_key_reuse.py)
 * [x] [Key reuse attack (MAC-then-encrypt)](cbc_and_cbc_mac/eam_key_reuse.py)
 
 ### CBC-MAC
+
 * [x] [Length extension attack](cbc_mac/length_extension.py)
 
 ### CTR
+
 * [x] [CRIME attack](ctr/crime.py)
 * [x] [Separator oracle attack](ctr/separator_oracle.py)
 
 ### ECB
+
 * [x] [Plaintext recovery attack](ecb/plaintext_recovery.py)
 
 ### Elliptic Curve Cryptography
+
 * [x] [ECDSA nonce reuse attack](ecc/ecdsa_nonce_reuse.py)
 * [x] [Frey-Ruck attack](ecc/frey_ruck_attack.py)
 * [x] [MOV attack](ecc/mov_attack.py)
@@ -36,10 +45,12 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Smart's attack](ecc/smart_attack.py) [More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"]
 
 ### ElGamal Encryption
+
 * [x] [Nonce reuse attack](elgamal_encryption/nonce_reuse.py)
 * [x] [Unsafe generator attack](elgamal_encryption/unsafe_generator.py)
 
 ### ElgGamal Signature
+
 * [ ] Bleichenbacher's attack
 * [ ] Khadir's attack
 * [x] [Nonce reuse attack](elgamal_signature/nonce_reuse.py)
@@ -52,6 +63,7 @@ Python implementations of cryptographic attacks and utilities.
 * [ ] Supersingular curves
 
 ### Factorization
+
 * [x] [Base conversion factorization](factorization/base_conversion.py)
 * [x] [Elliptic curve complex multiplication factorization](factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
 * [x] [Coppersmith factorization](factorization/coppersmith.py)
@@ -61,31 +73,39 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Twin primes factorization](factorization/twin_primes.py)
 
 ### GCM
+
 * [x] [Forbidden attack](gcm/forbidden_attack.py) [More information: Joux A., "Authentication Failures in NIST version of GCM"]
 
 ### Hidden Number Problem
+
 * [x] [Lattice-based attack](hnp/lattice_attack.py) [More information: Breitner J., Heninger N., "Biased Nonce Sense: Lattice Attacks against Weak ECDSA Signatures in Cryptocurrencies"]
 * [ ] Fourier analysis attack
 * [ ] Extended hidden number problem
 
 ### IGE
+
 * [x] [Padding oracle attack](ige/padding_oracle.py)
 
 ### Knapsack Cryptosystem
+
 * [x] [Low density attack](knapsack/low_density.py)
 
 ### Linear Congruential Generators
+
 * [x] [LCG parameter recovery](lcg/parameter_recovery.py)
 * [x] [Truncated LCG state recovery](lcg/truncated_state_recovery.py) [More information: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"]
 
 ### OFB
+
 * [x] [CRIME attack](ofb/crime.py)
 * [x] [Separator oracle attack](ctr/separator_oracle.py)
 
 ### Pseudoprimes
+
 * [x] [Generating Miller-Rabin pseudoprimes](pseudoprimes/miller_rabin.py)
 
 ### RSA
+
 * [ ] Bleichenbacher's attack
 * [x] [Bleichenbacher's signature forgery attack](rsa/bleichenbacher_signature_forgery.py)
 * [x] [Boneh-Durfee attack](rsa/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
@@ -104,10 +124,12 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Wiener's attack (Heuristic lattice variant)](rsa/wiener_attack_lattice.py) [More information: Nguyen P. Q., "Public-Key Cryptanalysis"]
 
 ### Shamir's Secret Sharing
+
 * [x] [Deterministic coefficients](shamir_secret_sharing/deterministic_coefficients.py)
 * [x] [Share forgery](shamir_secret_sharing/share_forgery.py)
 
 ### Small roots
+
 * [x] [Boneh-Durfee method](small_roots/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
 * [x] [Coron method](small_roots/coron.py) [More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"]
 * [x] [Herrmann-May method (Boneh-Durfee with unravelled linearization)](small_roots/herrmann_may.py) [Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"]
