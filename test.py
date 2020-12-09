@@ -424,6 +424,7 @@ class TestFactorization(TestCase):
     from factorization import complex_multiplication
     from factorization import coppersmith
     from factorization import fermat
+    from factorization import roca
     from factorization import known_phi
 
     def test_base_conversion(self):
@@ -530,14 +531,23 @@ class TestFactorization(TestCase):
         self.assertEqual(n, p_ * q_ * r_ * s_)
 
     def test_roca(self):
-        # TODO: ROCA takes too long for unit tests.
-        pass
-
-    def test_twin_primes(self):
-        p = 4045364040964617981493056570547683620499113851384489798802437290109120991898115799819774088264427282611552038114397865000343325953101387058967136608664303
-        q = 4045364040964617981493056570547683620499113851384489798802437290109120991898115799819774088264427282611552038114397865000343325953101387058967136608664301
+        # 39th primorial
+        M = 962947420735983927056946215901134429196419130606213075415963491270
+        # These primes are chosen such that a' is pretty small so it doesn't take too long.
+        p = 85179386137518452231354185509698113331528483782580002217930594759662020757433
+        q = 121807704694511224555991770528701515984374557330058194205583818929517699002107
         n = p * q
-        p_, q_ = self.fermat.factorize(n)
+        p_, q_ = self.roca.factorize(n, M, 5, 6)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(n, p_ * q_)
+
+
+def test_twin_primes(self):
+    p = 4045364040964617981493056570547683620499113851384489798802437290109120991898115799819774088264427282611552038114397865000343325953101387058967136608664303
+    q = 4045364040964617981493056570547683620499113851384489798802437290109120991898115799819774088264427282611552038114397865000343325953101387058967136608664301
+    n = p * q
+    p_, q_ = self.fermat.factorize(n)
+    self.assertIsInstance(p_, int)
+    self.assertIsInstance(q_, int)
+    self.assertEqual(n, p_ * q_)

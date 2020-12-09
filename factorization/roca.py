@@ -2,7 +2,6 @@ import logging
 from math import log2
 
 from sage.all import Zmod
-from sage.all import discrete_log
 from sage.all import factor
 
 from small_roots.howgrave_graham import modular_univariate
@@ -51,7 +50,7 @@ def _greedy_find_M_(n, M):
         M = best_M_
 
 
-def attack(n, M, m, t):
+def factorize(n, M, m, t):
     """
     Recovers the prime factors from a modulus using the ROCA method.
     More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"
@@ -63,13 +62,14 @@ def attack(n, M, m, t):
     """
     logging.debug("Generating M'...")
     M_ = _greedy_find_M_(n, M)
-    e = Zmod(M_)(65537)
-    c_ = discrete_log(n, e)
+    ZmodM_ = Zmod(M_)
+    e = ZmodM_(65537)
+    c_ = ZmodM_(n).log(e)
     ord_ = e.multiplicative_order()
 
-    logging.debug("Starting exhaustive a' search...")
     x = Zmod(n)["x"].gen()
     X = int(2 * n ** 0.5 // M_)
+    logging.debug("Starting exhaustive a' search...")
     for a_ in range(c_ // 2, (c_ + ord_) // 2 + 1):
         f = M_ * x + int(e ** a_)
         for k_ in modular_univariate(f, n, m, t, X):
