@@ -230,6 +230,7 @@ class TestECB(TestCase):
 
 class TestECC(TestCase):
     from ecc import ecdsa_nonce_reuse
+    from ecc import parameter_recovery
     from ecc import singular_curve
     from ecc import smart_attack
 
@@ -273,7 +274,10 @@ class TestECC(TestCase):
         return multiplication_result
 
     def test_ecdsa_nonce_reuse(self):
-        p_256 = EllipticCurve(GF(115792089210356248762697446949407573530086143415290314195533631308867097853951), [-3, 41058363725152142129326129780047268409114441015993725554835256314039467401291])
+        p = 115792089210356248762697446949407573530086143415290314195533631308867097853951
+        a = 115792089210356248762697446949407573530086143415290314195533631308867097853948
+        b = 41058363725152142129326129780047268409114441015993725554835256314039467401291
+        p_256 = EllipticCurve(GF(p), [a, b])
         gen = p_256.gen(0)
         n = int(gen.order())
         d = randint(1, n - 1)
@@ -298,6 +302,19 @@ class TestECC(TestCase):
     def test_mov_attack(self):
         # TODO: MOV attack is too inconsistent in unit tests.
         pass
+
+    def test_parameter_recovery(self):
+        p = 115792089210356248762697446949407573530086143415290314195533631308867097853951
+        a = 115792089210356248762697446949407573530086143415290314195533631308867097853948
+        b = 41058363725152142129326129780047268409114441015993725554835256314039467401291
+        p_256 = EllipticCurve(GF(p), [a, b])
+        x1, y1 = p_256.random_point().xy()
+        x2, y2 = p_256.random_point().xy()
+        a_, b_ = self.parameter_recovery.attack(p, x1, y1, x2, y2)
+        self.assertIsInstance(a_, int)
+        self.assertIsInstance(b_, int)
+        self.assertEqual(a, a_)
+        self.assertEqual(b, b_)
 
     def test_singular_curve(self):
         # Singular point is a cusp.

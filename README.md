@@ -41,6 +41,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [ECDSA nonce reuse attack](ecc/ecdsa_nonce_reuse.py)
 * [x] [Frey-Ruck attack](ecc/frey_ruck_attack.py)
 * [x] [MOV attack](ecc/mov_attack.py)
+* [x] [Parameter recovery](ecc/parameter_recovery.py)
 * [x] [Singular curve attack](ecc/singular_curve.py)
 * [x] [Smart's attack](ecc/smart_attack.py) [More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"]
 
@@ -68,7 +69,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Elliptic curve complex multiplication factorization](factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
 * [x] [Coppersmith factorization](factorization/coppersmith.py)
 * [x] [Fermat factorization](factorization/fermat.py)
-* [x] [Known phi factorization](factorization/known_phi.py)
+* [x] [Known phi factorization (with multi-prime support)](factorization/known_phi.py) [More information: Hinek M. J., Low M. K., Teske E., "On Some Attacks on Multi-prime RSA" (Section 3)]
 * [x] [ROCA](factorization/roca.py) [More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"]
 * [x] [Twin primes factorization](factorization/twin_primes.py)
 
@@ -133,5 +134,5 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Boneh-Durfee method](small_roots/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
 * [x] [Coron method](small_roots/coron.py) [More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"]
 * [x] [Herrmann-May method (Boneh-Durfee with unravelled linearization)](small_roots/herrmann_may.py) [Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"]
-* [x] [Howgrave-Graham method](small_roots/howgrave_graham.py) [More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods"]
+* [x] [Howgrave-Graham method](small_roots/howgrave_graham.py) [More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods (Section 3.2)"]
 * [ ] Jochemsz-May method [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants"]

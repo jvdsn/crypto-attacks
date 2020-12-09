@@ -43,6 +43,7 @@ def attack(base, multiplication_result):
 
         u = pairing_base.weil_pairing(rand, n)
         v = pairing_multiplication_result.weil_pairing(rand, n)
+        logging.debug(f"Calculating ({v}).log({u}) modulo {d}")
         l = v.log(u)
         logging.debug(f"Found discrete log {l} modulo {d}")
         ls.append(int(l))
