@@ -18,59 +18,61 @@ def _prime_power_divisors(n):
     return divisors
 
 
-def _compute_max_primorial_(primorial, order):
-    for p in _prime_power_divisors(primorial):
-        orderp = Zmod(p)(65537).multiplicative_order()
-        if order % orderp != 0:
-            primorial //= p
+# Algorithm 2.
+def compute_max_M_(M, ord_):
+    for p in _prime_power_divisors(M):
+        ordp = Zmod(p)(65537).multiplicative_order()
+        if ord_ % ordp != 0:
+            M //= p
 
-    return primorial
+    return M
 
 
-def _greedy_find_primorial_(n, primorial):
-    order = Zmod(primorial)(65537).multiplicative_order()
+# Section 2.7.2
+def _greedy_find_M_(n, M):
+    ord = Zmod(M)(65537).multiplicative_order()
     while True:
-        best_reward = 0
-        best_order = order
-        best_primorial_ = primorial
-        for p in _prime_power_divisors(order):
-            order_ = order // p
-            primorial_ = _compute_max_primorial_(primorial, order_)
-            r = (log2(order) - log2(order_)) / (log2(primorial) - log2(primorial_))
-            if r > best_reward:
-                best_reward = r
-                best_order = order_
-                best_primorial_ = primorial_
+        best_r = 0
+        best_ord_ = ord
+        best_M_ = M
+        for p in _prime_power_divisors(ord):
+            ord_ = ord // p
+            M_ = compute_max_M_(M, ord_)
+            r = (log2(ord) - log2(ord_)) / (log2(M) - log2(M_))
+            if r > best_r:
+                best_r = r
+                best_ord_ = ord_
+                best_M_ = M_
 
-        if log2(best_primorial_) < log2(n) / 4:
-            return primorial
+        if log2(best_M_) < log2(n) / 4:
+            return M
 
-        order = best_order
-        primorial = best_primorial_
+        ord = best_ord_
+        M = best_M_
 
 
-def attack(n, primorial, m):
+def attack(n, M, m, t):
     """
     Recovers the prime factors from a modulus using the ROCA method.
     More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"
     :param n: the modulus
-    :param primorial: the primorial used to generate the primes
+    :param M: the primorial used to generate the primes
     :param m: the m parameter for Coppersmith's method
+    :param t: the t parameter for Coppersmith's method
     :return: a tuple containing the prime factors
     """
-    logging.debug("Generating primorial_...")
-    primorial_ = _greedy_find_primorial_(n, primorial)
-    inverse_primorial_ = pow(primorial_, -1, n)
-    e = Zmod(primorial_)(65537)
-    c = discrete_log(n, e)
-    order = e.multiplicative_order()
+    logging.debug("Generating M'...")
+    M_ = _greedy_find_M_(n, M)
+    e = Zmod(M_)(65537)
+    c_ = discrete_log(n, e)
+    ord_ = e.multiplicative_order()
 
-    logging.debug("Starting exhaustive a search...")
+    logging.debug("Starting exhaustive a' search...")
     x = Zmod(n)["x"].gen()
-    bound = int(2 * n ** 0.5 // primorial_)
-    for a in range(c // 2, (c + order) // 2 + 1):
-        f = x + inverse_primorial_ * int(e ** a)
-        for root in modular_univariate(f, n, m, m + 1, bound):
-            p = root * primorial_ + int(e ** a)
+    X = int(2 * n ** 0.5 // M_)
+    for a_ in range(c_ // 2, (c_ + ord_) // 2 + 1):
+        f = M_ * x + int(e ** a_)
+        for k_ in modular_univariate(f, n, m, t, X):
+            p = int(f(k_))
             if n % p == 0:
                 return p, n // p

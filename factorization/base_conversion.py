@@ -1,4 +1,6 @@
-from sage.all import Integer
+import logging
+
+from sage.all import ZZ
 from sage.all import var
 
 
@@ -12,12 +14,13 @@ def factorize(n, coefficient_threshold=50):
     x = var("x")
     base = 2
     while True:
-        p = 0
-        for i, e in enumerate(Integer(n).digits(base)):
-            p += e * x ** i
+        logging.debug(f"Trying base {base}...")
 
-        if len(p.coefficients()) < coefficient_threshold:
-            (p, _), (q, _) = p.factor_list()
-            return p.subs(x=base), q.subs(x=base)
+        polynomial = 0
+        for i, e in enumerate(ZZ(n).digits(base)):
+            polynomial += e * x ** i
+
+        if len(polynomial.coefficients()) < coefficient_threshold:
+            return tuple(map(lambda f: int(f[0].subs(x=base)), polynomial.factor_list()))
 
         base += 1

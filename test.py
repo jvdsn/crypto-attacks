@@ -1,3 +1,4 @@
+import sys
 from math import gcd
 from random import getrandbits
 from random import randbytes
@@ -399,3 +400,127 @@ class TestElgamalSignautre(TestCase):
                 break
         else:
             self.fail()
+
+
+class TestFactorization(TestCase):
+    from factorization import base_conversion
+    from factorization import complex_multiplication
+    from factorization import coppersmith
+    from factorization import fermat
+    from factorization import known_phi
+
+    def test_base_conversion(self):
+        # Base 3, 3 primes.
+        p = 21187083124088512843307390152364167522362269594349815270782628323431805003774795906872825415073456706499910412455608669
+        q = 15684240429131529254685698284890751184639406145730291592802676915731672495230992603635422093849215077
+        r = 40483766026713491645694780188316242859742718066890630967135095358496115350752613236101566589
+        n = p * q * r
+        p_, q_, r_ = self.base_conversion.factorize(n)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertIsInstance(r_, int)
+        self.assertEqual(n, p_ * q_ * r_)
+
+        # Base 11, 2 primes.
+        p = 5636663100410339050591445485090234548439547400230152507623650956862470951259768771895609021439466657292113515499213261725046751664333428835212665405991848764779073407177219695916181638661604890906124870900657349291343875716114535224623986662673220278594643325664055743877053272540004735452198447411515019043760699779198474382859366389140522851725256493083967381046565218658785408508317
+        q = 4637643488084848224165183518002033325616428077917519043195914958210451836010505629755906000122693190713754782092365745897354221494160410767300504260339311867766125480345877257141604490894821710144701103564244398358535542801965838493
+        n = p * q
+        p_, q_ = self.base_conversion.factorize(n)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+    def test_complex_multiplication(self):
+        # Recursion limit is necessary for calculating division polynomials using sage.
+        rec_limit = sys.getrecursionlimit()
+        sys.setrecursionlimit(5000)
+
+        p = 10577468517212308916917871367410399281392767861135513107255047025555394408598222362847763634342865553142272076186583012471808986419037203678594688627595231
+        q = 8925960222192297437450017303748967603715694246793735943594688849877125733026282069058422865132949625288537523520769856912162011383285034969425346137038883
+        n = p * q
+        D = 427
+        p_, q_ = self.complex_multiplication.factorize(n, D)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        sys.setrecursionlimit(rec_limit)
+
+    def test_coppersmith(self):
+        import logging
+        logging.basicConfig(level=logging.DEBUG)
+        p = 8294118504611118345546466080325632607801907364697312317242368417303646025896249767645395912291329182895616276681886182303417327463669722370956110678857457
+        q = 11472445399871949099065671577613972926185090427303119917183801667878634389108674818205844773744056675054520407290278050115877859333328393928885760892504569
+        n = p * q
+
+        p_, q_ = self.coppersmith.factorize_univariate(n, 512, 270, p >> (512 - 270), 0, 0)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_, q_ = self.coppersmith.factorize_univariate(n, 512, 0, 0, 270, p % (2 ** 270))
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_, q_ = self.coppersmith.factorize_univariate(n, 512, 135, p >> (512 - 135), 135, p % (2 ** 135))
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_, q_ = self.coppersmith.factorize_bivariate(n, 512, 150, p >> (512 - 150), 0, 0, 512, 0, 0, 150, q % (2 ** 150))
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_, q_ = self.coppersmith.factorize_bivariate(n, 512, 0, 0, 150, p % (2 ** 150), 512, 150, q >> (512 - 150), 0, 0)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+    def test_fermat(self):
+        p = 383885088537555147258860631363598239852683844948508219667734507794290658581818891369581578137796842442514517285109997827646844102293746572763236141308659
+        q = 383885088537555147258860631363598239852683844948508219667734507794290658581818891369581578137796842442514517285109997827646844102293746572763236141308451
+        n = p * q
+        p_, q_ = self.fermat.factorize(n)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+    def test_known_phi(self):
+        # These primes aren't special.
+        p = 11106026672819778415395265319351312104517763207376765038636473714941732117831488482730793398782365364840624898218935983446211558033147834146885518313145941
+        q = 12793494802119353329493630005275969260540058187994460635179617401018719587481122947567147790680079651999077966705114757935833094909655872125005398075725409
+        n = p * q
+        phi = (p - 1) * (q - 1)
+        p_, q_ = self.known_phi.factorize(n, phi)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        # Multi-prime case takes longer so there's a separate method.
+        p = 10193015828669388212171268316396616412166866643440710733674534917491644123135436050477232002188857603479321547506131679866357093667445348339711929671105733
+        q = 8826244874397589965592244959402585690675974843434609869757034692220480232437419549416634170391846191239385439228177059214900435042874545573920364227747261
+        r = 7352042777909126576764043061995108196815011736073183321111078742728938275060552442022686305342309076279692633229512445674423158310200668776459828180575601
+        s = 9118676262959556930818956921827413198986277995127667203870694452397233225961924996910197904901037135372560207618442015208042298428698343225720163505153059
+        n = p * q * r * s
+        phi = (p - 1) * (q - 1) * (r - 1) * (s - 1)
+        p_, q_, r_, s_ = self.known_phi.factorize_multi_prime(n, phi)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertIsInstance(r_, int)
+        self.assertIsInstance(s_, int)
+        self.assertEqual(n, p_ * q_ * r_ * s_)
+
+    def test_roca(self):
+        # TODO: ROCA takes too long for unit tests.
+        pass
+
+    def test_twin_primes(self):
+        p = 4045364040964617981493056570547683620499113851384489798802437290109120991898115799819774088264427282611552038114397865000343325953101387058967136608664303
+        q = 4045364040964617981493056570547683620499113851384489798802437290109120991898115799819774088264427282611552038114397865000343325953101387058967136608664301
+        n = p * q
+        p_, q_ = self.fermat.factorize(n)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)

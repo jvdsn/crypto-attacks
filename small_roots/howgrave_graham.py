@@ -4,52 +4,55 @@ from sage.all import Matrix
 from sage.all import ZZ
 
 
-def modular_univariate(p, modulus, m, t, bound, early_return=True):
+def modular_univariate(f, N, m, t, X, early_return=True):
     """
     Computes small modular roots of a univariate polynomial.
-    More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods"
-    :param p: the polynomial
-    :param modulus: the modulus
-    :param m: the amount of normal shifts to use
-    :param t: the amount of additional shifts to use
-    :param bound: an approximate bound on the roots
+    More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods (Section 3.2)"
+    :param f: the polynomial
+    :param N: the modulus
+    :param m: the amount of g shifts to use
+    :param t: the amount of h shifts to use
+    :param X: an approximate bound on the roots
     :param early_return: try to return as early as possible (default: true)
     :return: a generator generating small roots of the polynomial
     """
-    p = p.monic().change_ring(ZZ)
-    x = p.parent().gen()
-    d = p.degree()
+    f = f.monic().change_ring(ZZ)
+    x = f.parent().gen()
+    d = f.degree()
 
-    lattice = Matrix(d * m + t)
+    B = Matrix(ZZ, d * m + t)
     row = 0
-    logging.debug("Generating normal shifts...")
+    logging.debug("Generating g shifts...")
     for i in range(m):
         for j in range(d):
-            shift = (x * bound) ** j * modulus ** (m - i) * p(x * bound) ** i
+            g = x ** j * N ** (m - i) * f ** i
             for col in range(row + 1):
-                lattice[row, col] = shift[col]
+                B[row, col] = g(x * X)[col]
 
             row += 1
 
-    logging.debug("Generating additional shifts...")
+    logging.debug("Generating h shifts...")
     for i in range(t):
-        shift = (x * bound) ** i * p(x * bound) ** m
+        h = x ** i * f ** m
+        h = h(x * X)
         for col in range(row + 1):
-            lattice[row, col] = shift[col]
+            B[row, col] = h[col]
 
         row += 1
 
     logging.debug("Executing the LLL algorithm...")
-    basis = lattice.LLL()
+    B = B.LLL()
 
     logging.debug("Reconstructing polynomials...")
-    for row in range(basis.nrows()):
-        new_polynomial = 0
-        for col in range(basis.ncols()):
-            new_polynomial += (basis[row, col] // bound ** col) * x ** col
+    for row in range(B.nrows()):
+        f = 0
+        for col in range(B.ncols()):
+            f += B[row, col] * x ** col
 
-        for xroot, _ in new_polynomial.roots():
-            yield int(xroot)
+        f = f(x / X).change_ring(ZZ)
+        if not f.is_constant():
+            for x0, _ in f.roots():
+                yield int(x0)
 
         if early_return:
             return

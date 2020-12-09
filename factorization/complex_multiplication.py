@@ -1,3 +1,4 @@
+import logging
 from math import gcd
 
 from sage.all import EllipticCurve
@@ -45,28 +46,30 @@ def factorize(n, D):
     pr = zmodn["x"]
 
     H = pr(hilbert_class_polynomial(-D))
-    qr = pr.quotient(H)
-    j = qr.gen()
+    Q = pr.quotient(H)
+    j = Q.gen()
 
     try:
         k = j * _polynomial_inverse((1728 - j).lift(), H)
     except ArithmeticError as err:
         # If some polynomial was not invertible during XGCD calculation, we can factor n.
         p = gcd(int(err.args[1].lc()), n)
-        return p, n // p
+        return int(p), int(n // p)
 
-    E = EllipticCurve(qr, [3 * k, 2 * k])
+    E = EllipticCurve(Q, [3 * k, 2 * k])
     while True:
         x = zmodn.random_element()
-        z = E.division_polynomial(n, x=qr(x))
+
+        logging.debug(f"Calculating division polynomial of Q{x}...")
+        z = E.division_polynomial(n, x=Q(x))
 
         try:
             d, _, _ = _polynomial_xgcd(z.lift(), H)
         except ArithmeticError as err:
             # If some polynomial was not invertible during XGCD calculation, we can factor n.
             p = gcd(int(err.args[1].lc()), n)
-            return p, n // p
+            return int(p), int(n // p)
 
         p = gcd(int(d), n)
         if 1 < p < n:
-            return p, n // p
+            return int(p), int(n // p)

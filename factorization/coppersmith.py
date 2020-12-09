@@ -1,4 +1,6 @@
 import logging
+from math import ceil
+from math import floor
 
 from sage.all import ZZ
 from sage.all import Zmod
@@ -7,7 +9,7 @@ from small_roots.coron import integer_bivariate
 from small_roots.howgrave_graham import modular_univariate
 
 
-def factorize_univariate(n, bitsize, msb_known, msb, lsb_known, lsb, m_start=1):
+def factorize_univariate(n, bitsize, msb_known, msb, lsb_known, lsb, beta=0.5):
     """
     Recovers the prime factors from a modulus using Coppersmith's method.
     :param n: the modulus
@@ -16,17 +18,18 @@ def factorize_univariate(n, bitsize, msb_known, msb, lsb_known, lsb, m_start=1):
     :param msb: the known most significant bits of the target prime factor
     :param lsb_known: the amount of known least significant bits of the target prime factor
     :param lsb: the known least significant bits of the target prime factor
-    :param m_start: the m value to start at for the Howgrave-Graham small roots method (default: 1)
+    :param beta: the beta value: the target prime factor is less than or equal to N^beta (default: 0.5)
     :return: a tuple containing the prime factors
     """
     x = Zmod(n)["x"].gen()
     f = msb * 2 ** (bitsize - msb_known) + x * 2 ** lsb_known + lsb
-    bound = 2 ** (bitsize - msb_known - lsb_known)
-    m = m_start
+    X = 2 ** (bitsize - msb_known - lsb_known)
+    d = f.degree()
+    m = ceil(max(beta ** 2 / d, 7 * beta / d))
     while True:
-        t = m
+        t = floor(d * m * (1 / beta - 1))
         logging.debug(f"Trying m = {m}, t = {t}...")
-        for root in modular_univariate(f, n, m, t, bound):
+        for root in modular_univariate(f, n, m, t, X):
             p = msb * 2 ** (bitsize - msb_known) + root * 2 ** lsb_known + lsb
             if p != 0 and n % p == 0:
                 return p, n // p
@@ -54,14 +57,14 @@ def factorize_bivariate(n, p_bitsize, p_msb_known, p_msb, p_lsb_known, p_lsb, q_
     """
     x, y = ZZ["x, y"].gens()
     f = (p_msb * 2 ** (p_bitsize - p_msb_known) + x * 2 ** p_lsb_known + p_lsb) * (q_msb * 2 ** (q_bitsize - q_msb_known) + y * 2 ** q_lsb_known + q_lsb) - n
-    xbound = 2 ** (p_bitsize - p_msb_known - p_lsb_known)
-    ybound = 2 ** (q_bitsize - q_msb_known - q_lsb_known)
+    X = 2 ** (p_bitsize - p_msb_known - p_lsb_known)
+    Y = 2 ** (q_bitsize - q_msb_known - q_lsb_known)
     k = k_start
     while True:
         logging.debug(f"Trying k = {k}...")
-        for xroot, yroot in integer_bivariate(f, k, xbound, ybound):
-            p = p_msb * 2 ** (p_bitsize - p_msb_known) + xroot * 2 ** p_lsb_known + p_lsb
-            q = q_msb * 2 ** (q_bitsize - q_msb_known) + yroot * 2 ** q_lsb_known + q_lsb
+        for x0, y0 in integer_bivariate(f, k, X, Y):
+            p = int(p_msb * 2 ** (p_bitsize - p_msb_known) + x0 * 2 ** p_lsb_known + p_lsb)
+            q = int(q_msb * 2 ** (q_bitsize - q_msb_known) + y0 * 2 ** q_lsb_known + q_lsb)
             if p * q == n:
                 return p, q
 
