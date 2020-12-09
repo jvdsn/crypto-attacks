@@ -81,7 +81,7 @@ def forge_tag(h, a, c, t, target_a, target_c):
     :param t: the known authentication tag (bytes)
     :param target_a: the target associated data (bytes)
     :param target_c: the target ciphertext (bytes)
-    :return: the forged authenticatino tag (bytes)
+    :return: the forged authentication tag (bytes)
     """
     ghash = _from_gf2e(_ghash(h, a, c))
     target_ghash = _from_gf2e(_ghash(h, target_a, target_c))
