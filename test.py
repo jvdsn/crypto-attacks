@@ -381,19 +381,20 @@ class TestElgamalEncryption(TestCase):
         p = 16902648776703029279
         # Unsafe generator, generates the entire group.
         g = 7
-        d = randint(1, p - 1)
-        h = pow(g, d, p)
-        l = randint(1, p - 1)
-        s = pow(h, p, l)
-        c1 = pow(g, l, p)
-        m = getrandbits(p.bit_length())
-        c2 = m * s % p
-        k = self.unsafe_generator.attack(p, h, c1, c2)
-        self.assertIsInstance(k, int)
-        self.assertEqual(legendre_symbol(m, p), k)
+        for i in range(100):
+            x = randint(1, p - 1)
+            h = pow(g, x, p)
+            y = randint(1, p - 1)
+            s = pow(h, y, p)
+            c1 = pow(g, y, p)
+            m = randint(1, p - 1)
+            c2 = m * s % p
+            k = self.unsafe_generator.attack(p, h, c1, c2)
+            self.assertIsInstance(k, int)
+            self.assertEqual(legendre_symbol(m, p), k)
 
 
-class TestElgamalSignautre(TestCase):
+class TestElgamalSignature(TestCase):
     from elgamal_signature import nonce_reuse
 
     def test_nonce_reuse(self):
