@@ -66,8 +66,8 @@ def recover_possible_auth_keys(a1, c1, t1, a2, c2, t2):
     p1 = _ghash(h, a1, c1) + _to_gf2e(bytes_to_long(t1))
     p2 = _ghash(h, a2, c2) + _to_gf2e(bytes_to_long(t2))
     p = (p1 + p2).monic()
-    for root in p.roots():
-        yield root[0]
+    for h in p.roots():
+        yield h[0]
 
 
 def forge_tag(h, a, c, t, target_a, target_c):
