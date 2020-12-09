@@ -583,3 +583,56 @@ class TestGCM(TestCase):
                 continue
         else:
             self.fail()
+
+
+class TestHNP(TestCase):
+    from hnp import lattice_attack
+
+    def _dsa(self, p, g, x):
+        h = getrandbits(p.bit_length())
+        k = randint(1, p - 1)
+        r = pow(g, k, p)
+        s = (pow(k, -1, p) * (h + x * r)) % p
+        return h, r, s, k
+
+    def test_lattice_attack(self):
+        # Not a safe prime, but it doesn't really matter.
+        p = 299182277398782807472682876223275635417
+        g = 5
+        x = randint(1, p - 1)
+
+        nonce_bitsize = p.bit_length()
+        msb_known = 6
+        n_signatures = 40
+        nonces = []
+        signatures = []
+        for i in range(n_signatures):
+            h, r, s, k = self._dsa(p, g, x)
+            nonces.append(k)
+            signatures.append((h, r, s, k >> (nonce_bitsize - msb_known)))
+
+        x_, nonces_ = self.lattice_attack.dsa_known_msb(p, signatures, nonce_bitsize, msb_known)
+        self.assertIsInstance(x_, int)
+        self.assertIsInstance(nonces_, list)
+        self.assertEqual(x, x_)
+        for i in range(n_signatures):
+            self.assertIsInstance(nonces_[i], int)
+            self.assertEqual(nonces[i], nonces_[i])
+
+        nonce_bitsize = p.bit_length()
+        lsb_known = 6
+        n_signatures = 40
+        nonces = []
+        signatures = []
+        for i in range(n_signatures):
+            h, r, s, k = self._dsa(p, g, x)
+            nonces.append(k)
+            signatures.append((h, r, s, k % (2 ** lsb_known)))
+
+        x_, nonces_ = self.lattice_attack.dsa_known_lsb(p, signatures, nonce_bitsize, lsb_known)
+        self.assertIsInstance(x_, int)
+        self.assertIsInstance(nonces_, list)
+        self.assertEqual(x, x_)
+        for i in range(n_signatures):
+            self.assertIsInstance(nonces_[i], int)
+            self.assertEqual(nonces[i], nonces_[i])
