@@ -36,7 +36,7 @@ def integer_bivariate(p, k, X, Y, early_return=True):
             s = x ** a * y ** b * p
             for i in range(k):
                 for j in range(k):
-                    S[a * k + b, i * k + j] = int(s.coefficient([i0 + i, j0 + j]))
+                    S[a * k + b, i * k + j] = s.coefficient([i0 + i, j0 + j])
 
     n = abs(S.det())
     logging.debug(f"Found n = {n}")
@@ -93,9 +93,9 @@ def integer_bivariate(p, k, X, Y, early_return=True):
             continue
 
         h = h(x / X, y / Y).change_ring(ZZ)
-        resultant = h.resultant(p, y)
-        if not resultant.is_constant():
-            for x0, _ in resultant.univariate_polynomial().roots():
+        res = h.resultant(p, y)
+        if not res.is_constant():
+            for x0, _ in res.univariate_polynomial().roots():
                 x0 = int(x0)
                 p_ = p(x0, y)
                 if not p_.is_constant():
