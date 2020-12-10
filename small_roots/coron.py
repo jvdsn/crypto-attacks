@@ -16,18 +16,9 @@ def integer_bivariate(p, k, X, Y, early_return=True):
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     x, y = p.parent().gens()
-    d = max(p.degrees())
+    delta = max(p.degrees())
 
-    W = 0
-    i0 = 0
-    j0 = 0
-    for i in range(d + 1):
-        for j in range(d + 1):
-            w = abs(int(p.coefficient([i, j]))) * X ** i * Y ** j
-            if w > W:
-                W = w
-                i0 = i
-                j0 = j
+    (i0, j0), W = max(map(lambda kv: (kv[0], abs(kv[1])), p(x * X, y * Y).dict().items()), key=lambda kv: kv[1])
 
     logging.debug("Calculating n...")
     S = Matrix(k ** 2)
@@ -46,8 +37,8 @@ def integer_bivariate(p, k, X, Y, early_return=True):
     logging.debug("Generating monomials...")
     left_monomials = []
     right_monomials = []
-    for i in range(k + d):
-        for j in range(k + d):
+    for i in range(k + delta):
+        for j in range(k + delta):
             if 0 <= i - i0 < k and 0 <= j - j0 < k:
                 left_monomials.append(x ** i * y ** j)
             else:
@@ -56,7 +47,7 @@ def integer_bivariate(p, k, X, Y, early_return=True):
     assert len(left_monomials) == k ** 2
     monomials = left_monomials + right_monomials
 
-    L = Matrix(k ** 2 + (k + d) ** 2, (k + d) ** 2)
+    L = Matrix(k ** 2 + (k + delta) ** 2, (k + delta) ** 2)
     row = 0
     logging.debug("Generating s shifts...")
     for a in range(k):
@@ -80,28 +71,36 @@ def integer_bivariate(p, k, X, Y, early_return=True):
     L = L.echelon_form(algorithm="pari0")
 
     logging.debug(f"Executing the LLL algorithm on the sublattice ({k ** 2} x {k ** 2})...")
-    L2 = L.submatrix(k ** 2, k ** 2, (k + d) ** 2 - k ** 2).LLL()
+    L2 = L.submatrix(k ** 2, k ** 2, (k + delta) ** 2 - k ** 2).LLL()
 
+    new_polynomials = []
     logging.debug("Reconstructing polynomials...")
     for row in range(L2.nrows()):
-        h = 0
+        new_polynomial = 0
         # Only use right monomials now (corresponding the the sublattice)
         for col, monomial in enumerate(right_monomials):
-            h += L2[row, col] * monomial
+            new_polynomial += L2[row, col] * monomial
 
-        if h.is_constant():
+        if new_polynomial.is_constant():
             continue
 
-        h = h(x / X, y / Y).change_ring(ZZ)
-        res = h.resultant(p, y)
-        if not res.is_constant():
-            for x0, _ in res.univariate_polynomial().roots():
-                x0 = int(x0)
-                p_ = p(x0, y)
-                if not p_.is_constant():
-                    for y0, _ in p_.univariate_polynomial().roots():
-                        y0 = int(y0)
-                        yield x0, y0
+        new_polynomial = new_polynomial(x / X, y / Y).change_ring(ZZ)
+        new_polynomials.append(new_polynomial)
 
-                        if early_return:
-                            return
+    logging.debug("Calculating resultants...")
+    for h in new_polynomials:
+        res = p.resultant(h, y)
+        if res.is_constant():
+            continue
+
+        for x0, _ in res.univariate_polynomial().roots():
+            h_ = p.subs(x=x0)
+            if h_.is_constant():
+                continue
+
+            for y0, _ in h_.univariate_polynomial().roots():
+                yield int(x0), int(y0)
+
+        if early_return:
+            # Assuming that the first "good" polynomial in the lattice doesn't provide roots, we return.
+            return

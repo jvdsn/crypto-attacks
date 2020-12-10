@@ -45,14 +45,17 @@ def modular_univariate(f, N, m, t, X, early_return=True):
 
     logging.debug("Reconstructing polynomials...")
     for row in range(B.nrows()):
-        f = 0
+        new_polynomial = 0
         for col in range(B.ncols()):
-            f += B[row, col] * x ** col
+            new_polynomial += B[row, col] * x ** col
 
-        f = f(x / X).change_ring(ZZ)
-        if not f.is_constant():
-            for x0, _ in f.roots():
-                yield int(x0)
+        if new_polynomial.is_constant():
+            continue
+
+        new_polynomial = new_polynomial(x / X).change_ring(ZZ)
+        for x0, _ in new_polynomial.roots():
+            yield int(x0)
 
         if early_return:
+            # Assuming that the first "good" polynomial in the lattice doesn't provide roots, we return.
             return
