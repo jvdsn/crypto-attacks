@@ -634,3 +634,19 @@ class TestHNP(TestCase):
         for i in range(n_signatures):
             self.assertIsInstance(nonces_[i], int)
             self.assertEqual(nonces[i], nonces_[i])
+
+        nonce_bitsize = p.bit_length()
+        msb_unknown = 10
+        lsb_unknown = 20
+        h1, r1, s1, k1 = self._dsa(p, g, x)
+        signature1 = (h1, r1, s1, (k1 >> lsb_unknown) % (2 ** (nonce_bitsize - msb_unknown)))
+        h2, r2, s2, k2 = self._dsa(p, g, x)
+        signature2 = (h2, r2, s2, (k2 >> lsb_unknown) % (2 ** (nonce_bitsize - msb_unknown)))
+
+        x_, k1_, k2_ = self.lattice_attack.dsa_known_middle(p, signature1, signature2, nonce_bitsize, msb_unknown, lsb_unknown)
+        self.assertIsInstance(x_, int)
+        self.assertIsInstance(k1_, int)
+        self.assertIsInstance(k2_, int)
+        self.assertEqual(x, x_)
+        self.assertEqual(k1, k1_)
+        self.assertEqual(k2, k2_)
