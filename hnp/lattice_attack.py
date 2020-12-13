@@ -88,7 +88,7 @@ def dsa_known_middle(n, signature1, signature2, nonce_bitsize, msb_unknown, lsb_
     """
     Recovers the (EC)DSA private key and nonces if the middle nonce bits are known.
     This is a heuristic extension which might perform worse than the methods to solve the Extended Hidden Number Problem
-    More information: De Micheli, G., Heninger, N., "Recovering cryptographic keys from partial information, by example" (Section 5.2.3)
+    More information: De Micheli G., Heninger N., "Recovering cryptographic keys from partial information, by example" (Section 5.2.3)
     :param n: the modulus
     :param signature1: the first signature (a tuple of the message (hash), the r value, the s value, and the known middle bits)
     :param signature2: the second signature (a tuple of the message (hash), the r value, the s value, and the known middle bits)
