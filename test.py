@@ -422,6 +422,7 @@ class TestElgamalSignature(TestCase):
 
 class TestFactorization(TestCase):
     from factorization import base_conversion
+    from factorization import branch_and_prune
     from factorization import complex_multiplication
     from factorization import coppersmith
     from factorization import fermat
@@ -445,6 +446,70 @@ class TestFactorization(TestCase):
         q = 4637643488084848224165183518002033325616428077917519043195914958210451836010505629755906000122693190713754782092365745897354221494160410767300504260339311867766125480345877257141604490894821710144701103564244398358535542801965838493
         n = p * q
         p_, q_ = self.base_conversion.factorize(n)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+    def test_branch_and_prune(self):
+        # These primes aren't special.
+        p = 13139791741351746894866427726721425232688052495714047961128606568137470741236391419984296213524906103377170890688143635009211116727124842849096165421244153
+        q = 6705712489981460472010451576220118673766200621788838066168783990030831970269515515674361221085135530331369278172131216566093286615777148021404414538085037
+        n = p * q
+        phi = (p - 1) * (q - 1)
+        e = 65537
+        d = pow(e, -1, phi)
+        dp = pow(e, -1, p - 1)
+        dq = pow(e, -1, q - 1)
+
+        known_prop = 57
+        p_bits = []
+        for i in reversed(range(512)):
+            p_bits.append((p >> i) & 1 if randint(1, 100) <= known_prop else None)
+        q_bits = []
+        for i in reversed(range(512)):
+            q_bits.append((q >> i) & 1 if randint(1, 100) <= known_prop else None)
+
+        p_, q_ = self.branch_and_prune.factorize_pq(n, p_bits, q_bits)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        known_prop = 42
+        p_bits = []
+        for i in reversed(range(512)):
+            p_bits.append((p >> i) & 1 if randint(1, 100) <= known_prop else None)
+        q_bits = []
+        for i in reversed(range(512)):
+            q_bits.append((q >> i) & 1 if randint(1, 100) <= known_prop else None)
+        d_bits = []
+        for i in reversed(range(1024)):
+            d_bits.append((d >> i) & 1 if randint(1, 100) <= known_prop else None)
+
+        p_, q_ = self.branch_and_prune.factorize_pqd(n, e, p_bits, q_bits, d_bits)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        known_prop = 27
+        p_bits = []
+        for i in reversed(range(512)):
+            p_bits.append((p >> i) & 1 if randint(1, 100) <= known_prop else None)
+        q_bits = []
+        for i in reversed(range(512)):
+            q_bits.append((q >> i) & 1 if randint(1, 100) <= known_prop else None)
+        d_bits = []
+        for i in reversed(range(1024)):
+            d_bits.append((d >> i) & 1 if randint(1, 100) <= known_prop else None)
+        dp_bits = []
+        # A bit larger than 512 due to implementation details of the branch and prune algorithm.
+        for i in reversed(range(516)):
+            dp_bits.append((dp >> i) & 1 if randint(1, 100) <= known_prop else None)
+        dq_bits = []
+        # A bit larger than 512 due to implementation details of the branch and prune algorithm.
+        for i in reversed(range(516)):
+            dq_bits.append((dq >> i) & 1 if randint(1, 100) <= known_prop else None)
+
+        p_, q_ = self.branch_and_prune.factorize_pqddpdq(n, e, p_bits, q_bits, d_bits, dp_bits, dq_bits)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(n, p_ * q_)

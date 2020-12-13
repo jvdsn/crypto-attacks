@@ -66,6 +66,7 @@ Python implementations of cryptographic attacks and utilities.
 ### Factorization
 
 * [x] [Base conversion factorization](factorization/base_conversion.py)
+* [x] [Branch and prune attack](factorization/branch_and_prune.py) [More information: Heninger N., Shacham H., "Reconstructing RSA Private Keys from Random Key Bits"]
 * [x] [Elliptic curve complex multiplication factorization](factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
 * [x] [Coppersmith factorization](factorization/coppersmith.py)
 * [x] [Fermat factorization](factorization/fermat.py)
@@ -79,9 +80,9 @@ Python implementations of cryptographic attacks and utilities.
 
 ### Hidden Number Problem
 
-* [x] [Lattice-based attack](hnp/lattice_attack.py) [More information: Breitner J., Heninger N., "Biased Nonce Sense: Lattice Attacks against Weak ECDSA Signatures in Cryptocurrencies"]
-* [ ] Fourier analysis attack
 * [ ] Extended hidden number problem
+* [ ] Fourier analysis attack
+* [x] [Lattice-based attack](hnp/lattice_attack.py) [More information: Breitner J., Heninger N., "Biased Nonce Sense: Lattice Attacks against Weak ECDSA Signatures in Cryptocurrencies"]
 
 ### IGE
 
