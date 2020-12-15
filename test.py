@@ -9,6 +9,7 @@ from Crypto.Cipher import AES
 from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
 from Crypto.Util.Padding import unpad
+from Crypto.Util.strxor import strxor
 from sage.all import EllipticCurve
 from sage.all import GF
 from sage.all import legendre_symbol
@@ -715,3 +716,51 @@ class TestHNP(TestCase):
         self.assertEqual(x, x_)
         self.assertEqual(k1, k1_)
         self.assertEqual(k2, k2_)
+
+
+class TestIGE(TestCase):
+    from ige import padding_oracle
+
+    def _encrypt(self, key, p):
+        p0 = randbytes(16)
+        c0 = randbytes(16)
+        cipher = AES.new(key, mode=AES.MODE_ECB)
+
+        p_last = p0
+        c_last = c0
+        c = bytearray()
+        for i in range(0, len(p), 16):
+            p_i = p[i:i + 16]
+            c_i = strxor(cipher.encrypt(strxor(p_i, c_last)), p_last)
+            p_last = p_i
+            c_last = c_i
+            c += c_i
+
+        return p0, c0, c
+
+    def _valid_padding(self, key, p0, c0, c):
+        try:
+            cipher = AES.new(key, mode=AES.MODE_ECB)
+            p_last = p0
+            c_last = c0
+            p = bytearray()
+            for i in range(0, len(c), 16):
+                c_i = c[i:i + 16]
+                p_i = strxor(cipher.decrypt(strxor(c_i, p_last)), c_last)
+                p_last = p_i
+                c_last = c_i
+                p += p_i
+
+            unpad(p, 16)
+            return True
+        except ValueError:
+            return False
+
+    def test_padding_oracle(self):
+        key = randbytes(16)
+
+        for i in range(16):
+            p = pad(randbytes(i + 1), 16)
+            p0, c0, c = self._encrypt(key, p)
+            p_ = self.padding_oracle.attack(lambda p0, c0, c: self._valid_padding(key, p0, c0, c), p0, c0, c)
+            self.assertEqual(p, p_)
