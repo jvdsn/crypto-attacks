@@ -67,10 +67,11 @@ Python implementations of cryptographic attacks and utilities.
 
 * [x] [Base conversion factorization](factorization/base_conversion.py)
 * [x] [Branch and prune attack](factorization/branch_and_prune.py) [More information: Heninger N., Shacham H., "Reconstructing RSA Private Keys from Random Key Bits"]
-* [x] [Elliptic curve complex multiplication factorization](factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
+* [x] [Complex multiplication (elliptic curve) factorization](factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
 * [x] [Coppersmith factorization](factorization/coppersmith.py)
 * [x] [Fermat factorization](factorization/fermat.py)
-* [x] [Known phi factorization (with multi-prime support)](factorization/known_phi.py) [More information: Hinek M. J., Low M. K., Teske E., "On Some Attacks on Multi-prime RSA" (Section 3)]
+* [x] [Implicit factorization](factorization/implicit.py) [More information: Nitaj A., Ariffin MRK., "Implicit factorization of unbalanced RSA moduli"]
+* [x] [Known phi factorization](factorization/known_phi.py) [More information: Hinek M. J., Low M. K., Teske E., "On Some Attacks on Multi-prime RSA" (Section 3)]
 * [x] [ROCA](factorization/roca.py) [More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"]
 * [x] [Twin primes factorization](factorization/twin_primes.py)
 
