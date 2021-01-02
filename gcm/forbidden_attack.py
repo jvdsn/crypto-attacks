@@ -2,8 +2,7 @@ from Crypto.Util.number import bytes_to_long
 from Crypto.Util.number import long_to_bytes
 from sage.all import GF
 
-gf2 = GF(2)
-x = gf2["x"].gen()
+x = GF(2)["x"].gen()
 gf2e = GF(2 ** 128, name="y", modulus=x ** 128 + x ** 7 + x ** 2 + x + 1)
 
 
@@ -16,7 +15,7 @@ def _to_gf2e(n):
 def _from_gf2e(p):
     n = p.integer_representation()
     ans = n & 1
-    for i in range(127):
+    for _ in range(127):
         ans <<= 1
         n >>= 1
         ans |= n & 1
@@ -28,7 +27,7 @@ def _from_gf2e(p):
 def _ghash(h, a, c):
     la = len(a)
     lc = len(c)
-    p = gf2e.zero()
+    p = 0
     for i in range(la // 16):
         p += _to_gf2e(bytes_to_long(a[16 * i:16 * (i + 1)]))
         p *= h
@@ -65,8 +64,7 @@ def recover_possible_auth_keys(a1, c1, t1, a2, c2, t2):
     h = gf2e["h"].gen()
     p1 = _ghash(h, a1, c1) + _to_gf2e(bytes_to_long(t1))
     p2 = _ghash(h, a2, c2) + _to_gf2e(bytes_to_long(t2))
-    p = (p1 + p2).monic()
-    for h in p.roots():
+    for h in (p1 + p2).roots():
         yield h[0]
 
 
