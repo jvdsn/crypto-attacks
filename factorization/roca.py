@@ -27,7 +27,7 @@ def compute_max_M_(M, ord_):
     return M
 
 
-# Section 2.7.2
+# Section 2.7.2.
 def _greedy_find_M_(n, M):
     ord = Zmod(M)(65537).multiplicative_order()
     while True:

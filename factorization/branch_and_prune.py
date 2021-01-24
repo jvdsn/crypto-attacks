@@ -24,8 +24,8 @@ def _bits_to_int(bits, count):
     return i
 
 
+# Section 3.
 def _tau(x):
-    # Section 3.
     i = 0
     while x % 2 == 0:
         x //= 2
@@ -34,8 +34,8 @@ def _tau(x):
     return i
 
 
+# Section 2.
 def _find_k(n, e, d_bits):
-    # Section 2.
     best_match_count = 0
     best_k = None
     best_d__bits = None
@@ -58,15 +58,15 @@ def _find_k(n, e, d_bits):
     return best_k, best_d__bits
 
 
+# Section 2.
 def _correct_msb(d_bits, d__bits):
-    # Section 2.
     # Correcting the most significant half of d.
     for i in range(len(d_bits) // 2 - 2):
         d_bits[-(i + 1)] = d__bits[-(i + 1)]
 
 
+# Section 3.
 def _correct_lsb(e, d_bits, exp):
-    # Section 3.
     # Correcting the least significant bits of d.
     # Also works for dp and dq, just with a different exponent.
     inv = pow(e, -1, 2 ** exp)
@@ -74,8 +74,8 @@ def _correct_lsb(e, d_bits, exp):
         d_bits[i] = (inv >> i) & 1
 
 
+# Branch and prune for the case with p and q bits known.
 def _branch_and_prune_pq(n, p, q, i):
-    # Branch and prune for the case with p and q bits known.
     p_ = _bits_to_int(p, i)
     q_ = _bits_to_int(q, i)
     if i == len(p) or i == len(q):
@@ -97,8 +97,8 @@ def _branch_and_prune_pq(n, p, q, i):
         q[i] = q_prev
 
 
+# Branch and prune for the case with p, q, and d bits known.
 def _branch_and_prune_pqd(n, e, k, tk, p, q, d, i):
-    # Branch and prune for the case with p, q, and d bits known.
     p_ = _bits_to_int(p, i)
     q_ = _bits_to_int(q, i)
     if i == len(p) or i == len(q):
@@ -126,8 +126,8 @@ def _branch_and_prune_pqd(n, e, k, tk, p, q, d, i):
         d[i + tk] = d_prev
 
 
+# Branch and prune for the case with p, q, d, dp, and dq bits known.
 def _branch_and_prune_pqddpdq(n, e, k, tk, kp, tkp, kq, tkq, p, q, d, dp, dq, i):
-    # Branch and prune for the case with p, q, d, dp, and dq bits known.
     p_ = _bits_to_int(p, i)
     q_ = _bits_to_int(q, i)
     if i == len(p) or i == len(q):
