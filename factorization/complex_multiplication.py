@@ -6,7 +6,7 @@ from sage.all import Zmod
 from sage.all import hilbert_class_polynomial
 
 
-# Extended Euclid's algorithm for polynomials
+# Extended Euclid's algorithm for polynomials.
 def _polynomial_xgcd(a, b):
     assert a.base_ring() == b.base_ring()
 
