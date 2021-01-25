@@ -18,18 +18,18 @@ def attack(p, t, a, B):
     assert len(t) == len(a), "t and a lists should be of equal length."
 
     m = len(t)
-    lattice = Matrix(QQ, m + 2, m + 2)
+    M = Matrix(QQ, m + 2, m + 2)
     for i in range(m):
-        lattice[i, i] = p
+        M[i, i] = p
 
-    lattice[m] = t + [B / QQ(p), 0]
-    lattice[m + 1] = a + [0, B]
+    M[m] = t + [B / QQ(p), 0]
+    M[m + 1] = a + [0, B]
 
-    basis = lattice.LLL()
+    L = M.LLL()
 
-    for row in basis.rows():
+    for row in L.rows():
         y = (int(row[m] * p) // B) % p
-        if y != 0:
+        if y != 0 and row[m + 1] == B:
             return int(y), list(map(int, row[:m]))
 
 
