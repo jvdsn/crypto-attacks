@@ -819,3 +819,201 @@ class Knapsack(TestCase):
         for i in range(len(a)):
             self.assertIsInstance(e[i], int)
         self.assertEqual(e, [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0])
+
+
+class LCG(TestCase):
+    from lcg import parameter_recovery
+    from lcg import truncated_parameter_recovery
+    from lcg import truncated_state_recovery
+
+    def test_parameter_recovery(self):
+        modulus = 230565400234205371157763985910524799617
+        multiplier = 192101630084837332907895369052393213499
+        increment = 212252940839553091477500231998099191939
+        state = 182679397636465813399296757573664340382
+        n_outputs = 10
+
+        outputs = []
+        for _ in range(n_outputs):
+            state = (multiplier * state + increment) % modulus
+            outputs.append(state)
+
+        modulus_, multiplier_, increment_ = self.parameter_recovery.attack(outputs)
+        self.assertIsInstance(modulus_, int)
+        self.assertEqual(modulus, modulus_)
+        self.assertIsInstance(multiplier_, int)
+        self.assertEqual(multiplier, multiplier_)
+        self.assertIsInstance(increment_, int)
+        self.assertEqual(increment, increment_)
+
+        modulus_, multiplier_, increment_ = self.parameter_recovery.attack(outputs, modulus=modulus)
+        self.assertIsInstance(modulus_, int)
+        self.assertEqual(modulus, modulus_)
+        self.assertIsInstance(multiplier_, int)
+        self.assertEqual(multiplier, multiplier_)
+        self.assertIsInstance(increment_, int)
+        self.assertEqual(increment, increment_)
+
+        modulus_, multiplier_, increment_ = self.parameter_recovery.attack(outputs, multiplier=multiplier)
+        self.assertIsInstance(modulus_, int)
+        self.assertEqual(modulus, modulus_)
+        self.assertIsInstance(multiplier_, int)
+        self.assertEqual(multiplier, multiplier_)
+        self.assertIsInstance(increment_, int)
+        self.assertEqual(increment, increment_)
+
+        modulus_, multiplier_, increment_ = self.parameter_recovery.attack(outputs, increment=increment)
+        self.assertIsInstance(modulus_, int)
+        self.assertEqual(modulus, modulus_)
+        self.assertIsInstance(multiplier_, int)
+        self.assertEqual(multiplier, multiplier_)
+        self.assertIsInstance(increment_, int)
+        self.assertEqual(increment, increment_)
+
+        modulus_, multiplier_, increment_ = self.parameter_recovery.attack(outputs, modulus=modulus, multiplier=multiplier)
+        self.assertIsInstance(modulus_, int)
+        self.assertEqual(modulus, modulus_)
+        self.assertIsInstance(multiplier_, int)
+        self.assertEqual(multiplier, multiplier_)
+        self.assertIsInstance(increment_, int)
+        self.assertEqual(increment, increment_)
+
+        modulus_, multiplier_, increment_ = self.parameter_recovery.attack(outputs, modulus=modulus, increment=increment)
+        self.assertIsInstance(modulus_, int)
+        self.assertEqual(modulus, modulus_)
+        self.assertIsInstance(multiplier_, int)
+        self.assertEqual(multiplier, multiplier_)
+        self.assertIsInstance(increment_, int)
+        self.assertEqual(increment, increment_)
+
+        modulus_, multiplier_, increment_ = self.parameter_recovery.attack(outputs, multiplier=multiplier, increment=increment)
+        self.assertIsInstance(modulus_, int)
+        self.assertEqual(modulus, modulus_)
+        self.assertIsInstance(multiplier_, int)
+        self.assertEqual(multiplier, multiplier_)
+        self.assertIsInstance(increment_, int)
+        self.assertEqual(increment, increment_)
+
+        modulus_, multiplier_, increment_ = self.parameter_recovery.attack(outputs, modulus=modulus, multiplier=multiplier, increment=increment)
+        self.assertIsInstance(modulus_, int)
+        self.assertEqual(modulus, modulus_)
+        self.assertIsInstance(multiplier_, int)
+        self.assertEqual(multiplier, multiplier_)
+        self.assertIsInstance(increment_, int)
+        self.assertEqual(increment, increment_)
+
+    def test_truncated_parameter_recovery(self):
+        state_bitsize = 128
+        output_bitsize = 32
+        modulus = 236360717458728691963813082060498623380
+        multiplier = 192101630084837332907895369052393213499
+        increment = 212252940839553091477500231998099191939
+        state = 182679397636465813399296757573664340382
+        n_outputs = 40
+        # The recovery method is not perfect, so we allow some errors in the generated output.
+        n_test = 200
+        max_failures = 5
+
+        outputs = []
+        states = []
+        for _ in range(n_outputs):
+            state = (multiplier * state + increment) % modulus
+            states.append(state)
+            outputs.append(state >> (state_bitsize - output_bitsize))
+
+        for modulus_, multiplier_, increment_, states_ in self.truncated_parameter_recovery.attack(outputs, state_bitsize, output_bitsize, state_bitsize):
+            self.assertIsInstance(modulus_, int)
+            self.assertIsInstance(multiplier_, int)
+            self.assertIsInstance(increment_, int)
+            for i in range(n_outputs):
+                self.assertIsInstance(states_[i], int)
+
+            s = state
+            s_ = states_[n_outputs - 1]
+            failures = 0
+            for _ in range(n_test):
+                s = (multiplier * s + increment) % modulus
+                s_ = (multiplier_ * s_ + increment_) % modulus_
+                if (s >> (state_bitsize - output_bitsize)) != (s_ >> (state_bitsize - output_bitsize)):
+                    failures += 1
+
+            self.assertLessEqual(failures, max_failures)
+            break
+
+        for modulus_, multiplier_, increment_, states_ in self.truncated_parameter_recovery.attack(outputs, state_bitsize, output_bitsize, state_bitsize, modulus=modulus):
+            self.assertIsInstance(modulus_, int)
+            self.assertIsInstance(multiplier_, int)
+            self.assertIsInstance(increment_, int)
+            for i in range(n_outputs):
+                self.assertIsInstance(states_[i], int)
+
+            s = state
+            s_ = states_[n_outputs - 1]
+            failures = 0
+            for _ in range(n_test):
+                s = (multiplier * s + increment) % modulus
+                s_ = (multiplier_ * s_ + increment_) % modulus_
+                if (s >> (state_bitsize - output_bitsize)) != (s_ >> (state_bitsize - output_bitsize)):
+                    failures += 1
+
+            self.assertLessEqual(failures, max_failures)
+            break
+
+        for modulus_, multiplier_, increment_, states_ in self.truncated_parameter_recovery.attack(outputs, state_bitsize, output_bitsize, state_bitsize, multiplier=multiplier):
+            self.assertIsInstance(modulus_, int)
+            self.assertIsInstance(multiplier_, int)
+            self.assertIsInstance(increment_, int)
+            for i in range(n_outputs):
+                self.assertIsInstance(states_[i], int)
+
+            s = state
+            s_ = states_[n_outputs - 1]
+            failures = 0
+            for _ in range(n_test):
+                s = (multiplier * s + increment) % modulus
+                s_ = (multiplier_ * s_ + increment_) % modulus_
+                if (s >> (state_bitsize - output_bitsize)) != (s_ >> (state_bitsize - output_bitsize)):
+                    failures += 1
+
+            self.assertLessEqual(failures, max_failures)
+            break
+
+        for modulus_, multiplier_, increment_, states_ in self.truncated_parameter_recovery.attack(outputs, state_bitsize, output_bitsize, state_bitsize, modulus=modulus, multiplier=multiplier):
+            self.assertIsInstance(modulus_, int)
+            self.assertIsInstance(multiplier_, int)
+            self.assertIsInstance(increment_, int)
+            for i in range(n_outputs):
+                self.assertIsInstance(states_[i], int)
+
+            s = state
+            s_ = states_[n_outputs - 1]
+            failures = 0
+            for _ in range(n_test):
+                s = (multiplier * s + increment) % modulus
+                s_ = (multiplier_ * s_ + increment_) % modulus_
+                if (s >> (state_bitsize - output_bitsize)) != (s_ >> (state_bitsize - output_bitsize)):
+                    failures += 1
+
+            self.assertLessEqual(failures, max_failures)
+            break
+
+    def test_truncated_state_recovery(self):
+        state_bitsize = 128
+        output_bitsize = 32
+        modulus = 236360717458728691963813082060498623380
+        multiplier = 192101630084837332907895369052393213499
+        increment = 212252940839553091477500231998099191939
+        state = 182679397636465813399296757573664340382
+        n_outputs = 40
+
+        outputs = []
+        states = []
+        for _ in range(n_outputs):
+            state = (multiplier * state + increment) % modulus
+            states.append(state)
+            outputs.append(state >> (state_bitsize - output_bitsize))
+
+        states_ = self.truncated_state_recovery.attack(outputs, state_bitsize, output_bitsize, modulus, multiplier, increment)
+        for i in range(n_outputs):
+            self.assertIsInstance(states_[i], int)
+            self.assertEqual(states[i], states_[i])

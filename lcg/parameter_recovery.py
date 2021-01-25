@@ -33,12 +33,12 @@ def attack(outputs, modulus=None, multiplier=None, increment=None):
         x0 = gf(outputs[0])
         x1 = gf(outputs[1])
         x2 = gf(outputs[2])
-        multiplier = (x2 - x1) / (x1 - x0)
+        multiplier = int((x2 - x1) / (x1 - x0))
 
     if increment is None:
         assert len(outputs) >= 2, "At least 2 outputs are required to recover the multiplier"
         x0 = gf(outputs[0])
         x1 = gf(outputs[1])
-        increment = x1 - multiplier * x0
+        increment = int(x1 - multiplier * x0)
 
     return modulus, multiplier, increment

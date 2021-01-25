@@ -96,6 +96,7 @@ Python implementations of cryptographic attacks and utilities.
 ### Linear Congruential Generators
 
 * [x] [LCG parameter recovery](lcg/parameter_recovery.py)
+* [x] [Truncated LCG parameter recovery](lcg/truncated_parameter_recovery.py) [More information: Contini S., Shparlinski I. E., "On Stern's Attack Against Secret Truncated Linear Congruential Generators"]
 * [x] [Truncated LCG state recovery](lcg/truncated_state_recovery.py) [More information: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"]
 
 ### OFB

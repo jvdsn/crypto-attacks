@@ -1,4 +1,5 @@
 from sage.all import QQ
+from sage.all import ZZ
 from sage.all import matrix
 from sage.all import vector
 
@@ -7,7 +8,7 @@ def attack(outputs, state_bitsize, output_bitsize, modulus, multiplier, incremen
     """
     Recovers the states associated with the outputs from a truncated linear congruential generator.
     More information: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"
-    :param outputs: the outputs (the states truncated to output_bitsize most significant bits)
+    :param outputs: the sequential output values obtained from the truncated LCG (the states truncated to output_bitsize most significant bits)
     :param state_bitsize: the size in bits of the states
     :param output_bitsize: the size in bits of the outputs
     :param modulus: the modulus of the LCG
@@ -26,25 +27,25 @@ def attack(outputs, state_bitsize, output_bitsize, modulus, multiplier, incremen
         delta = (multiplier * delta + increment) % modulus
 
     # This lattice only works for increment = 0.
-    lattice = matrix(len(y))
-    lattice[0, 0] = modulus
+    M = matrix(ZZ, len(y), len(y))
+    M[0, 0] = modulus
     for i in range(1, len(y)):
-        lattice[i, 0] = multiplier ** i
-        lattice[i, i] = -1
+        M[i, 0] = multiplier ** i
+        M[i, i] = -1
 
-    basis = lattice.LLL()
+    L = M.LLL()
 
     # Finding the target value to solve the equation for the states.
-    target = basis * y
+    target = L * y
     for i in range(len(target)):
         target[i] = round(QQ(target[i]) / modulus) * modulus - target[i]
 
     # Recovering the states
     delta = increment % modulus
-    states = list(basis.solve_right(target))
-    for i in range(len(states)):
+    states = list(L.solve_right(target))
+    for i, state in enumerate(states):
         # Adding the MSBs and the increment back again.
-        states[i] = y[i] + states[i] + delta
+        states[i] = int(y[i] + state + delta)
         delta = (multiplier * delta + increment) % modulus
 
     return states
