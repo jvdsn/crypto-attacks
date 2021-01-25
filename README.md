@@ -45,6 +45,13 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Singular curve attack](ecc/singular_curve.py)
 * [x] [Smart's attack](ecc/smart_attack.py) [More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"]
 
+### Elliptic Curve Generation
+
+* [ ] MNT curves
+* [ ] Prescribed order
+* [ ] Prescribed trace
+* [ ] Supersingular curves
+
 ### ElGamal Encryption
 
 * [x] [Nonce reuse attack](elgamal_encryption/nonce_reuse.py)
@@ -55,13 +62,6 @@ Python implementations of cryptographic attacks and utilities.
 * [ ] Bleichenbacher's attack
 * [ ] Khadir's attack
 * [x] [Nonce reuse attack](elgamal_signature/nonce_reuse.py)
-
-### Elliptic Curve Generation
-
-* [ ] MNT curves
-* [ ] Prescribed order
-* [ ] Prescribed trace
-* [ ] Supersingular curves
 
 ### Factorization
 
