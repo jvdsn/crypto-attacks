@@ -91,7 +91,7 @@ Python implementations of cryptographic attacks and utilities.
 
 ### Knapsack Cryptosystem
 
-* [x] [Low density attack](knapsack/low_density.py)
+* [x] [Low density attack](knapsack/low_density.py) [More information: Coster M. J. et al., "Improved low-density subset sum algorithms"]
 
 ### Linear Congruential Generators
 
