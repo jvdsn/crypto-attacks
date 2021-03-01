@@ -703,7 +703,7 @@ class TestHNP(TestCase):
 
         nonce_bitsize = p.bit_length()
         msb_known = 7
-        n_signatures = 40
+        n_signatures = 25
         nonces = []
         signatures = []
         for i in range(n_signatures):
@@ -721,7 +721,7 @@ class TestHNP(TestCase):
 
         nonce_bitsize = p.bit_length()
         lsb_known = 7
-        n_signatures = 40
+        n_signatures = 25
         nonces = []
         signatures = []
         for i in range(n_signatures):

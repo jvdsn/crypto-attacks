@@ -23,14 +23,14 @@ def attack(p, t, a, B):
         M[i, i] = p
 
     M[m] = t + [B / QQ(p), 0]
-    M[m + 1] = a + [0, B]
+    M[m + 1] = list(map(lambda x: x - B // 2, a)) + [0, B]
 
     L = M.LLL()
 
     for row in L.rows():
         y = (int(row[m] * p) // B) % p
         if y != 0 and row[m + 1] == B:
-            return int(y), list(map(int, row[:m]))
+            return int(y), list(map(lambda x: int(x + B // 2), row[:m]))
 
 
 def dsa_known_msb(n, signatures, nonce_bitsize, msb_known):
