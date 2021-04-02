@@ -428,6 +428,7 @@ class TestFactorization(TestCase):
     from factorization import coppersmith
     from factorization import fermat
     from factorization import gaa
+    from factorization import known_crt_exponents
     from factorization import known_phi
     from factorization import implicit
     from factorization import roca
@@ -582,6 +583,45 @@ class TestFactorization(TestCase):
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(n, p_ * q_)
+
+    def test_known_crt_exponents(self):
+        # These primes aren't special.
+        p = 9734878849445118420073785869554836149487671692719552358756738189651079813869054963335880039395402041883956221923435780797276507555906725160774871585184181
+        q = 11608927577332560028819160266239104364716512653498293226451614650722863458488829019269383773936258272349564355274218301207779572980847476544743569746719093
+        n = p * q
+        phi = (p - 1) * (q - 1)
+        e = 65537
+        d = pow(e, -1, phi)
+        dp = d % (p - 1)
+        dq = d % (q - 1)
+
+        p_, q_ = next(self.known_crt_exponents.factorize(e, e + 2, n=n, dp=dp, dq=dq))
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_, q_ = next(self.known_crt_exponents.factorize(e, e + 2, n=n, dp=dp))
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_, q_ = next(self.known_crt_exponents.factorize(e, e + 2, n=n, dq=dq))
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_, q_ = next(self.known_crt_exponents.factorize(e, e + 2, dp=dp, dq=dq, p_bitsize=512, q_bitsize=512))
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_ = next(self.known_crt_exponents.factorize(e, e + 2, dp=dp, p_bitsize=512))
+        self.assertIsInstance(p_, int)
+        self.assertEqual(p, p_)
+
+        q_ = next(self.known_crt_exponents.factorize(e, e + 2, dq=dq, q_bitsize=512))
+        self.assertIsInstance(q_, int)
+        self.assertEqual(q, q_)
 
     def test_known_phi(self):
         # These primes aren't special.
