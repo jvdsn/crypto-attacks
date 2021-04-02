@@ -3,13 +3,13 @@ from math import ceil
 from math import gcd
 from math import sqrt
 
-from sage.all import QQ
 from sage.all import ZZ
 from sage.all import Zmod
 from sage.all import crt
 from sage.all import factor
 from sage.all import matrix
-from sage.all import vector
+
+from hnp import lattice_attack
 
 
 # Euclid's algorithm for polynomials.
@@ -39,22 +39,17 @@ def _polynomial_gcd_crt(a, b, modulus):
 
 # Section 2.1 in "On Stern's Attack Against Secret Truncated Linear Congruential Generators".
 def _generate_polynomials(y, n, t):
-    V = []
-    for i in range(n):
-        Vi = vector(ZZ, [y[i + j + 1] - y[i + j] for j in range(t)])
-        V.append(Vi)
-
-    L = matrix(ZZ, n, t + n)
+    B = matrix(ZZ, n, n + t)
     for i in range(n):
         for j in range(t):
-            L[i, j] = V[i][j]
+            B[i, j] = y[i + j + 1] - y[i + j]
 
-        L[i, t + i] = 1
+        B[i, t + i] = 1
 
-    L = L.LLL()
+    B = B.LLL()
 
     x = ZZ["x"].gen()
-    for row in L.rows():
+    for row in B.rows():
         P = 0
         for i, l in enumerate(row[t:]):
             P += l * x ** i
@@ -78,41 +73,22 @@ def _recover_modulus_and_multiplier(polynomials, modulus_bitsize, modulus=None, 
                 yield int(possible_modulus), multiplier
 
 
-# Generates possible values for the modulus, multiplier, increment, and states.
+# Generates possible values for the modulus, multiplier, increment, and seed.
 # This is similar to the Hidden Number Problem, but with two 'global' unknowns.
-def _recover_increment_and_states(outputs, state_bitsize, output_bitsize, modulus, multiplier):
-    B = 2 ** (state_bitsize - output_bitsize)
+def _recover_increment_and_seed(outputs, state_bitsize, output_bitsize, modulus, multiplier):
+    a = []
+    b = []
+    X = 2 ** (state_bitsize - output_bitsize)
     mult1 = multiplier
     mult2 = 1
-
-    # Adapted from the code to solve the Hidden Number Problem using a lattice attack.
-    m = len(outputs)
-    M = matrix(QQ, m + 3, m + 3)
-    for i in range(m):
-        M[i, i] = modulus
-        M[m, i] = mult1
-        M[m + 1, i] = mult2
-        # Adding B // 2 improves the quality of the results.
-        M[m + 2, i] = (-(B * outputs[i] + B // 2)) % modulus
+    for i in range(len(outputs)):
+        a.append([mult1, mult2])
+        b.append(-X * outputs[i])
         mult1 = (multiplier * mult1) % modulus
         mult2 = (multiplier * mult2 + 1) % modulus
-    M[m, m] = B / QQ(modulus)
-    M[m + 1, m + 1] = B / QQ(modulus)
-    M[m + 2, m] = 0
-    M[m + 2, m + 1] = 0
-    M[m + 2, m + 2] = B
 
-    L = M.LLL()
-
-    for row in L.rows():
-        seed = (int(row[m] * modulus) // B) % modulus
-        increment = (int(row[m + 1] * modulus) // B) % modulus
-        if seed != 0 and increment != 0 and row[m + 2] == B:
-            states = []
-            for i in range(len(outputs)):
-                states.append((B * outputs[i] + B // 2 + int(row[i])))
-            yield modulus, multiplier, increment, states
-            break
+    for _, params in lattice_attack.attack(a, b, modulus, X):
+        yield modulus, multiplier, params[1], params[0]
 
 
 def attack(outputs, state_bitsize, output_bitsize, modulus_bitsize, modulus=None, multiplier=None):
@@ -129,7 +105,7 @@ def attack(outputs, state_bitsize, output_bitsize, modulus_bitsize, modulus=None
     :param modulus_bitsize: the size in bits of the modulus
     :param modulus: the modulus of the LCG (can be None)
     :param multiplier: the multiplier of the LCG (can be None)
-    :return: a generator generating possible parameters (tuples of modulus, multiplier, increment, and states) of truncated the LCG.
+    :return: a generator generating possible parameters (tuples of modulus, multiplier, increment, and seed) of truncated the LCG.
     """
     if modulus is None or multiplier is None:
         alpha = output_bitsize / state_bitsize
@@ -145,10 +121,10 @@ def attack(outputs, state_bitsize, output_bitsize, modulus_bitsize, modulus=None
                     polynomials.append(P)
 
             for possible_modulus, possible_multiplier in _recover_modulus_and_multiplier(polynomials, modulus_bitsize, modulus, multiplier):
-                yield from _recover_increment_and_states(outputs, state_bitsize, output_bitsize, possible_modulus, possible_multiplier)
+                yield from _recover_increment_and_seed(outputs, state_bitsize, output_bitsize, possible_modulus, possible_multiplier)
 
             t += 1
             n = ceil(sqrt(2 * alpha * t * state_bitsize))
             chunk_size = n + t
     else:
-        yield from _recover_increment_and_states(outputs, state_bitsize, output_bitsize, modulus, multiplier)
+        yield from _recover_increment_and_seed(outputs, state_bitsize, output_bitsize, modulus, multiplier)

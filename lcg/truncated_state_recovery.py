@@ -27,22 +27,22 @@ def attack(outputs, state_bitsize, output_bitsize, modulus, multiplier, incremen
         delta = (multiplier * delta + increment) % modulus
 
     # This lattice only works for increment = 0.
-    M = matrix(ZZ, len(y), len(y))
-    M[0, 0] = modulus
+    B = matrix(ZZ, len(y), len(y))
+    B[0, 0] = modulus
     for i in range(1, len(y)):
-        M[i, 0] = multiplier ** i
-        M[i, i] = -1
+        B[i, 0] = multiplier ** i
+        B[i, i] = -1
 
-    L = M.LLL()
+    B = B.LLL()
 
     # Finding the target value to solve the equation for the states.
-    target = L * y
+    target = B * y
     for i in range(len(target)):
         target[i] = round(QQ(target[i]) / modulus) * modulus - target[i]
 
     # Recovering the states
     delta = increment % modulus
-    states = list(L.solve_right(target))
+    states = list(B.solve_right(target))
     for i, state in enumerate(states):
         # Adding the MSBs and the increment back again.
         states[i] = int(y[i] + state + delta)
