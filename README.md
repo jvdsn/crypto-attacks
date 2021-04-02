@@ -70,6 +70,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Complex multiplication (elliptic curve) factorization](factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
 * [x] [Coppersmith factorization](factorization/coppersmith.py)
 * [x] [Fermat factorization](factorization/fermat.py)
+* [x] [Ghafar-Ariffin-Asbullah attack](factorization/gaa.py) [More information: Ghafar AHA. et al., "A New LSB Attack on Special-Structured RSA Primes"]
 * [x] [Implicit factorization](factorization/implicit.py) [More information: Nitaj A., Ariffin MRK., "Implicit factorization of unbalanced RSA moduli"]
 * [x] [Known phi factorization](factorization/known_phi.py) [More information: Hinek M. J., Low M. K., Teske E., "On Some Attacks on Multi-prime RSA" (Section 3)]
 * [x] [ROCA](factorization/roca.py) [More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"]
@@ -83,7 +84,7 @@ Python implementations of cryptographic attacks and utilities.
 
 * [ ] Extended hidden number problem
 * [ ] Fourier analysis attack
-* [x] [Lattice-based attack](hnp/lattice_attack.py) [More information: Breitner J., Heninger N., "Biased Nonce Sense: Lattice Attacks against Weak ECDSA Signatures in Cryptocurrencies"]
+* [x] [Lattice-based attack](hnp/lattice_attack.py) 
 
 ### IGE
 
