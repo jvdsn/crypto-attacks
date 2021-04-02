@@ -711,7 +711,7 @@ class TestHNP(TestCase):
             nonces.append(k)
             signatures.append((h, r, s, k >> (nonce_bitsize - msb_known)))
 
-        x_, nonces_ = self.lattice_attack.dsa_known_msb(p, signatures, nonce_bitsize, msb_known)
+        x_, nonces_ = next(self.lattice_attack.dsa_known_msb(p, signatures, nonce_bitsize, msb_known))
         self.assertIsInstance(x_, int)
         self.assertIsInstance(nonces_, list)
         self.assertEqual(x, x_)
@@ -729,7 +729,7 @@ class TestHNP(TestCase):
             nonces.append(k)
             signatures.append((h, r, s, k % (2 ** lsb_known)))
 
-        x_, nonces_ = self.lattice_attack.dsa_known_lsb(p, signatures, nonce_bitsize, lsb_known)
+        x_, nonces_ = next(self.lattice_attack.dsa_known_lsb(p, signatures, nonce_bitsize, lsb_known))
         self.assertIsInstance(x_, int)
         self.assertIsInstance(nonces_, list)
         self.assertEqual(x, x_)
