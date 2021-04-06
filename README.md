@@ -103,7 +103,7 @@ Python implementations of cryptographic attacks and utilities.
 
 ### OFB
 
-* [x] [CRIME attack](ofb/crime.py)
+* [x] [CRIME attack](ctr/crime.py)
 * [x] [Separator oracle attack](ctr/separator_oracle.py)
 
 ### Pseudoprimes
@@ -123,7 +123,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Low public exponent attack](rsa/low_exponent.py)
 * [x] [LSB oracle attack](rsa/lsb_oracle.py)
 * [ ] Manger's attack
-* [x] [Partial key exposure attack for low public exponents](rsa/partial_key_exposure.py) [More information: Boneh D., Durfee G., Frankel Y., "An Attack on RSA Given a Small Fraction of the Private Key Bits"]
+* [x] [Partial key exposure](rsa/partial_key_exposure.py) [More information: Boneh D., Durfee G., Frankel Y., "An Attack on RSA Given a Small Fraction of the Private Key Bits"]
 * [x] [Related message attack](rsa/related_message.py)
 * [x] [Stereotyped message attack](rsa/stereotyped_message.py)
 * [x] [Wiener's attack](rsa/wiener_attack.py)
