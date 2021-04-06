@@ -1,8 +1,3 @@
-from sage.all import GF
-from sage.all import matrix
-from sage.all import vector
-
-
 def attack(p, x1, y1, x2, y2):
     """
     Recovers the a and b parameters from an elliptic curve when two points are known.
@@ -13,7 +8,6 @@ def attack(p, x1, y1, x2, y2):
     :param y2: the y coordinate of the second point
     :return: a tuple containing the a and b parameters of the elliptic curve
     """
-    m = matrix(GF(p), [[x1, 1], [x2, 1]])
-    v = vector(GF(p), [y1 ** 2 - x1 ** 3, y2 ** 2 - x2 ** 3])
-    a, b = m.solve_right(v)
-    return int(a), int(b)
+    a = pow(x1 - x2, -1, p) * (pow(y1, 2, p) - pow(y2, 2, p) - (pow(x1, 3, p) - pow(x2, 3, p))) % p
+    b = (pow(y1, 2, p) - pow(x1, 3, p) - a * x1) % p
+    return a, b

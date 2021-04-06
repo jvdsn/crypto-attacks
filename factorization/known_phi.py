@@ -1,8 +1,8 @@
 from math import gcd
+from math import isqrt
 from random import randint
 
-from sage.all import ZZ
-from sage.all import is_prime
+from Crypto.Util.number import isPrime
 
 
 def factorize(n, phi):
@@ -14,12 +14,10 @@ def factorize(n, phi):
     :return: a tuple containing the prime factors, or None if the factors were not found
     """
     s = n + 1 - phi
-    x = ZZ["x"].gen()
-    f = x ** 2 - s * x + n
-    for p, _ in f.roots():
-        p = int(p)
-        if n % p == 0:
-            return p, n // p
+    d = s ** 2 - 4 * n
+    p = (s - isqrt(d)) // 2
+    q = (s + isqrt(d)) // 2
+    return p, q
 
 
 def factorize_multi_prime(n, phi):
@@ -48,12 +46,12 @@ def factorize_multi_prime(n, phi):
                 p = gcd(n, sqrt_1 + 1)
                 q = n // p
 
-                if is_prime(p):
+                if isPrime(p):
                     prime_factors.add(p)
                 elif p > 1:
                     factors.append(p)
 
-                if is_prime(q):
+                if isPrime(q):
                     prime_factors.add(q)
                 elif q > 1:
                     factors.append(q)

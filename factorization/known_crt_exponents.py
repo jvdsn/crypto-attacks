@@ -1,4 +1,4 @@
-from sage.all import is_prime
+from Crypto.Util.number import isPrime
 
 
 def _get_possible_primes(e, d):
@@ -6,7 +6,7 @@ def _get_possible_primes(e, d):
     for k in range(3, e):
         if mul % k == 0:
             p = (mul // k) + 1
-            if is_prime(p):
+            if isPrime(p):
                 yield p
 
 
@@ -55,7 +55,6 @@ def factorize(e_start, e_end, n=None, dp=None, dq=None, p_bitsize=None, q_bitsiz
                         yield q, n // q
 
         return
-
 
 # for p in factorize(65537, 65538, None, 0x878f7c1b9b19b1693c1371305f194cd08c770c8f5976b2d8e3cf769a1117080d6e90a10aef9da6eb5b34219b71f4c8e5cde3a9d36945ac507ee6dfe4c146e7458ef83fa065e3036e5fbf15597e97a7ba93a31124d97c177e68e38adc4c45858417abf8034745d6b3782a195e6dd3cf0be14f5d97247900e9aac3b2b5a89f33a3f8f71d27d670401ca185eb9c88644b7985e4d98a7da37bfffdb737e54b6e0de2004d0c8c425fb16380431d7de40540c02346c98991b748ebbc8aac73dd58de6f7ff00a302f4047020b6cd9098f6ba686994f5e043e7181edfc552e18bce42b3a42b63f7ccb7729b74e76a040055d397278cb939240f236d0a2a79757ba7a9f09, None, 2048, None):
 #     print(p)
