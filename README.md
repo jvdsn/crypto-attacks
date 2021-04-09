@@ -116,7 +116,6 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Bleichenbacher's signature forgery attack](rsa/bleichenbacher_signature_forgery.py)
 * [x] [Boneh-Durfee attack](rsa/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
 * [x] [Common modulus attack](rsa/common_modulus.py)
-* [x] [Common prime factor attack](rsa/common_prime_factor.py)
 * [x] [CRT fault attack](rsa/crt_fault_attack.py)
 * [x] [Extended Wiener's attack](rsa/extended_wiener_attack.py) [More information: Dujella A., "Continued fractions and RSA with small secret exponent"]
 * [x] [Hastad's broadcast attack](rsa/hastad_attack.py)
