@@ -75,6 +75,7 @@ Python implementations of cryptographic attacks and utilities.
 * [x] [Known CRT exponents factorization](factorization/known_crt_exponents.py) [More information: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"]
 * [x] [Known phi factorization](factorization/known_phi.py) [More information: Hinek M. J., Low M. K., Teske E., "On Some Attacks on Multi-prime RSA" (Section 3)]
 * [x] [ROCA](factorization/roca.py) [More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"]
+* [x] [Shor's algorithm (classical)](factorization/shor.py) [More information: M. Johnston A., "Shor’s Algorithm and Factoring: Don’t Throw Away the Odd Orders"]
 * [x] [Twin primes factorization](factorization/twin_primes.py)
 
 ### GCM

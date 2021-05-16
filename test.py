@@ -432,6 +432,7 @@ class TestFactorization(TestCase):
     from factorization import known_phi
     from factorization import implicit
     from factorization import roca
+    from factorization import shor
     from factorization import twin_primes
 
     def test_base_conversion(self):
@@ -692,6 +693,23 @@ class TestFactorization(TestCase):
         q = 121807704694511224555991770528701515984374557330058194205583818929517699002107
         n = p * q
         p_, q_ = self.roca.factorize(n, M, 5, 6)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+    def test_shor(self):
+        # Examples from the reference paper
+        p = 1789
+        q = 1847
+        n = p * q
+        p_, q_ = self.shor.factorize(n, 751228, 78)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+        p = 12343
+        q = 12391
+        n = p * q
+        p_, q_ = self.shor.factorize(n, 2, 4247705)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(n, p_ * q_)
