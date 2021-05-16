@@ -430,6 +430,7 @@ class TestFactorization(TestCase):
     from factorization import gaa
     from factorization import known_crt_exponents
     from factorization import known_phi
+    from factorization import known_d
     from factorization import implicit
     from factorization import roca
     from factorization import shor
@@ -624,6 +625,19 @@ class TestFactorization(TestCase):
         q_ = next(self.known_crt_exponents.factorize(e, e + 2, dq=dq, q_bitsize=512))
         self.assertIsInstance(q_, int)
         self.assertEqual(q, q_)
+
+    def test_known_d(self):
+        # These primes aren't special.
+        p = 10999882285407021659159843781080979389814097626452668846482424135627220062700466847567575264657287989126943263999867722090759547565297969535143544253926071
+        q = 12894820825544912052042889653649757120734073367261758361676140208842841153775542379620171049124260330205408767340830801133280422958906941622318918402459837
+        n = p * q
+        phi = (p - 1) * (q - 1)
+        e = 65537
+        d = pow(e, -1, phi)
+        p_, q_ = self.known_d.factorize(n, e, d)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
 
     def test_known_phi(self):
         # These primes aren't special.
