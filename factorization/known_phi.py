@@ -15,8 +15,8 @@ def factorize(n, phi):
     """
     s = n + 1 - phi
     d = s ** 2 - 4 * n
-    p = (s - isqrt(d)) // 2
-    q = (s + isqrt(d)) // 2
+    p = int(s - isqrt(d)) // 2
+    q = int(s + isqrt(d)) // 2
     return p, q
 
 
