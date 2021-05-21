@@ -112,6 +112,10 @@ Python implementations of cryptographic attacks and utilities.
 
 * [x] [Generating Miller-Rabin pseudoprimes](pseudoprimes/miller_rabin.py)
 
+### RC4
+
+* [x] [Fluhrer-Mantin-Shamir attack](rc4/fms.py)
+
 ### RSA
 
 * [ ] Bleichenbacher's attack

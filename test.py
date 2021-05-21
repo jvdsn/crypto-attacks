@@ -6,6 +6,7 @@ from random import randint
 from unittest import TestCase
 
 from Crypto.Cipher import AES
+from Crypto.Cipher import ARC4
 from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
 from Crypto.Util.Padding import unpad
@@ -1129,3 +1130,13 @@ class Pseudoprimes(TestCase):
 
         for base in bases:
             self.assertTrue(pow(base, d, p) == 1 or pow(base, d, p) == p - 1)
+
+
+class RC4(TestCase):
+    from rc4 import fms
+
+    def test_fms(self):
+        key = randbytes(13)
+        encrypt_oracle = lambda iv, p: ARC4.new(iv + key).encrypt(p)
+        key_ = self.fms.attack(encrypt_oracle, 13)
+        self.assertEqual(key, key_)
