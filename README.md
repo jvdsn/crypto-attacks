@@ -98,12 +98,6 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Singular curve attack](attacks/ecc/singular_curve.py)
 * [x] [Smart's attack](attacks/ecc/smart_attack.py) [More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"]
 
-### Elliptic Curve Generation
-* [ ] MNT curves
-* [ ] Prescribed order
-* [ ] Prescribed trace
-* [ ] Supersingular curves
-
 ### ElGamal Encryption
 * [x] [Nonce reuse attack](attacks/elgamal_encryption/nonce_reuse.py)
 * [x] [Unsafe generator attack](attacks/elgamal_encryption/unsafe_generator.py)
@@ -187,6 +181,12 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [ ] Quadratic Hensel lifting
 * [x] [Babai's Nearest Plane Algorithm](shared/lattice.py)
 * [x] [Fast GCD using half GCD](shared/polynomial.py)
+
+### Elliptic Curve Generation
+* [ ] MNT curves
+* [ ] Prescribed order
+* [ ] Prescribed trace
+* [ ] Supersingular curves
 
 ### Small roots
 * [x] [Polynomial roots using resultants](shared/small_roots/__init__.py)
