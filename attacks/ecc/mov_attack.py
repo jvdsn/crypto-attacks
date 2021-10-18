@@ -1,52 +1,51 @@
 import logging
 from math import gcd
-from math import lcm
 
 from sage.all import GF
-from sage.all import crt
+from sage.all import discrete_log
 
 
-def attack(base, multiplication_result):
+def attack(P, R, max_k=6, max_tries=10):
     """
     Solves the discrete logarithm problem using the MOV attack.
-    :param base: the base point
-    :param multiplication_result: the point multiplication result
-    :return: l such that l * base == multiplication_result
+    More information: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 2)
+    :param P: the base point
+    :param R: the point multiplication result
+    :param max_k: the maximum value of embedding degree to try (default: 6)
+    :param max_tries: the maximum amount of times to try to find l (default: 10)
+    :return: l such that l * P == R, or None if l was not found
     """
-    curve = base.curve()
-    p = curve.base_ring().order()
-    n = base.order()
-
-    assert gcd(n, p) == 1, "GCD of curve base ring order and generator order should be 1."
+    E = P.curve()
+    q = E.base_ring().order()
+    n = P.order()
+    assert gcd(n, q) == 1, "GCD of generator order and curve base ring order should be 1."
 
     logging.info("Calculating embedding degree...")
+    for k in range(1, max_k + 1):
+        if q ** k % n == 1:
+            break
+    else:
+        return None
 
-    # Embedding degree k.
-    k = 1
-    while (p ** k - 1) % n != 0:
-        k += 1
+    logging.info(f"Found embedding degree {k}")
+    Ek = E.base_extend(GF(q ** k))
+    Pk = Ek(P)
+    Rk = Ek(R)
+    for i in range(max_tries):
+        Q_ = Ek.random_point()
+        m = Q_.order()
+        d = gcd(m, n)
+        Q = (m // d) * Q_
+        if Q.order() != n:
+            continue
 
-    logging.info(f"Found embedding degree {k}, computing discrete logarithm...")
+        alpha = Pk.weil_pairing(Q, n)
+        if alpha == 1:
+            continue
 
-    pairing_curve = curve.base_extend(GF(p ** k))
-    pairing_base = pairing_curve(base)
-    pairing_multiplication_result = pairing_curve(multiplication_result)
+        beta = Rk.weil_pairing(Q, n)
+        logging.info(f"Computing discrete_log({beta}, {alpha})...")
+        l = discrete_log(beta, alpha)
+        return int(l)
 
-    ls = []
-    ds = []
-    while lcm(*ds) != n:
-        rand = pairing_curve.random_point()
-        o = rand.order()
-        d = gcd(o, n)
-        rand = (o // d) * rand
-        assert rand.order() == d
-
-        u = pairing_base.weil_pairing(rand, n)
-        v = pairing_multiplication_result.weil_pairing(rand, n)
-        logging.debug(f"Calculating ({v}).log({u}) modulo {d}...")
-        l = v.log(u)
-        logging.debug(f"Found discrete log {l} modulo {d}")
-        ls.append(int(l))
-        ds.append(int(d))
-
-    return ls[0] if len(ls) == 1 else int(crt(ls, ds))
+    return None

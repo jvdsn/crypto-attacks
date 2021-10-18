@@ -12,6 +12,8 @@ if sys.path[1] != path:
     sys.path.insert(1, path)
 
 from attacks.ecc import ecdsa_nonce_reuse
+from attacks.ecc import frey_ruck_attack
+from attacks.ecc import mov_attack
 from attacks.ecc import parameter_recovery
 from attacks.ecc import singular_curve
 from attacks.ecc import smart_attack
@@ -62,11 +64,11 @@ class TestECC(TestCase):
         a = 115792089210356248762697446949407573530086143415290314195533631308867097853948
         b = 41058363725152142129326129780047268409114441015993725554835256314039467401291
         p_256 = EllipticCurve(GF(p), [a, b])
-        gen = p_256.gen(0)
-        n = int(gen.order())
+        G = p_256.gen(0)
+        n = int(G.order())
         x = randint(1, n - 1)
         k = randint(1, n - 1)
-        r = int((k * gen).xy()[0])
+        r = int((k * G).xy()[0])
         m1 = getrandbits(n.bit_length())
         s1 = pow(k, -1, n) * (m1 + r * x) % n
         m2 = getrandbits(n.bit_length())
@@ -80,12 +82,115 @@ class TestECC(TestCase):
             self.fail()
 
     def test_frey_ruck_attack(self):
-        # TODO: Frey-Ruck attack is too inconsistent in unit tests.
-        pass
+        p = 23305425500899
+        a = 13079575536215
+        b = 951241857177
+        l = 709658
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(17662927853004, 1766549410280)
+        R = E(2072411881257, 5560421985272)
+        l_ = frey_ruck_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        p = 93340306032025588917032364977153
+        a = 71235469403697021051902688366816
+        b = 47490312935798014034601792244544
+        l = 764009
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(10362409929965041614317835692463, 79529049191468905652172306035573)
+        R = E(15411349585423321468944221089888, 9416052907883278088782335830033)
+        l_ = frey_ruck_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        p = 23305425500899
+        a = 1
+        b = 0
+        l = 4500974
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(18414716422748, 9607997424906)
+        R = E(22829488331658, 15463570264423)
+        l_ = frey_ruck_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        p = 625276251724681468065787127391468008213949163
+        a = 625276251724681468065787127391468008213949162
+        b = 0
+        l = 573267844
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(106475251480616516532312035568555890205578047, 431897649280430503785680130194791468278435206)
+        R = E(325210632278386769754263691768220745652895158, 308687159471094662490925278095484225164835682)
+        l_ = frey_ruck_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        p = 1527181879
+        a = 623779536
+        b = 170102
+        l = 16029094
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(470008538, 130171157)
+        R = E(1247215477, 775699526)
+        l_ = frey_ruck_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
 
     def test_mov_attack(self):
-        # TODO: MOV attack is too inconsistent in unit tests.
-        pass
+        p = 23305425500899
+        a = 13079575536215
+        b = 951241857177
+        l = 709658
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(17662927853004, 1766549410280)
+        R = E(2072411881257, 5560421985272)
+        l_ = mov_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        p = 93340306032025588917032364977153
+        a = 71235469403697021051902688366816
+        b = 47490312935798014034601792244544
+        l = 764009
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(10362409929965041614317835692463, 79529049191468905652172306035573)
+        R = E(15411349585423321468944221089888, 9416052907883278088782335830033)
+        l_ = mov_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        p = 23305425500899
+        a = 1
+        b = 0
+        l = 4500974
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(18414716422748, 9607997424906)
+        R = E(22829488331658, 15463570264423)
+        l_ = mov_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        p = 625276251724681468065787127391468008213949163
+        a = 625276251724681468065787127391468008213949162
+        b = 0
+        l = 573267844
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(106475251480616516532312035568555890205578047, 431897649280430503785680130194791468278435206)
+        R = E(325210632278386769754263691768220745652895158, 308687159471094662490925278095484225164835682)
+        l_ = mov_attack.attack(P, R)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        p = 1527181879
+        a = 623779536
+        b = 170102
+        l = 16029094
+        E = EllipticCurve(GF(p), [a, b])
+        P = E(470008538, 130171157)
+        R = E(1247215477, 775699526)
+        l_ = mov_attack.attack(P, R)
+        self.assertIsNone(l_)
 
     def test_parameter_recovery(self):
         p = 115792089210356248762697446949407573530086143415290314195533631308867097853951

@@ -5,7 +5,7 @@ Python implementations of cryptographic attacks and utilities.
 * Python 3.9
 * [PyCryptodome](https://pycryptodome.readthedocs.io/)
 * [SageMath](https://www.sagemath.org/)
-* [Hilbert Class Polynomial database](https://doc.sagemath.org/html/en/reference/databases/sage/databases/db_class_polynomials.html) (Only required for complex multiplication factorization)
+* [Hilbert Class Polynomial database](https://doc.sagemath.org/html/en/reference/databases/sage/databases/db_class_polynomials.html) (Only required for complex multiplication)
 
 ## Usage
 Unit tests are located in the `test` directory and can be executed using the `unittest` module or using `pytest`. This should not take very long, perhaps a few minutes depending on your machine.
@@ -92,8 +92,8 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 ### Elliptic Curve Cryptography
 * [x] [ECDSA nonce reuse attack](attacks/ecc/ecdsa_nonce_reuse.py)
-* [x] [Frey-Ruck attack](attacks/ecc/frey_ruck_attack.py)
-* [x] [MOV attack](attacks/ecc/mov_attack.py)
+* [x] [Frey-Ruck attack](attacks/ecc/frey_ruck_attack.py) [More information: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 3)]
+* [x] [MOV attack](attacks/ecc/mov_attack.py) [More information: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 2)]
 * [x] [Parameter recovery](attacks/ecc/parameter_recovery.py)
 * [x] [Singular curve attack](attacks/ecc/singular_curve.py)
 * [x] [Smart's attack](attacks/ecc/smart_attack.py) [More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"]
