@@ -1,4 +1,6 @@
 import logging
+from math import gcd
+from math import lcm
 
 from sage.all import crt
 from sage.all import is_prime
@@ -6,76 +8,71 @@ from sage.all import kronecker
 from sage.all import next_prime
 
 
-def _generate_s(bases, k2, k3):
-    s = []
-    for b in bases:
-        s_b = set()
-        for p in range(1, 4 * b, 2):
-            if kronecker(b, p) == -1:
-                s_b.add(p)
+def _generate_s(A, k):
+    S = []
+    for a in A:
+        # Possible non-residues mod 4a of potential primes p
+        Sa = set()
+        for p in range(1, 4 * a, 2):
+            if kronecker(a, p) == -1:
+                Sa.add(p)
 
-        s.append(s_b)
+        # Subsets of Sa that meet the intersection requirement
+        Sk = []
+        for ki in k:
+            assert gcd(ki, 4 * a) == 1
+            Sk.append({pow(ki, -1, 4 * a) * (s + ki - 1) % (4 * a) for s in Sa})
 
-    for i in range(len(s)):
-        mod = 4 * bases[i]
-        inv2 = pow(k2, -1, mod)
-        inv3 = pow(k3, -1, mod)
-        s2 = set()
-        s3 = set()
-        for z in s[i]:
-            s2.add(inv2 * (z + k2 - 1) % mod)
-            s3.add(inv3 * (z + k3 - 1) % mod)
+        S.append(Sa.intersection(*Sk))
 
-        s[i] &= s2 & s3
-
-    return s
+    return S
 
 
-# Brute forces a combination of residues from s by backtracking
-def _backtrack(s, bases, residues, moduli, i):
-    if i == len(s):
-        combined_modulus = 1
-        for modulus in moduli:
-            combined_modulus *= modulus
+# Brute forces a combination of residues from S by backtracking
+# rems already contains the remainders mod each k
+# mods already contains each k
+def _backtrack(S, A, rems, mods, i):
+    if i == len(S):
+        return crt(rems, mods), lcm(*mods)
 
-        return crt(residues, moduli), combined_modulus
-
-    moduli.append(4 * bases[i])
-    for residue in s[i]:
-        residues.append(residue)
+    mods.append(4 * A[i])
+    for za in S[i]:
+        rems.append(za)
         try:
-            crt(residues, moduli)
-            ans = _backtrack(s, bases, residues, moduli, i + 1)
-            if ans:
-                return ans
+            crt(rems, mods)
+            z, m = _backtrack(S, A, rems, mods, i + 1)
+            if z is not None and m is not None:
+                return z, m
         except ValueError:
             pass
-        residues.pop()
+        rems.pop()
 
-    moduli.pop()
+    mods.pop()
     return None, None
 
 
-def generate_pseudoprime(bases, min_bitsize=0):
+def generate_pseudoprime(A, min_bitsize=0):
     """
     Generates a pseudoprime of the form p1 * p2 * p3 which passes the Miller-Rabin primality test for the provided bases.
-    :param bases: the bases
+    More information: R. Albrecht M. et al., "Prime and Prejudice: Primality Testing Under Adversarial Conditions"
+    :param A: the bases
     :param min_bitsize: the minimum bitsize of the generated pseudoprime (default: 0)
-    :return: a tuple containing the pseudoprime, as well as its 3 prime factors
+    :return: a tuple containing the pseudoprime n, as well as its 3 prime factors
     """
-    bases.sort()
-    k2 = int(next_prime(bases[-1]))
+    A.sort()
+    k2 = int(next_prime(A[-1]))
     k3 = int(next_prime(k2))
     while True:
-        residues = [pow(-k2, -1, k3), pow(-k3, -1, k2)]
-        moduli = [k3, k2]
-        s = _generate_s(bases, k2, k3)
-        residue, modulus = _backtrack(s, bases, residues, moduli, 0)
-        if residue and modulus:
-            logging.info(f"Found residue {residue} and modulus {modulus}")
-            i = (2 ** (min_bitsize // 3)) // modulus
+        logging.info(f"Trying k2 = {k2} and k3 = {k3}...")
+        rems = [pow(-k3, -1, k2), pow(-k2, -1, k3)]
+        mods = [k2, k3]
+        s = _generate_s(A, mods)
+        z, m = _backtrack(s, A, rems, mods, 0)
+        if z and m:
+            logging.info(f"Found residue {z} and modulus {m}")
+            i = (2 ** (min_bitsize // 3)) // m
             while True:
-                p1 = int(residue + i * modulus)
+                p1 = int(z + i * m)
                 p2 = k2 * (p1 - 1) + 1
                 p3 = k3 * (p1 - 1) + 1
                 if is_prime(p1) and is_prime(p2) and is_prime(p3):

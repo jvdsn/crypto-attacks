@@ -146,7 +146,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [ ] Lattice reduction attack
 
 ### Pseudoprimes
-* [x] [Generating Miller-Rabin pseudoprimes](attacks/pseudoprimes/miller_rabin.py)
+* [x] [Generating Miller-Rabin pseudoprimes](attacks/pseudoprimes/miller_rabin.py) [More information: R. Albrecht M. et al., "Prime and Prejudice: Primality Testing Under Adversarial Conditions"]
 
 ### RC4
 * [x] [Fluhrer-Mantin-Shamir attack](attacks/rc4/fms.py)
