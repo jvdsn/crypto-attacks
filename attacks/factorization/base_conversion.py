@@ -20,6 +20,7 @@ def factorize(N, coefficient_threshold=50):
         for i, e in enumerate(ZZ(N).digits(base)):
             polynomial += e * x ** i
 
+        logging.debug(f"Got {len(polynomial.coefficients())} coefficients")
         if len(polynomial.coefficients()) < coefficient_threshold:
             return tuple(map(lambda f: int(f[0].subs(x=base)), polynomial.factor_list()))
 
