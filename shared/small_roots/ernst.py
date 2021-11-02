@@ -31,6 +31,7 @@ def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="r
         return
 
     R = f.constant_coefficient()
+    assert R != 0
     while gcd(R, X) != 1:
         X += 1
     while gcd(R, Y) != 1:
@@ -103,6 +104,7 @@ def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="r
         return
 
     R = f.constant_coefficient()
+    assert R != 0
     while gcd(R, X) != 1:
         X += 1
     while gcd(R, Y) != 1:

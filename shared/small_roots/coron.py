@@ -26,12 +26,18 @@ def integer_bivariate(p, k, X, Y, roots_method="resultants"):
     _, W = max_norm(p(x * X, y * Y))
 
     p00 = int(p.constant_coefficient())
-    assert p00 != 0 and gcd(p00, X * Y) == 1
+    assert p00 != 0
+    while gcd(p00, X) != 1:
+        X += 1
+    while gcd(p00, Y) != 1:
+        Y += 1
+    while gcd(p00, W) != 1:
+        W += 1
+
     u = W + (1 - W) % abs(p00)
     n = u * (X * Y) ** k
-
-    q = (pow(p00, -1, n) * p) % n
-    q = q.change_ring(ZZ)
+    assert gcd(p00, n) == 1
+    q = ((pow(p00, -1, n) * p) % n).change_ring(ZZ)
 
     logging.debug("Generating shifts...")
 
