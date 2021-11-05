@@ -17,7 +17,6 @@ if sys.path[1] != path:
     sys.path.insert(1, path)
 
 from shared.hensel import hensel_roots
-from shared.polynomial import max_norm
 from shared.small_roots import blomer_may
 from shared.small_roots import ernst
 from shared.small_roots import howgrave_graham
@@ -217,7 +216,7 @@ def attack_small_d_msb_1(N, e, d_, beta, delta, m_start=1):
     X = int(RR(N) ** delta)
     Y = int(RR(N) ** beta)
     Z = int(3 * RR(N) ** (1 / 2))
-    _, W = max_norm(f(x * X, y * Y, z * Z))
+    W = int(RR(N) ** (1 + beta))
 
     m = m_start
     while True:
@@ -258,7 +257,7 @@ def attack_small_d_msb_2(N, e, d_, beta, delta, m_start=1):
     X = int(RR(N) ** delta)
     Y = int(4 * RR(N) ** gamma)
     Z = int(3 * RR(N) ** (1 / 2))
-    _, W = max_norm(f(x * X, y * Y, z * Z))
+    W = int(4 * RR(N) ** (1 + gamma))
 
     m = m_start
     while True:
@@ -297,7 +296,7 @@ def attack_small_d_lsb(N, e, d0, M, beta, delta, m_start=1):
     X = int(RR(N) ** delta)
     Y = int(RR(N) ** beta)
     Z = int(3 * RR(N) ** (1 / 2))
-    _, W = max_norm(f(x * X, y * Y, z * Z))
+    W = int(RR(N) ** (1 + beta))
 
     m = m_start
     while True:
