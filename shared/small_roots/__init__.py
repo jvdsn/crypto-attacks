@@ -131,6 +131,9 @@ def find_roots(f, polynomials, pr, method="resultants"):
     else:
         if method == "resultants":
             logging.debug("Using resultants method to find roots...")
+            # TODO: should we use f here or not?
+            # Sometimes, when f is used, it does not find the solution (jochemsz_may_modular). However, if only the polynomials are used, it does find the solution.
+            # On the other hand, sometimes it does not find the solution if only the polynomials are used (ernst), but it does find the solution, when f is used.
             yield from find_roots_resultants(f, polynomials, pr.gens())
         elif method == "groebner":
             logging.debug("Using Groebner basis method to find roots...")

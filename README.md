@@ -201,5 +201,5 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Ernst et al. methods](shared/small_roots/ernst.py) [More information: Ernst M. et al., "Partial Key Exposure Attacks on RSA Up to Full Size Exponents"]
 * [x] [Herrmann-May method (unravelled linearization)](shared/small_roots/herrmann_may.py) [More information: Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"]
 * [x] [Howgrave-Graham method](shared/small_roots/howgrave_graham.py) [More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods" (Section 3.2)]
-* [ ] Jochemsz-May method (modular roots) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.1)]
+* [x] Jochemsz-May method (modular roots) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.1)]
 * [x] [Jochemsz-May method (integer roots)](shared/small_roots/jochemsz_may_integer.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.2)]
