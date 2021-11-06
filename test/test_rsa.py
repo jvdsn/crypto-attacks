@@ -1,5 +1,6 @@
 import os
 import sys
+from math import lcm
 from random import getrandbits
 from random import randint
 from unittest import TestCase
@@ -25,6 +26,7 @@ from attacks.rsa import partial_key_exposure
 from attacks.rsa import related_message
 from attacks.rsa import stereotyped_message
 from attacks.rsa import wiener_attack
+from attacks.rsa import wiener_attack_common_prime
 from attacks.rsa import wiener_attack_lattice
 
 
@@ -372,6 +374,20 @@ class TestRSA(TestCase):
         self.assertIsInstance(d_, int)
         self.assertEqual(N, p_ * q_)
         self.assertEqual(d, d_)
+
+    def test_wiener_attack_common_prime(self):
+        p = 6782064950424760710980284774219634491993236863153483768598482045213175969155112496910085683689731379194662789263026739644356045047675956598858137448376083
+        q = 8504790992500016807878718231498496399986587899005250624106963488787126208070626038486629561793688885242005440622123291666782461185365857422920183086563257
+        N = p * q
+        # Need lcm here to force e to be smaller.
+        phi = lcm(p - 1, q - 1)
+        d = 23036500924799795486061779142562236752665840004239
+        e = pow(d, -1, phi)
+        delta = 0.1604
+        p_, q_, d_ = wiener_attack_common_prime.attack(N, e, delta)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
 
     def test_wiener_attack_lattice(self):
         p = 10058836956790351250887686696724836874393543803785063208855808993934035100716802252422366234311980376453091436742252598818654765951361743967196495143096063

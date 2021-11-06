@@ -169,6 +169,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Related message attack](attacks/rsa/related_message.py)
 * [x] [Stereotyped message attack](attacks/rsa/stereotyped_message.py)
 * [x] [Wiener's attack](attacks/rsa/wiener_attack.py)
+* [x] [Wiener's attack for Common Prime RSA](attacks/rsa/wiener_attack_common_prime.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 5)]
 * [x] [Wiener's attack (Heuristic lattice variant)](attacks/rsa/wiener_attack_lattice.py) [More information: Nguyen P. Q., "Public-Key Cryptanalysis"]
 
 ### Shamir's Secret Sharing
