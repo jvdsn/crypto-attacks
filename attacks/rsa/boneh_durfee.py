@@ -23,7 +23,7 @@ def attack(N, e, bitsize, lsb_known=0, lsb=0, delta=0.25, m_start=1):
     :param bitsize: the amount of bits of the prime factors
     :param lsb_known: the amount of known least significant bits of one of the prime factors
     :param lsb: the known least significant bits of one of the prime factors
-    :param delta: a predicted bound on the private exponent (d < n^delta) (default: 0.25)
+    :param delta: a predicted bound on the private exponent (d < N^delta) (default: 0.25)
     :param m_start: the m value to start at for the small roots method (default: 1)
     :return: a tuple containing the prime factors
     """
