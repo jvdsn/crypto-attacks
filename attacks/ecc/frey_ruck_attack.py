@@ -18,7 +18,6 @@ def attack(P, R, max_k=6, max_tries=10):
     E = P.curve()
     q = E.base_ring().order()
     n = P.order()
-    print(n, q)
     assert gcd(n, q) == 1, "GCD of generator order and curve base ring order should be 1."
 
     logging.info("Calculating embedding degree...")
