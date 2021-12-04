@@ -25,7 +25,7 @@ def attack(a, s):
     """
     n = len(a)
     d = n / log2(max(a))
-    N = ceil(sqrt(1 / 2 * n))
+    N = ceil(1 / 2 * sqrt(n))
     assert d < 0.9408, f"Density should be less than 0.9408 but was {d}."
 
     L = matrix(QQ, n + 1, n + 1)
