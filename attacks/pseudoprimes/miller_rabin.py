@@ -51,23 +51,28 @@ def _backtrack(S, A, X, M, i):
     return None, None
 
 
-def generate_pseudoprime(A, min_bitsize=0):
+def generate_pseudoprime(A, k2=None, k3=None, min_bitsize=0):
     """
     Generates a pseudoprime of the form p1 * p2 * p3 which passes the Miller-Rabin primality test for the provided bases.
     More information: R. Albrecht M. et al., "Prime and Prejudice: Primality Testing Under Adversarial Conditions"
     :param A: the bases
+    :param k2: the k2 value (default: next_prime(A[-1]))
+    :param k3: the k3 value (default: next_prime(k2))
     :param min_bitsize: the minimum bitsize of the generated pseudoprime (default: 0)
     :return: a tuple containing the pseudoprime n, as well as its 3 prime factors
     """
     A.sort()
-    k2 = int(next_prime(A[-1]))
-    k3 = int(next_prime(k2))
+    if k2 is None:
+        k2 = int(next_prime(A[-1]))
+    if k3 is None:
+        k3 = int(next_prime(k2))
     while True:
         logging.info(f"Trying k2 = {k2} and k3 = {k3}...")
         X = [pow(-k3, -1, k2), pow(-k2, -1, k3)]
         M = [k2, k3]
-        s = _generate_s(A, M)
-        z, m = _backtrack(s, A, X, M, 0)
+        S = _generate_s(A, M)
+        logging.info(f"S = {S}")
+        z, m = _backtrack(S, A, X, M, 0)
         if z and m:
             logging.info(f"Found residue {z} and modulus {m}")
             i = (2 ** (min_bitsize // 3)) // m
