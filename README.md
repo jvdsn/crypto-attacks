@@ -152,7 +152,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Fluhrer-Mantin-Shamir attack](attacks/rc4/fms.py)
 
 ### RSA
-* [ ] Bleichenbacher's attack
+* [x] [Bleichenbacher's attack](attacks/rsa/bleichenbacher.py) [More information: Bleichenbacher D., "Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard PKCS #1"]
 * [x] [Bleichenbacher's signature forgery attack](attacks/rsa/bleichenbacher_signature_forgery.py)
 * [x] [Boneh-Durfee attack](attacks/rsa/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
 * [x] [Common modulus attack](attacks/rsa/common_modulus.py)

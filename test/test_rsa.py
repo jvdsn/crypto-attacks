@@ -5,12 +5,16 @@ from random import getrandbits
 from random import randint
 from unittest import TestCase
 
+from Crypto.Cipher import PKCS1_v1_5
+from Crypto.PublicKey import RSA
+from Crypto.Util.number import long_to_bytes
 from sage.all import crt
 
 path = os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__))))
 if sys.path[1] != path:
     sys.path.insert(1, path)
 
+from attacks.rsa import bleichenbacher
 from attacks.rsa import bleichenbacher_signature_forgery
 from attacks.rsa import boneh_durfee
 from attacks.rsa import common_modulus
@@ -36,6 +40,26 @@ class TestRSA(TestCase):
         sq = pow(m, (d % (q - 1)), q)
         # Random bitflip?
         return crt([sp, sq ^ 1], [p, q])
+
+    def _valid_padding(self, cipher, k, c):
+        return cipher.decrypt(long_to_bytes(c, k), b"") != b""
+
+    def test_bleichenbacher(self):
+        p = 8371433218848358145038188834376952780015970046874950635276595345380605659774957836526221018721547441806561287602735774125878237978059976407232379361297183
+        q = 11466377869587829648871708469119992174705652479796097233499813683057983019116298140412758762054846456284362676185136356912754651085919371755263313171141577
+        n = p * q
+        phi = (p - 1) * (q - 1)
+        e = 65537
+        d = pow(e, -1, phi)
+        k = 128
+        cipher = PKCS1_v1_5.new(RSA.construct((n, e, d)))
+
+        # We know it doesn't take too long to decrypt this c using Bleichenbacher's attack (~7500 queries).
+        c = 41825379700061736537842449489601003429572348310436151924728709132681706878857980459161227458335791180711615257337302674792944628957924785690808047623816090305399357488221035015598239161665727483209037254608986214222956682098319678174134123989991914343760644546568563066348494878863941359213637733834134515197
+        m = pow(c, d, n)
+        m_ = bleichenbacher.attack(lambda c: self._valid_padding(cipher, k, c), k, n, e, c)
+        self.assertIsInstance(m_, int)
+        self.assertEqual(m, m_)
 
     def test_bleichenbacher_signature_forgery(self):
         suffix_bits = 32
