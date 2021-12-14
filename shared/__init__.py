@@ -31,6 +31,26 @@ def bits_to_int_le(bits, count):
     return i
 
 
+def floor(a, b):
+    """
+    Returns floor(a / b), works with large integers.
+    :param a: a
+    :param b: b
+    :return: floor(a / b)
+    """
+    return a // b
+
+
+def ceil(a, b):
+    """
+    Returns ceil(a / b), works with large integers.
+    :param a: a
+    :param b: b
+    :return: ceil(a / b)
+    """
+    return a // b + (a % b > 0)
+
+
 def symmetric_mod(x, m):
     """
     Computes the symmetric modular reduction.

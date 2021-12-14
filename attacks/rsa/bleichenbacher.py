@@ -1,12 +1,14 @@
+import logging
+import os
+import sys
 from random import randint
 
+path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
+if sys.path[1] != path:
+    sys.path.insert(1, path)
 
-def _floor(a, b):
-    return a // b
-
-
-def _ceil(a, b):
-    return a // b + (a % b > 0)
+from shared import ceil
+from shared import floor
 
 
 def _insert(M, a, b):
@@ -34,7 +36,7 @@ def _step_1(padding_oracle, n, e, c):
 
 # Step 2.a.
 def _step_2a(padding_oracle, n, e, c0, B):
-    s = _ceil(n, 3 * B)
+    s = ceil(n, 3 * B)
     while not padding_oracle((c0 * pow(s, e, n)) % n):
         s += 1
 
@@ -52,10 +54,10 @@ def _step_2b(padding_oracle, n, e, c0, s):
 
 # Step 2.c.
 def _step_2c(padding_oracle, n, e, c0, B, s, a, b):
-    r = _ceil(2 * (b * s - 2 * B), n)
+    r = ceil(2 * (b * s - 2 * B), n)
     while True:
-        left = _ceil(2 * B + r * n, b)
-        right = _floor(3 * B + r * n, a)
+        left = ceil(2 * B + r * n, b)
+        right = floor(3 * B + r * n, a)
         for s in range(left, right + 1):
             if padding_oracle((c0 * pow(s, e, n)) % n):
                 return s
@@ -67,32 +69,35 @@ def _step_2c(padding_oracle, n, e, c0, B, s, a, b):
 def _step_3(n, B, s, M):
     M_ = []
     for (a, b) in M:
-        left = _ceil(a * s - 3 * B + 1, n)
-        right = _floor(b * s - 2 * B, n)
+        left = ceil(a * s - 3 * B + 1, n)
+        right = floor(b * s - 2 * B, n)
         for r in range(left, right + 1):
-            a_ = max(a, _ceil(2 * B + r * n, s))
-            b_ = min(b, _floor(3 * B - 1 + r * n, s))
+            a_ = max(a, ceil(2 * B + r * n, s))
+            b_ = min(b, floor(3 * B - 1 + r * n, s))
             _insert(M_, a_, b_)
 
     return M_
 
 
-def attack(padding_oracle, k, n, e, c):
+def attack(padding_oracle, n, e, c):
     """
     Recovers the plaintext using Bleichenbacher's attack.
     More information: Bleichenbacher D., "Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard PKCS #1"
     :param padding_oracle: the padding oracle taking integers, returns True if the PKCS #1 v1.5 padding is correct, False otherwise
-    :param k: the number of bytes in a padded plaintext
     :param n: the modulus
     :param e: the public exponent
     :param c: the ciphertext (integer)
     :return: the plaintext (integer)
     """
+    k = ceil(n.bit_length(), 8)
     B = 2 ** (8 * (k - 2))
+    logging.info("Executing step 1...")
     s0, c0 = _step_1(padding_oracle, n, e, c)
     M = [(2 * B, 3 * B - 1)]
+    logging.info("Executing step 2.a...")
     s = _step_2a(padding_oracle, n, e, c0, B)
     M = _step_3(n, B, s, M)
+    logging.info("Starting while loop...")
     while True:
         if len(M) > 1:
             s = _step_2b(padding_oracle, n, e, c0, s)
