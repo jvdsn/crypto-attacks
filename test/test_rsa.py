@@ -6,6 +6,7 @@ from random import randint
 from unittest import TestCase
 
 from Crypto.Cipher import PKCS1_v1_5
+from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from Crypto.Util.number import long_to_bytes
 from sage.all import crt
@@ -25,6 +26,7 @@ from attacks.rsa import known_crt_exponents
 from attacks.rsa import known_d
 from attacks.rsa import low_exponent
 from attacks.rsa import lsb_oracle
+from attacks.rsa import manger
 from attacks.rsa import non_coprime_exponent
 from attacks.rsa import partial_key_exposure
 from attacks.rsa import related_message
@@ -41,8 +43,11 @@ class TestRSA(TestCase):
         # Random bitflip?
         return crt([sp, sq ^ 1], [p, q])
 
-    def _valid_padding(self, cipher, k, c):
+    def _valid_padding_v1_5(self, cipher, k, c):
         return cipher.decrypt(long_to_bytes(c, k), b"") != b""
+
+    def _valid_padding_oaep(self, n, d, B, c):
+        return pow(c, d, n) < B
 
     def test_bleichenbacher(self):
         p = 8371433218848358145038188834376952780015970046874950635276595345380605659774957836526221018721547441806561287602735774125878237978059976407232379361297183
@@ -57,7 +62,7 @@ class TestRSA(TestCase):
         # We know it doesn't take too long to decrypt this c using Bleichenbacher's attack (~7500 queries).
         c = 41825379700061736537842449489601003429572348310436151924728709132681706878857980459161227458335791180711615257337302674792944628957924785690808047623816090305399357488221035015598239161665727483209037254608986214222956682098319678174134123989991914343760644546568563066348494878863941359213637733834134515197
         m = pow(c, d, n)
-        m_ = bleichenbacher.attack(lambda c: self._valid_padding(cipher, k, c), n, e, c)
+        m_ = bleichenbacher.attack(lambda c: self._valid_padding_v1_5(cipher, k, c), n, e, c)
         self.assertIsInstance(m_, int)
         self.assertEqual(m, m_)
 
@@ -232,6 +237,23 @@ class TestRSA(TestCase):
         m = randint(1, N)
         c = pow(m, e, N)
         m_ = lsb_oracle.attack(N, e, c, lambda c: pow(c, d, N) & 1)
+        self.assertIsInstance(m_, int)
+        self.assertEqual(m, m_)
+
+    def test_manger(self):
+        p = 11550140397625831237795340388931764619590203348477070899900744712142057429184408396002838334752152208585447782690486121190515605653404086833126302256665293
+        q = 11235144439517708878544315543777445305219755865213735904183809061384223163112309675101975657775860815518111926557521605302651507623721470417911684612028139
+        n = p * q
+        phi = (p - 1) * (q - 1)
+        e = 65537
+        d = pow(e, -1, phi)
+        k = 128
+        B = 2 ** (8 * (k - 1))
+
+        # We know it doesn't take too long to decrypt this c using Manger's attack (~1000 queries).
+        c = 88724310553655024406998673890906955926769391892532500091257501059546128411164957509885727337380526571122120832873601676837576704085217211100300291225160276367472411100146256463969941418608788600822191439544173046896875356040910136817300727665043174773434871223215069772985286442145129776197191070321384162933
+        m = pow(c, d, n)
+        m_ = manger.attack(lambda c: self._valid_padding_oaep(n, d, B, c), n, e, c)
         self.assertIsInstance(m_, int)
         self.assertEqual(m, m_)
 
