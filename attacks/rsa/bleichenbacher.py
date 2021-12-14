@@ -81,7 +81,7 @@ def attack(padding_oracle, k, n, e, c):
     """
     Recovers the plaintext using Bleichenbacher's attack.
     More information: Bleichenbacher D., "Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard PKCS #1"
-    :param padding_oracle: the padding oracle taking integers, returns True if the PKCS#1 v1.5 padding is correct, False otherwise
+    :param padding_oracle: the padding oracle taking integers, returns True if the PKCS #1 v1.5 padding is correct, False otherwise
     :param k: the number of bytes in a padded plaintext
     :param n: the modulus
     :param e: the public exponent
