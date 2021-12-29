@@ -6,7 +6,6 @@ from random import randint
 from unittest import TestCase
 
 from Crypto.Cipher import PKCS1_v1_5
-from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from Crypto.Util.number import long_to_bytes
 from sage.all import crt
@@ -161,8 +160,8 @@ class TestRSA(TestCase):
         N = [N1, N2, N3]
         e = 3
         m = randint(1, min(N))
-        cs = [pow(m, e, n) for n in N]
-        m_ = hastad_attack.attack(N, e, cs)
+        c = [pow(m, e, n) for n in N]
+        m_ = hastad_attack.attack(N, e, c)
         self.assertIsInstance(m_, int)
         self.assertEqual(m, m_)
 
