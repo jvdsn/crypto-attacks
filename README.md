@@ -136,22 +136,31 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Low density attack](attacks/knapsack/low_density.py) [More information: Coster M. J. et al., "Improved low-density subset sum algorithms"]
 
 ### Linear Congruential Generators
+
 * [x] [LCG parameter recovery](attacks/lcg/parameter_recovery.py)
 * [x] [Truncated LCG parameter recovery](attacks/lcg/truncated_parameter_recovery.py) [More information: Contini S., Shparlinski I. E., "On Stern's Attack Against Secret Truncated Linear Congruential Generators"]
 * [x] [Truncated LCG state recovery](attacks/lcg/truncated_state_recovery.py) [More information: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"]
 
 ### Learning With Errors
+
 * [x] [Arora-Ge attack](attacks/lwe/arora_ge.py) [More information: "The Learning with Errors Problem: Algorithms" (Section 1)]
 * [ ] Blum-Kalai-Wasserman attack
 * [ ] Lattice reduction attack
 
+## One-time Pad
+
+* [x] [Key reuse](attacks/otp/key_reuse.py)
+
 ### Pseudoprimes
+
 * [x] [Generating Miller-Rabin pseudoprimes](attacks/pseudoprimes/miller_rabin.py) [More information: R. Albrecht M. et al., "Prime and Prejudice: Primality Testing Under Adversarial Conditions"]
 
 ### RC4
+
 * [x] [Fluhrer-Mantin-Shamir attack](attacks/rc4/fms.py)
 
 ### RSA
+
 * [x] [Bleichenbacher's attack](attacks/rsa/bleichenbacher.py) [More information: Bleichenbacher D., "Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard PKCS #1"]
 * [x] [Bleichenbacher's signature forgery attack](attacks/rsa/bleichenbacher_signature_forgery.py)
 * [x] [Boneh-Durfee attack](attacks/rsa/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
