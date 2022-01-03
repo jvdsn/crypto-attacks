@@ -111,8 +111,7 @@ def dsa_known_middle(n, signature1, signature2, nonce_bitsize, msb_unknown, lsb_
     :param lsb_unknown: the amount of unknown least significant bits of the nonces
     :return: a tuple containing the private key, the nonce of the first signature, and the nonce of the second signature
     """
-    unknown = max(msb_unknown, lsb_unknown)
-    K = 2 ** unknown
+    K = 2 ** max(msb_unknown, lsb_unknown)
     l = nonce_bitsize - msb_unknown
 
     h1, r1, s1, a1 = signature1
@@ -126,7 +125,7 @@ def dsa_known_middle(n, signature1, signature2, nonce_bitsize, msb_unknown, lsb_
     B[1] = vector(ZZ, [0, K * n, 0, 0, 0])
     B[2] = vector(ZZ, [0, 0, K * n, 0, 0])
     B[3] = vector(ZZ, [0, 0, 0, K * n, 0])
-    B[4] = vector(ZZ, [0, 0, 0, 0, K * n])
+    B[4] = vector(ZZ, [0, 0, 0, 0, n])
 
     A = matrix(ZZ, 4, 4)
     b = []
@@ -138,6 +137,7 @@ def dsa_known_middle(n, signature1, signature2, nonce_bitsize, msb_unknown, lsb_
 
     assert len(b) == 4
     x1, y1, x2, y2 = A.solve_right(vector(ZZ, b))
+    assert (x1 + 2 ** l * y1 + t * x2 + 2 ** l * t * y2 + u_) % n == 0
 
     k1 = 2 ** l * y1 + 2 ** lsb_unknown * a1 + x1
     k2 = 2 ** l * y2 + 2 ** lsb_unknown * a2 + x2
