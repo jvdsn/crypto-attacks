@@ -1,11 +1,17 @@
 import logging
+import os
+import sys
 from math import gcd
-from math import lcm
 
-from sage.all import crt
 from sage.all import is_prime
 from sage.all import kronecker
 from sage.all import next_prime
+
+path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
+if sys.path[1] != path:
+    sys.path.insert(1, path)
+
+from shared.crt import fast_crt
 
 
 def _generate_s(A, k):
@@ -33,13 +39,13 @@ def _generate_s(A, k):
 # M already contains each k
 def _backtrack(S, A, X, M, i):
     if i == len(S):
-        return crt(X, M), lcm(*M)
+        return fast_crt(X, M)
 
     M.append(4 * A[i])
     for za in S[i]:
         X.append(za)
         try:
-            crt(X, M)
+            fast_crt(X, M)
             z, m = _backtrack(S, A, X, M, i + 1)
             if z is not None and m is not None:
                 return z, m

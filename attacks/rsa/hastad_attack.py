@@ -7,6 +7,7 @@ if sys.path[1] != path:
     sys.path.insert(1, path)
 
 from attacks.rsa import low_exponent
+from shared.crt import fast_crt
 
 
 def attack(N, e, c):
@@ -24,12 +25,5 @@ def attack(N, e, c):
             if i != j and gcd(N[i], N[j]) != 1:
                 raise ValueError(f"Modulus {i} and {j} share factors, Hastad's attack is impossible.")
 
-    l = len(N)
-    p = 1
-    for Ni in N:
-        p *= Ni
-
-    n = [p // Ni for Ni in N]
-    u = [pow(n[i], -1, N[i]) for i in range(l)]
-    c = sum(map(lambda i: c[i] * u[i] * n[i], range(l))) % p
+    c, _ = fast_crt(c, N)
     return low_exponent.attack(e, c)

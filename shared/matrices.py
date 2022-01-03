@@ -1,6 +1,7 @@
 import logging
 
-from sage.all import identity_matrix, GF
+from sage.all import GF
+from sage.all import identity_matrix
 from sage.matrix.matrix2 import _jordan_form_vector_in_difference
 
 
@@ -48,6 +49,7 @@ def dlog(A, B):
     """
     assert A.is_square() and B.is_square() and A.nrows() == B.nrows()
 
+    p = A.base_ring().order()
     for K, k, e, l, P in find_eigenvalues(A):
         B_ = P ** -1 * B * P
         logging.debug(f"Computing dlog in {K}...")

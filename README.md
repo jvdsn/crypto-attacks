@@ -187,12 +187,13 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 ## Other interesting implementations
 * [x] [Adleman-Manders-Miller root extraction method](shared/__init__.py) [More information: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)]
+* [x] [Fast CRT using divide-and-conquer](shared/crt.py)
 * [x] [Linear Hensel lifting](shared/hensel.py)
 * [ ] Quadratic Hensel lifting
 * [x] [Babai's Nearest Plane Algorithm](shared/lattice.py)
 * [x] [Matrix discrete logarithm](shared/matrices.py)
 * [x] [Matrix discrete logarithm (equation)](shared/matrices.py)
-* [x] [Fast GCD using half GCD](shared/polynomial.py)
+* [x] [Fast polynomial GCD using half GCD](shared/polynomial.py)
 
 ### Elliptic Curve Generation
 * [ ] MNT curves

@@ -2,8 +2,9 @@ import logging
 
 from sage.all import ZZ
 from sage.all import Zmod
-from sage.all import crt
 from sage.all import factor
+
+from shared.crt import fast_crt
 
 
 def _polynomial_hgcd(ring, a0, a1):
@@ -87,7 +88,8 @@ def polynomial_gcd_crt(a, b, m):
         gs.append(fast_polynomial_gcd(a.change_ring(zmodp), b.change_ring(zmodp)).change_ring(ZZ))
         ps.append(p)
 
-    return gs[0] if len(gs) == 1 else crt(gs, ps)
+    g, _ = fast_crt(gs, ps)
+    return g
 
 
 def polynomial_xgcd(a, b):
