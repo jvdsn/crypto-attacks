@@ -18,8 +18,9 @@ class TestECB(TestCase):
         return AES.new(key, AES.MODE_ECB).encrypt(p)
 
     def test_plaintext_recovery(self):
-        key = randbytes(16)
-        s = randbytes(16)
+        for i in range(33):
+            key = randbytes(16)
+            s = randbytes(i)
 
-        s_ = plaintext_recovery.attack(lambda p: self._encrypt(key, pad(p + s, 16)))
-        self.assertEqual(s, s_)
+            s_ = plaintext_recovery.attack(lambda p: self._encrypt(key, pad(p + s, 16)))
+            self.assertEqual(s, s_)

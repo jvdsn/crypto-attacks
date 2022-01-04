@@ -201,7 +201,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [ ] Prescribed trace
 * [ ] Supersingular curves
 
-### Small roots
+### Small Roots
 * [x] [Polynomial roots using resultants](shared/small_roots/__init__.py)
 * [x] [Polynomial roots using Groebner bases](shared/small_roots/__init__.py)
 * [x] [Blomer-May method](shared/small_roots/blomer_may.py) [More information: Blomer J., May A., "New Partial Key Exposure Attacks on RSA" (Section 6)]
