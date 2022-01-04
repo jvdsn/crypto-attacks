@@ -1,6 +1,7 @@
 import os
 import sys
 from random import choice
+from random import choices
 from random import randint
 from unittest import TestCase
 
@@ -29,7 +30,7 @@ class LWE(TestCase):
         n = 10
         E = list(range(-1, 2))
         S = list(range(0, q))
-        s = [choice(S) for _ in range(n)]
+        s = choices(S, k=n)
         A, b = self._generate_samples(q, m, n, E, s)
         s_ = arora_ge.attack(q, A, b, E)
         for i in range(n):
@@ -40,7 +41,7 @@ class LWE(TestCase):
         n = 10
         E = list(range(-1, 2))
         S = list(range(0, 2))
-        s = [choice(S) for _ in range(n)]
+        s = choices(S, k=n)
         A, b = self._generate_samples(q, m, n, E, s)
         s_ = arora_ge.attack(q, A, b, E, S)
         for i in range(n):
@@ -51,7 +52,7 @@ class LWE(TestCase):
         n = 10
         E = list(range(-2, 3))
         S = list(range(0, 2))
-        s = [choice(S) for _ in range(n)]
+        s = choices(S, k=n)
         A, b = self._generate_samples(q, m, n, E, s)
         s_ = arora_ge.attack(q, A, b, E, S)
         for i in range(n):
