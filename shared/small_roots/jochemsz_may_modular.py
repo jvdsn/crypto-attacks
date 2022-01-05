@@ -3,6 +3,8 @@ from abc import ABCMeta
 from abc import abstractmethod
 from math import gcd
 
+from sage.all import ZZ
+
 from shared import small_roots
 
 
