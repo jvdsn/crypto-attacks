@@ -29,7 +29,7 @@ class LWE(TestCase):
         m = 200
         n = 10
         E = list(range(-1, 2))
-        S = list(range(0, q))
+        S = list(range(q))
         s = choices(S, k=n)
         A, b = self._generate_samples(q, m, n, E, s)
         s_ = arora_ge.attack(q, A, b, E)
@@ -40,7 +40,7 @@ class LWE(TestCase):
         m = 10
         n = 10
         E = list(range(-1, 2))
-        S = list(range(0, 2))
+        S = list(range(2))
         s = choices(S, k=n)
         A, b = self._generate_samples(q, m, n, E, s)
         s_ = arora_ge.attack(q, A, b, E, S)
@@ -51,7 +51,7 @@ class LWE(TestCase):
         m = 150
         n = 10
         E = list(range(-2, 3))
-        S = list(range(0, 2))
+        S = list(range(2))
         s = choices(S, k=n)
         A, b = self._generate_samples(q, m, n, E, s)
         s_ = arora_ge.attack(q, A, b, E, S)
