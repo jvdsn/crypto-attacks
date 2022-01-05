@@ -44,7 +44,7 @@ class ExtendedStrategy(Strategy):
 
         M = set()
         for monomial in S:
-            M |= set((monomial * f).monomials())
+            M.update((monomial * f).monomials())
 
         return S, M
 
