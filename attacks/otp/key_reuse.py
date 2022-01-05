@@ -36,7 +36,7 @@ def _guess_key_sizes(c: list[bytes], max_key_size):
 
         prev_distance = distance
 
-    return list(map(lambda x: x[0], sorted(key_sizes, key=lambda x: x[1], reverse=True)))
+    return [x[0] for x in sorted(key_sizes, key=lambda x: x[1], reverse=True)]
 
 
 def _score(p, char_frequencies, char_floor):

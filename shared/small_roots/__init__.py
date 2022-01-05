@@ -123,7 +123,7 @@ def find_roots(f, polynomials, pr, method="resultants"):
     :param method: the method to use, can be "resultantss" or "groebner" (default: "resultants")
     :return: a generator generating dicts of (x0: x0root, x1: x1root, ...) entries
     """
-    polynomials = list(filter(lambda p: p % f != 0, polynomials))
+    polynomials = [p for p in polynomials if p % f != 0]
     if pr.ngens() == 1:
         logging.debug("Using univariate polynomial to find roots...")
         for polynomial in polynomials:

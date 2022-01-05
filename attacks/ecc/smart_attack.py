@@ -25,7 +25,7 @@ def attack(G, P):
     p = gf.order()
     assert E.trace_of_frobenius() == 1, f"Curve should have trace of Frobenius = 1."
 
-    E = EllipticCurve(Qp(p), list(map(lambda a: int(a) + p * ZZ.random_element(1, p), E.a_invariants())))
+    E = EllipticCurve(Qp(p), [int(a) + p * ZZ.random_element(1, p) for a in E.a_invariants()])
     G = p * _lift(E, G, gf)
     P = p * _lift(E, P, gf)
     Gx, Gy = G.xy()
