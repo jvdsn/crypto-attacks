@@ -276,8 +276,8 @@ class TestFactorization(TestCase):
         q = 64056043407867714782092549432658752846651715364072065058125051763204024699203
         N = p * q
 
-        W = 0
-        L = 515
+        W = 10
+        L = 513
         v = (p >> W) % (2 ** L)
         p_, q_ = unbalanced.factorize(N, W, L, v, 256)
         self.assertIsInstance(p_, int)
