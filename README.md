@@ -205,14 +205,17 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [ ] Supersingular curves
 
 ### Small Roots
-* [x] [Polynomial roots using resultants](shared/small_roots/__init__.py)
 * [x] [Polynomial roots using Groebner bases](shared/small_roots/__init__.py)
+* [x] [Polynomial roots using resultants](shared/small_roots/__init__.py)
+* [x] [Polynomial roots using Sage variety (triangular decomposition)](shared/small_roots/__init__.py)
 * [x] [Blomer-May method](shared/small_roots/blomer_may.py) [More information: Blomer J., May A., "New Partial Key Exposure Attacks on RSA" (Section 6)]
 * [x] [Boneh-Durfee method](shared/small_roots/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
 * [x] [Coron method](shared/small_roots/coron.py) [More information: Coron J., "Finding Small Roots of Bivariate Polynomial Equations Revisited"]
 * [x] [Coron method (direct)](shared/small_roots/coron_direct.py) [More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"]
 * [x] [Ernst et al. methods](shared/small_roots/ernst.py) [More information: Ernst M. et al., "Partial Key Exposure Attacks on RSA Up to Full Size Exponents"]
 * [x] [Herrmann-May method (unravelled linearization)](shared/small_roots/herrmann_may.py) [More information: Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"]
+* [x] [Herrmann-May method (modular multivariate)]
 * [x] [Howgrave-Graham method](shared/small_roots/howgrave_graham.py) [More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods" (Section 3.2)]
 * [x] [Jochemsz-May method (modular roots)](shared/small_roots/jochemsz_may_modular.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.1)]
 * [x] [Jochemsz-May method (integer roots)](shared/small_roots/jochemsz_may_integer.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.2)]
+* [ ] [Nitaj-Fouotsa method](shared/small_roots/nitaj_fouotsa.py) [More information: Nitaj A., Fouotsa E., "A New Attack on RSA and Demytko's Elliptic Curve Cryptosystem"]
