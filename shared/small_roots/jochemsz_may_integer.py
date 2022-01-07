@@ -150,6 +150,6 @@ def integer_multivariate(f, m, W, X, strategy, roots_method="resultants"):
 
     L = small_roots.fill_lattice(shifts, monomials, X)
     L = small_roots.reduce(L)
-    polynomials = small_roots.reconstruct_polynomials(L, monomials, X)
-    for roots in small_roots.find_roots(f, polynomials, pr, method=roots_method):
+    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, X)
+    for roots in small_roots.find_roots([f] + polynomials, pr, method=roots_method):
         yield tuple(roots[xi] for xi in x)

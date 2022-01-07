@@ -38,6 +38,6 @@ def modular_univariate(f, N, m, t, X):
 
     L = small_roots.fill_lattice(shifts, monomials, [X])
     L = small_roots.reduce(L)
-    polynomials = small_roots.reconstruct_polynomials(L, monomials, [X])
-    for roots in small_roots.find_roots(f, polynomials, pr):
+    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X])
+    for roots in small_roots.find_roots(polynomials, pr):
         yield roots[x]

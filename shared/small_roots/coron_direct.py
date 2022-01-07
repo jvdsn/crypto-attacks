@@ -7,7 +7,7 @@ from shared import small_roots
 from shared.polynomial import max_norm
 
 
-def integer_bivariate(p, k, X, Y, echelon_algorithm="default", roots_method="resultants"):
+def integer_bivariate(p, k, X, Y, echelon_algorithm="default", roots_method="groebner"):
     """
     Computes small integer roots of a bivariate polynomial.
     More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"
@@ -16,7 +16,7 @@ def integer_bivariate(p, k, X, Y, echelon_algorithm="default", roots_method="res
     :param X: an approximate bound on the x roots
     :param Y: an approximate bound on the y roots
     :param echelon_algorithm: the algorithm to use to calculate the Echelon form of L (default: "default")
-    :param roots_method: the method to use to find roots (default: "resultants")
+    :param roots_method: the method to use to find roots (default: "groebner")
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     pr = p.parent()
@@ -72,6 +72,6 @@ def integer_bivariate(p, k, X, Y, echelon_algorithm="default", roots_method="res
     L2 = L.submatrix(k ** 2, k ** 2, (k + delta) ** 2 - k ** 2)
     L2 = small_roots.reduce(L2)
     # Only use right monomials now (corresponding the the sublattice).
-    polynomials = small_roots.reconstruct_polynomials(L2, right_monomials, [X, Y])
-    for roots in small_roots.find_roots(p, polynomials, pr, method=roots_method):
+    polynomials = small_roots.reconstruct_polynomials(L2, p, right_monomials, [X, Y])
+    for roots in small_roots.find_roots([p] + polynomials, pr, method=roots_method):
         yield roots[x], roots[y]

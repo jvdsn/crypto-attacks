@@ -7,7 +7,7 @@ from shared import small_roots
 from shared.polynomial import max_norm
 
 
-def integer_bivariate(p, k, X, Y, roots_method="resultants"):
+def integer_bivariate(p, k, X, Y, roots_method="groebner"):
     """
     Computes small integer roots of a bivariate polynomial.
     More information: Coron J., "Finding Small Roots of Bivariate Polynomial Equations Revisited"
@@ -16,7 +16,7 @@ def integer_bivariate(p, k, X, Y, roots_method="resultants"):
     :param k: the amount of shifts to use
     :param X: an approximate bound on the x roots
     :param Y: an approximate bound on the y roots
-    :param roots_method: the method to use to find roots (default: "resultants")
+    :param roots_method: the method to use to find roots (default: "groebner")
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     pr = p.parent()
@@ -54,6 +54,6 @@ def integer_bivariate(p, k, X, Y, roots_method="resultants"):
 
     L = small_roots.fill_lattice(shifts, monomials, [X, Y])
     L = small_roots.reduce(L)
-    polynomials = small_roots.reconstruct_polynomials(L, monomials, [X, Y])
-    for roots in small_roots.find_roots(p, polynomials, pr, method=roots_method):
+    polynomials = small_roots.reconstruct_polynomials(L, p, monomials, [X, Y])
+    for roots in small_roots.find_roots([p] + polynomials, pr, method=roots_method):
         yield roots[x], roots[y]

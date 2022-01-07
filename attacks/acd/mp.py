@@ -14,7 +14,7 @@ if sys.path[1] != path:
 from shared import small_roots
 
 
-def attack(N, a, rho, t=1, k=1):
+def attack(N, a, rho, t=1, k=1, roots_method="groebner"):
     """
     Solves the ACD problem using the multivariate polynomial approach.
     More information: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 5)
@@ -23,6 +23,7 @@ def attack(N, a, rho, t=1, k=1):
     :param rho: the number of bits of the r values
     :param t: the t parameter (default: 1)
     :param k: the k parameter (default: 1)
+    :param roots_method: the method to use to find roots (default: "groebner")
     :return: the secret integer p and a list containing the r values, or None if p could not be found
     """
     assert len(a) >= 1, "At least one a value is required."
@@ -49,8 +50,8 @@ def attack(N, a, rho, t=1, k=1):
 
     B = small_roots.fill_lattice(shifts, monomials, bounds)
     B = small_roots.reduce(B)
-    polynomials = small_roots.reconstruct_polynomials(B, monomials, bounds)
-    for roots in small_roots.find_roots_groebner(polynomials, pr):
+    polynomials = small_roots.reconstruct_polynomials(B, None, monomials, bounds, divide_original=False)
+    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
         r = [roots[gen] for gen in gens]
         p = gcd(N, a[0] - r[0])
         if all(-R < ri < R for ri in r):

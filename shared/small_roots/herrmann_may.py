@@ -43,14 +43,11 @@ def modular_bivariate(f, e, m, t, X, Y, roots_method="groebner"):
             shifts.add(h)
             monomials.add(u ** k * y ** j)
 
-    L = small_roots.fill_lattice(shifts, monomials, [U, X, Y])
-    L = small_roots.reduce(L)
-    polynomials = small_roots.reconstruct_polynomials(L, monomials, [U, X, Y])
-
     pr = f.parent()
     x, y = pr.gens()
-    for i, polynomial in enumerate(polynomials):
-        polynomials[i] = polynomial(1 + x * y, x, y)
 
-    for roots in small_roots.find_roots(f, polynomials, pr, method=roots_method):
+    L = small_roots.fill_lattice(shifts, monomials, [U, X, Y])
+    L = small_roots.reduce(L)
+    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [U, X, Y], preprocess_polynomial=lambda p: p(1 + x * y, x, y))
+    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
         yield roots[x], roots[y]

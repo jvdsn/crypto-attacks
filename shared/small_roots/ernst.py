@@ -1,13 +1,13 @@
 import logging
-from math import gcd
 
 from sage.all import RR
 from sage.all import ZZ
+from sage.all import gcd
 
 from shared import small_roots
 
 
-def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="resultants"):
+def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="groebner"):
     """
     Computes small integer roots of a trivariate polynomial.
     More information: Ernst M. et al., "Partial Key Exposure Attacks on RSA Up to Full Size Exponents" (Section 4.1.1)
@@ -19,7 +19,7 @@ def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="r
     :param Y: an approximate bound on the y roots
     :param Z: an approximate bound on the z roots
     :param check_bounds: whether or not we should check bounds (default: True)
-    :param roots_method: the method to use to find roots (default: "resultants")
+    :param roots_method: the method to use to find roots (default: "groebner")
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     pr = f.parent()
@@ -75,12 +75,12 @@ def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="r
 
     L = small_roots.fill_lattice(shifts, monomials, [X, Y, Z])
     L = small_roots.reduce(L)
-    polynomials = small_roots.reconstruct_polynomials(L, monomials, [X, Y, Z])
-    for roots in small_roots.find_roots(f, polynomials, pr, method=roots_method):
+    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
+    for roots in small_roots.find_roots([f] + polynomials, pr, method=roots_method):
         yield roots[x], roots[y], roots[z]
 
 
-def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="resultants"):
+def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="groebner"):
     """
     Computes small integer roots of a trivariate polynomial.
     More information: Ernst M. et al., "Partial Key Exposure Attacks on RSA Up to Full Size Exponents" (Section 4.1.2)
@@ -92,7 +92,7 @@ def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="r
     :param Y: an approximate bound on the y roots
     :param Z: an approximate bound on the z roots
     :param check_bounds: whether or not we should check bounds (default: True)
-    :param roots_method: the method to use to find roots (default: "resultants")
+    :param roots_method: the method to use to find roots (default: "groebner")
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     pr = f.parent()
@@ -151,6 +151,6 @@ def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="r
 
     L = small_roots.fill_lattice(shifts, monomials, [X, Y, Z])
     L = small_roots.reduce(L)
-    polynomials = small_roots.reconstruct_polynomials(L, monomials, [X, Y, Z])
-    for roots in small_roots.find_roots(f, polynomials, pr, method=roots_method):
+    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
+    for roots in small_roots.find_roots([f] + polynomials, pr, method=roots_method):
         yield roots[x], roots[y], roots[z]
