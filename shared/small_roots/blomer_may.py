@@ -3,9 +3,9 @@ import logging
 from shared import small_roots
 
 
-def integer_bivariate(f, e, M, m, t, Y, Z, roots_method="groebner"):
+def modular_bivariate(f, e, M, m, t, Y, Z, roots_method="groebner"):
     """
-    Computes small integer roots of a bivariate polynomial.
+    Computes small modular roots of a bivariate polynomial.
     More information: Blomer J., May A., "New Partial Key Exposure Attacks on RSA" (Section 6)
     :param f: the polynomial
     :param e: the parameter e

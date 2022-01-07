@@ -184,7 +184,7 @@ def attack_small_e_lsb(N, e, d0, M, m_start=1):
     while True:
         for t in range(m + 1):
             logging.info(f"Trying m = {m}, t = {t}...")
-            for y0, z0 in blomer_may.integer_bivariate(f, e, M, m, t, Y, Z):
+            for y0, z0 in blomer_may.modular_bivariate(f, e, M, m, t, Y, Z):
                 phi = N - z0
                 d = pow(e, -1, phi)
                 if pow(pow(2, e, N), d, N) == 2:
