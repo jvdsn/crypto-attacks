@@ -170,8 +170,8 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [CRT fault attack](attacks/rsa/crt_fault_attack.py)
 * [x] [Extended Wiener's attack](attacks/rsa/extended_wiener_attack.py) [More information: Dujella A., "Continued fractions and RSA with small secret exponent"]
 * [x] [Hastad's broadcast attack](attacks/rsa/hastad_attack.py)
-* [x] [Known CRT exponents factorization](attacks/factorization/known_crt_exponents.py) [More information: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"]
-* [x] [Known private exponent factorization](attacks/factorization/known_d.py)
+* [x] [Known CRT exponents attack](attacks/rsa/known_crt_exponents.py) [More information: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"]
+* [x] [Known private exponent attack](attacks/rsa/known_d.py)
 * [x] [Low public exponent attack](attacks/rsa/low_exponent.py)
 * [x] [LSB oracle attack](attacks/rsa/lsb_oracle.py)
 * [x] [Manger's attack](attacks/rsa/manger.py) [More information: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"]

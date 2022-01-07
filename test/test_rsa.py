@@ -175,31 +175,31 @@ class TestRSA(TestCase):
         dp = d % (p - 1)
         dq = d % (q - 1)
 
-        p_, q_ = next(known_crt_exponents.factorize(e, e + 2, N=N, dp=dp, dq=dq))
+        p_, q_ = next(known_crt_exponents.attack(e, e + 2, N=N, dp=dp, dq=dq))
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_, q_ = next(known_crt_exponents.factorize(e, e + 2, N=N, dp=dp))
+        p_, q_ = next(known_crt_exponents.attack(e, e + 2, N=N, dp=dp))
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_, q_ = next(known_crt_exponents.factorize(e, e + 2, N=N, dq=dq))
+        p_, q_ = next(known_crt_exponents.attack(e, e + 2, N=N, dq=dq))
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_, q_ = next(known_crt_exponents.factorize(e, e + 2, dp=dp, dq=dq, p_bitsize=512, q_bitsize=512))
+        p_, q_ = next(known_crt_exponents.attack(e, e + 2, dp=dp, dq=dq, p_bitsize=512, q_bitsize=512))
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_ = next(known_crt_exponents.factorize(e, e + 2, dp=dp, p_bitsize=512))
+        p_ = next(known_crt_exponents.attack(e, e + 2, dp=dp, p_bitsize=512))
         self.assertIsInstance(p_, int)
         self.assertEqual(p, p_)
 
-        q_ = next(known_crt_exponents.factorize(e, e + 2, dq=dq, q_bitsize=512))
+        q_ = next(known_crt_exponents.attack(e, e + 2, dq=dq, q_bitsize=512))
         self.assertIsInstance(q_, int)
         self.assertEqual(q, q_)
 
@@ -210,7 +210,7 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1)
         e = 65537
         d = pow(e, -1, phi)
-        p_, q_ = known_d.factorize(N, e, d)
+        p_, q_ = known_d.attack(N, e, d)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)

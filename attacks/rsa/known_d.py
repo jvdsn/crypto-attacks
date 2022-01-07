@@ -2,7 +2,7 @@ from math import gcd
 from random import randint
 
 
-def factorize(N, e, d):
+def attack(N, e, d):
     """
     Recovers the prime factors from a modulus if the public exponent and private exponent are known.
     :param N: the modulus

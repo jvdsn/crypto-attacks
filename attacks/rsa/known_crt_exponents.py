@@ -10,9 +10,9 @@ def _get_possible_primes(e, d):
                 yield p
 
 
-def factorize(e_start, e_end, N=None, dp=None, dq=None, p_bitsize=None, q_bitsize=None):
+def attack(e_start, e_end, N=None, dp=None, dq=None, p_bitsize=None, q_bitsize=None):
     """
-    Factorizes a known modulus, or returns possible primes, if d_p and/or d_q are known.
+    Generates possible prime factors for a modulus, if d_p and/or d_q are known.
     More information: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"
     :param e_start: the start value of the public exponent (inclusive)
     :param e_end: the end value of the public exponent (exclusive)
