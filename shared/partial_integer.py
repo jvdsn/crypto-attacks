@@ -160,10 +160,10 @@ class PartialInteger:
 
     def to_string_le(self, base, symbols="0123456789abcdefghijklmnopqrstuvwxyz"):
         """
-        Converts this PartialInteger to a string in the provided base (little endian).
+        Converts this PartialInteger to a list of characters in the provided base (little endian).
         :param base: the base, must be a power of two and less than or equal to 36
         :param symbols: the symbols to use, at least as many as base (default: "0123456789abcdefghijklmnopqrstuvwxyz")
-        :return: the string, with '?' representing an unknown digit
+        :return: the list of characters, with '?' representing an unknown digit
         """
         assert (base & (base - 1)) == 0, "Base must be power of two."
         assert base <= 36
@@ -174,53 +174,53 @@ class PartialInteger:
             assert bit_length % bits_per_element == 0, f"Component with bit length {bit_length} can't be represented by base {base} digits"
             for _ in range(bit_length // bits_per_element):
                 if value is None:
-                    chars.append("?")
+                    chars.append('?')
                 else:
                     chars.append(symbols[value % base])
                     value //= base
 
-        return "".join(chars)
+        return chars
 
     def to_string_be(self, base, symbols="0123456789abcdefghijklmnopqrstuvwxyz"):
         """
-        Converts this PartialInteger to a string in the provided base (big endian).
+        Converts this PartialInteger to a list of characters in the provided base (big endian).
         :param base: the base, must be a power of two and less than or equal to 36
         :param symbols: the symbols to use, at least as many as base (default: "0123456789abcdefghijklmnopqrstuvwxyz")
-        :return: the string, with '?' representing an unknown digit
+        :return: the list of characters, with '?' representing an unknown digit
         """
         return self.to_string_le(base, symbols)[::-1]
 
     def to_bits_le(self, symbols="01"):
         """
-        Converts this PartialInteger to a bit string (little endian).
+        Converts this PartialInteger to a list of bit characters (little endian).
         :param symbols: the two symbols to use (default: "01")
-        :return: the bit string, with '?' representing an unknown bit
+        :return: the list of bit characters, with '?' representing an unknown bit
         """
         assert len(symbols) == 2
         return self.to_string_le(2, symbols)
 
     def to_bits_be(self, symbols="01"):
         """
-        Converts this PartialInteger to a bit string (big endian).
+        Converts this PartialInteger to a list of bit characters (big endian).
         :param symbols: the two symbols to use (default: "01")
-        :return: the bit string, with '?' representing an unknown bit
+        :return: the list of bit characters, with '?' representing an unknown bit
         """
         return self.to_bits_le(symbols)[::-1]
 
     def to_hex_le(self, symbols="0123456789abcdef"):
         """
-        Converts this PartialInteger to a hex string (little endian).
+        Converts this PartialInteger to a list of hex characters (little endian).
         :param symbols: the 16 symbols to use (default: "0123456789abcdef")
-        :return: the hex string, with '?' representing an unknown nibble
+        :return: the list of hex characters, with '?' representing an unknown nibble
         """
         assert len(symbols) == 16
         return self.to_string_le(16, symbols)
 
     def to_hex_be(self, symbols="0123456789abcdef"):
         """
-        Converts this PartialInteger to a hex string (big endian).
+        Converts this PartialInteger to a list of hex characters (big endian).
         :param symbols: the 16 symbols to use (default: "0123456789abcdef")
-        :return: the hex string, with '?' representing an unknown nibble
+        :return: the list of hex characters, with '?' representing an unknown nibble
         """
         return self.to_hex_le(symbols)[::-1]
 
