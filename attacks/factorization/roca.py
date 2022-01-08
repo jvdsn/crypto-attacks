@@ -78,7 +78,7 @@ def factorize(N, M, m, t):
     logging.info("Starting exhaustive a' search...")
     for a_ in range(c_ // 2, (c_ + ord_) // 2 + 1):
         f = M_ * x + int(e ** a_)
-        for k_ in howgrave_graham.modular_univariate(f, N, m, t, X):
+        for k_, in howgrave_graham.modular_univariate(f, N, m, t, X):
             p = int(f(k_))
             if N % p == 0:
                 return p, N // p

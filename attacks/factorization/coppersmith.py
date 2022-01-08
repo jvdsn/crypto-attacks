@@ -35,7 +35,7 @@ def factorize_univariate(N, bitsize, msb_known, msb, lsb_known, lsb, beta=0.5):
     while True:
         t = floor(d * m * (1 / beta - 1))
         logging.info(f"Trying m = {m}, t = {t}...")
-        for x0 in howgrave_graham.modular_univariate(f, N, m, t, X):
+        for x0, in howgrave_graham.modular_univariate(f, N, m, t, X):
             p = int(f(x0))
             if p != 0 and N % p == 0:
                 return p, N // p

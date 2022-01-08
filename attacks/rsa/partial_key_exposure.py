@@ -53,7 +53,7 @@ def attack_very_small_e_msb(N, e, d_, d__known, m_start=1):
             logging.info(f"Trying m = {m}, t = {t}...")
             for p0 in p0s:
                 f = x * e + p0
-                for x0 in howgrave_graham.modular_univariate(f, N, m, t, X):
+                for x0, in howgrave_graham.modular_univariate(f, N, m, t, X):
                     p = int(f(x0))
                     if p != 0 and N % p == 0:
                         q = N // p
@@ -107,7 +107,7 @@ def attack_very_small_e_lsb(N, e, d0, d0_known, m_start=1):
         logging.info(f"Trying m = {m}, t = {t}...")
         for p0 in p0s:
             f = x * 2 ** d0_known + p0
-            for x0 in howgrave_graham.modular_univariate(f, N, m, t, X):
+            for x0, in howgrave_graham.modular_univariate(f, N, m, t, X):
                 p = int(f(x0))
                 if p != 0 and N % p == 0:
                     q = N // p

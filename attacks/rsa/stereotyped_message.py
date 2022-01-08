@@ -33,7 +33,7 @@ def attack(N, e, c, bitsize, msb_known, msb, lsb_known, lsb, m_start=1):
     while True:
         t = m
         logging.info(f"Trying m = {m}, t = {t}...")
-        for x0 in howgrave_graham.modular_univariate(f, N, m, t, X):
+        for x0, in howgrave_graham.modular_univariate(f, N, m, t, X):
             if x0 != 0:
                 return int(f_pt(x0))
 
