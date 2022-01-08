@@ -10,8 +10,6 @@ from math import sqrt
 from sage.all import ZZ
 from sage.all import Zmod
 
-import shared.small_roots
-
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
 if sys.path[1] != path:
     sys.path.insert(1, path)
