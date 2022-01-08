@@ -191,6 +191,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Low public exponent attack](attacks/rsa/low_exponent.py)
 * [x] [LSB oracle attack](attacks/rsa/lsb_oracle.py)
 * [x] [Manger's attack](attacks/rsa/manger.py) [More information: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"]
+* [x] [Nitaj's CRT-RSA attack](attacks/rsa/nitaj_crt_rsa.py) [More information: Nitaj A., "A new attack on RSA and CRT-RSA"]
 * [x] [Non coprime public exponent attack](attacks/rsa/non_coprime_exponent.py) [More information: Shumow D., "Incorrectly Generated RSA Keys: How To Recover Lost Plaintexts"]
 * [x] [Partial key exposure](attacks/rsa/partial_key_exposure.py) [More information: Boneh D., Durfee G., Frankel Y., "An Attack on RSA Given a Small Fraction of the Private Key Bits", Ernst M. et al., "Partial Key Exposure Attacks on RSA Up to Full Size Exponents", Blomer J., May A., "New Partial Key Exposure Attacks on RSA"]
 * [x] [Related message attack](attacks/rsa/related_message.py)

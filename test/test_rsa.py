@@ -25,6 +25,7 @@ from attacks.rsa import known_d
 from attacks.rsa import low_exponent
 from attacks.rsa import lsb_oracle
 from attacks.rsa import manger
+from attacks.rsa import nitaj_crt_rsa
 from attacks.rsa import non_coprime_exponent
 from attacks.rsa import partial_key_exposure
 from attacks.rsa import related_message
@@ -254,6 +255,18 @@ class TestRSA(TestCase):
         m_ = manger.attack(lambda c: self._valid_padding_oaep(n, d, B, c), n, e, c)
         self.assertIsInstance(m_, int)
         self.assertEqual(m, m_)
+
+    def test_nitaj_crt_rsa(self):
+        # Section 5.1
+        p = 1965268334695819089811552114253
+        q = 1397509985733832541423163654649
+        N = p * q
+        e = 1908717316858446782674807627631
+
+        p_, q_ = nitaj_crt_rsa.attack(N, e, 0.09, 4, 2)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
 
     def test_non_coprime_exponent(self):
         # Small primes because the attack needs to perform dlog with order p/q at some point.
