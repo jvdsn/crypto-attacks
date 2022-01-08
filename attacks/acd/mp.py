@@ -4,7 +4,6 @@ import sys
 from itertools import product
 from math import gcd
 
-from sage.all import PolynomialRing
 from sage.all import ZZ
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
@@ -21,8 +20,8 @@ def attack(N, a, rho, t=1, k=1, roots_method="groebner"):
     :param N: N = p * q0
     :param a: the a samples, with ai = p * qi + ri
     :param rho: the number of bits of the r values
-    :param t: the t parameter (default: 1)
-    :param k: the k parameter (default: 1)
+    :param t: the parameter t (default: 1)
+    :param k: the parameter k (default: 1)
     :param roots_method: the method to use to find roots (default: "groebner")
     :return: the secret integer p and a list containing the r values, or None if p could not be found
     """
@@ -31,28 +30,28 @@ def attack(N, a, rho, t=1, k=1, roots_method="groebner"):
 
     R = 2 ** rho
 
-    pr = PolynomialRing(ZZ, [f"X{i}" for i in range(len(a))])
-    gens = pr.gens()
-    bounds = [R] * len(gens)
+    pr = ZZ[tuple(f"x{i}" for i in range(len(a)))]
+    x = pr.gens()
+    X = [R] * len(x)
 
     logging.debug("Generating shifts...")
+
     shifts = set()
     monomials = set()
-    for i in product(*[range(t + 1) for _ in gens]):
+    for i in product(*[range(t + 1) for _ in x]):
         if sum(i) <= t:
             l = max(k - sum(i), 0)
             fi = N ** l
             for m in range(len(i)):
-                fi *= (gens[m] - a[m]) ** i[m]
+                fi *= (x[m] - a[m]) ** i[m]
 
             shifts.add(fi)
             monomials.update(fi.monomials())
 
-    B = small_roots.fill_lattice(shifts, monomials, bounds)
+    B = small_roots.fill_lattice(shifts, monomials, X)
     B = small_roots.reduce(B)
-    polynomials = small_roots.reconstruct_polynomials(B, None, monomials, bounds, divide_original=False)
+    polynomials = small_roots.reconstruct_polynomials(B, None, monomials, X, divide_original=False)
     for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
-        r = [roots[gen] for gen in gens]
-        p = gcd(N, a[0] - r[0])
+        r = [roots[xi] for xi in x]
         if all(-R < ri < R for ri in r):
-            return int(p), r
+            return int(gcd(N, a[0] - r[0])), r
