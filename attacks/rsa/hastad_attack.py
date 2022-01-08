@@ -18,7 +18,7 @@ def attack(N, e, c):
     :param c: the ciphertexts
     :return: the plaintext
     """
-    assert e == len(N) == len(c), "The amount of ciphertexts should be equal to e"
+    assert e == len(N) == len(c), "The amount of ciphertexts should be equal to e."
 
     for i in range(len(N)):
         for j in range(len(N)):
