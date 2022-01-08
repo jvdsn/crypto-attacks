@@ -407,15 +407,16 @@ class PartialInteger:
         return PartialInteger.from_lsb_and_msb(bit_length, lsb, lsb_bit_length, msb, msb_bit_length)
 
     @staticmethod
-    def middle_of(i, middle_bit_length, lsb_bit_length, msb_bit_length):
+    def middle_of(i, bit_length, lsb_bit_length, msb_bit_length):
         """
         Constructs a PartialInteger from the middle bits of a known integer, setting the lsb and msb to unknown.
         Mainly used for testing purposes.
         :param i: the known integer
-        :param middle_bit_length: the bit length of the known middle bits
+        :param bit_length: the total length of the known integer
         :param lsb_bit_length: the bit length of the unknown lsb
         :param msb_bit_length: the bit length of the unknown msb
         :return: a PartialInteger with one known component (the middle bits) and two unknown components (the lsb and msb)
         """
+        middle_bit_length = bit_length - lsb_bit_length - msb_bit_length
         middle = (i >> lsb_bit_length) % (2 ** middle_bit_length)
         return PartialInteger.from_middle(middle, middle_bit_length, lsb_bit_length, msb_bit_length)

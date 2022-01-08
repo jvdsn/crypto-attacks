@@ -69,13 +69,12 @@ class TestHNP(TestCase):
         nonce_bit_length = p.bit_length()
         lsb_unknown = 20
         msb_unknown = 10
-        middle_known = nonce_bit_length - lsb_unknown - msb_unknown
         h1, r1, s1, k1 = self._dsa(p, g, x)
         signature1 = (h1, r1, s1)
-        partial_nonce1 = PartialInteger.middle_of(k1, middle_known, lsb_unknown, msb_unknown)
+        partial_nonce1 = PartialInteger.middle_of(k1, nonce_bit_length, lsb_unknown, msb_unknown)
         h2, r2, s2, k2 = self._dsa(p, g, x)
         signature2 = (h2, r2, s2)
-        partial_nonce2 = PartialInteger.middle_of(k2, middle_known, lsb_unknown, msb_unknown)
+        partial_nonce2 = PartialInteger.middle_of(k2, nonce_bit_length, lsb_unknown, msb_unknown)
 
         x_, k1_, k2_ = lattice_attack.dsa_known_middle(p, signature1, partial_nonce1, signature2, partial_nonce2)
         self.assertIsInstance(x_, int)
