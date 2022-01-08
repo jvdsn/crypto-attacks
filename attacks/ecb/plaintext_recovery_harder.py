@@ -1,5 +1,5 @@
 def _get_prefix_padding(encrypt_oracle, paddings):
-    check = b"\01" * 32
+    check = b"\x01" * 32
     for i in range(16):
         prefix_padding = paddings[16 - i]
         c = encrypt_oracle(prefix_padding + check)

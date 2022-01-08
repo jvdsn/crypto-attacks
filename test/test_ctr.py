@@ -27,14 +27,14 @@ class TestCTR(TestCase):
         pass
 
     def test_separator_oracle(self):
-        separator_byte = ord("\0")
+        separator_byte = ord("\x00")
         separator_count = randint(1, 10)
         key = randbytes(16)
         # We have to replace separators by some other byte.
-        p = randbytes(16).replace(b"\0", b"\1")
+        p = randbytes(16).replace(b"\x00", b"\x01")
         for _ in range(separator_count):
             # We have to replace separators by some other byte.
-            p += bytes([separator_byte]) + randbytes(16).replace(b"\0", b"\1")
+            p += bytes([separator_byte]) + randbytes(16).replace(b"\x00", b"\x01")
 
         c = self._encrypt(key, p)
 
