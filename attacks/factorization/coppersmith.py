@@ -59,37 +59,35 @@ def factorize_p(N, partial_p, beta=0.5, epsilon=0.125, m=None, t=None):
     return None
 
 
-def factorize_bivariate(N, p_bitsize, p_msb_known, p_msb, p_lsb_known, p_lsb, q_bitsize, q_msb_known, q_msb, q_lsb_known, q_lsb, k_start=1):
+def factorize_pq(N, partial_p, partial_q, k=None):
     """
-    Recovers the prime factors from a modulus using Coppersmith's method.
-    For more complex combinations of known bits, the coron_direct module in the shared/small_roots package should be used directly.
+    Recover the prime factors from a modulus using Coppersmith's method and bits of both prime factors p and q are known.
     :param N: the modulus
-    :param p_bitsize: the amount of bits of the first prime factor
-    :param p_msb_known: the amount of known most significant bits of the first prime factor
-    :param p_msb: the known most significant bits of the first prime factor
-    :param p_lsb_known: the amount of known least significant bits of the first prime factor
-    :param p_lsb: the known least significant bits of the first prime factor
-    :param q_bitsize: the amount of bits of the second prime factor
-    :param q_msb_known: the amount of known most significant bits of the second prime factor
-    :param q_msb: the known most significant bits of the second prime factor
-    :param q_lsb_known: the amount of known least significant bits of the second prime factor
-    :param q_lsb: the known least significant bits of the second prime factor
-    :param k_start: the k value to start at for the Coron small roots method (default: 1)
-    :return: a tuple containing the prime factors
+    :param partial_p: the partial prime factor p (PartialInteger)
+    :param partial_q: the partial prime factor q (PartialInteger)
+    :param k: the number of shifts to use for Coron's method, must be set if the total number of unknown components is two (default: None)
+    :return: a tuple containing the prime factors, or None if the factors could not be found
     """
-    x, y = ZZ["x, y"].gens()
-    f_p = p_msb * 2 ** (p_bitsize - p_msb_known) + x * 2 ** p_lsb_known + p_lsb
-    f_q = q_msb * 2 ** (q_bitsize - q_msb_known) + y * 2 ** q_lsb_known + q_lsb
-    f = f_p * f_q - N
-    X = 2 ** (p_bitsize - p_msb_known - p_lsb_known)
-    Y = 2 ** (q_bitsize - q_msb_known - q_lsb_known)
-    k = k_start
-    while True:
+    np = partial_p.unknowns
+    nq = partial_q.unknowns
+    assert np > 0 and nq > 0
+
+    x = ZZ[tuple(f"x{i}" for i in range(np + nq))].gens()
+    f = partial_p.sub(x[:np]) * partial_q.sub(x[np:]) - N
+    Xp = partial_p.get_unknown_bounds()
+    Xq = partial_q.get_unknown_bounds()
+
+    if np + nq == 2:
+        assert k is not None, "k must be set if the total number of unknown components is two."
         logging.info(f"Trying k = {k}...")
-        for x0, y0 in coron_direct.integer_bivariate(f, k, X, Y):
-            p = int(f_p(x0, 0))
-            q = int(f_q(0, y0))
+        for x0, y0 in coron_direct.integer_bivariate(f, k, Xp[0], Xq[0]):
+            p = partial_p.sub([x0])
+            q = partial_q.sub([y0])
             if p * q == N:
                 return p, q
+    else:
+        # TODO: Jochemsz-May multivariate integer roots?
+        # Or "Factoring RSA Modulus with Known Bits from Both p and q: A Lattice Method"?
+        pass
 
-        k += 1
+    return None

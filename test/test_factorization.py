@@ -133,12 +133,12 @@ class TestFactorization(TestCase):
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_, q_ = coppersmith.factorize_bivariate(N, 512, 155, p >> (512 - 155), 0, 0, 512, 0, 0, 155, q % (2 ** 155), k_start=4)
+        p_, q_ = coppersmith.factorize_pq(N, PartialInteger.msb_of(p, 512, 155), PartialInteger.lsb_of(q, 512, 155), k=4)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_, q_ = coppersmith.factorize_bivariate(N, 512, 0, 0, 155, p % (2 ** 155), 512, 155, q >> (512 - 155), 0, 0, k_start=4)
+        p_, q_ = coppersmith.factorize_pq(N, PartialInteger.lsb_of(p, 512, 155), PartialInteger.msb_of(q, 512, 155), k=4)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
