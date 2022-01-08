@@ -106,17 +106,29 @@ class TestFactorization(TestCase):
         q = 11472445399871949099065671577613972926185090427303119917183801667878634389108674818205844773744056675054520407290278050115877859333328393928885760892504569
         N = p * q
 
-        p_, q_ = coppersmith.factorize_univariate(N, 512, 280, p >> (512 - 280), 0, 0)
+        p_, q_ = coppersmith.factorize_p(N, PartialInteger.msb_of(p, 512, 280), m=6, t=6)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_, q_ = coppersmith.factorize_univariate(N, 512, 0, 0, 280, p % (2 ** 280))
+        p_, q_ = coppersmith.factorize_p(N, PartialInteger.lsb_of(p, 512, 280), m=6, t=6)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_, q_ = coppersmith.factorize_univariate(N, 512, 140, p >> (512 - 140), 140, p % (2 ** 140))
+        p_, q_ = coppersmith.factorize_p(N, PartialInteger.lsb_and_msb_of(p, 512, 140, 140), m=6, t=6)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+
+        p_hex = "????????????720e5a53f32044328cffaef96e72cf6b8cdcc983748bdb6abc6437c96d17c578326bc80d634a03c57b3e25775f6b54e9be37a70f????????????"
+        p_, q_ = coppersmith.factorize_p(N, PartialInteger.from_hex_be(p_hex), m=3, t=1)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+
+        p_hex = "9e5cce87????720e5a53f32044328cffaef96e72cf6b8cdcc983748bdb6abc64????6d17c578326bc80d634a03c57b3e25775f6b54e9be37a70f????ab6e16f1"
+        p_, q_ = coppersmith.factorize_p(N, PartialInteger.from_hex_be(p_hex), m=4, t=1)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)

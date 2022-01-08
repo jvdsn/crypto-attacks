@@ -3,44 +3,62 @@ import os
 import sys
 from math import ceil
 from math import floor
+from math import log
+from math import pi
+from math import sqrt
 
 from sage.all import ZZ
 from sage.all import Zmod
+
+import shared.small_roots
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
 if sys.path[1] != path:
     sys.path.insert(1, path)
 
 from shared.small_roots import coron_direct
+from shared.small_roots import herrmann_may_multivariate
 from shared.small_roots import howgrave_graham
 
 
-def factorize_univariate(N, bitsize, msb_known, msb, lsb_known, lsb, beta=0.5):
+def factorize_p(N, partial_p, beta=0.5, epsilon=0.125, m=None, t=None):
     """
-    Recovers the prime factors from a modulus using Coppersmith's method.
+    Recover the prime factors from a modulus using Coppersmith's method and bits of one prime factor p are known.
+    More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods" (Section 3.2)
+    More information: Herrmann M., May A., "Solving Linear Equations Modulo Divisors: On Factoring Given Any Bits" (Section 3 and 4)
     :param N: the modulus
-    :param bitsize: the amount of bits of the target prime factor
-    :param msb_known: the amount of known most significant bits of the target prime factor
-    :param msb: the known most significant bits of the target prime factor
-    :param lsb_known: the amount of known least significant bits of the target prime factor
-    :param lsb: the known least significant bits of the target prime factor
-    :param beta: the beta value: the target prime factor is less than or equal to N^beta (default: 0.5)
-    :return: a tuple containing the prime factors
+    :param partial_p: the partial prime factor p (PartialInteger)
+    :param beta: the parameter beta (default: 0.5)
+    :param epsilon: the parameter epsilon (default: 0.125)
+    :param m: the number of normal shifts to use (default: automatically computed using beta and epsilon)
+    :param t: the number of additional shifts to use (default: automatically computed using beta and epsilon)
+    :return: a tuple containing the prime factors, or None if the factors could not be found
     """
-    x = Zmod(N)["x"].gen()
-    f = msb * 2 ** (bitsize - msb_known) + x * 2 ** lsb_known + lsb
-    X = 2 ** (bitsize - msb_known - lsb_known)
-    d = f.degree()
-    m = ceil(max(beta ** 2 / d, 7 * beta / d))
-    while True:
-        t = floor(d * m * (1 / beta - 1))
-        logging.info(f"Trying m = {m}, t = {t}...")
-        for x0, in howgrave_graham.modular_univariate(f, N, m, t, X):
-            p = int(f(x0))
-            if p != 0 and N % p == 0:
-                return p, N // p
+    n = partial_p.unknowns
+    assert n > 0
+    if n == 1:
+        m = ceil(max(beta ** 2 / epsilon, 7 * beta)) if m is None else m
+        t = floor(m * (1 / beta - 1)) if t is None else t
+        small_roots = howgrave_graham.modular_univariate
+    elif n == 2:
+        m = ceil((3 * beta * (1 + sqrt(1 - beta))) / epsilon) if m is None else m
+        t = floor(m * (1 - sqrt(1 - beta))) if t is None else t
+        small_roots = herrmann_may_multivariate.modular_multivariate
+    else:
+        m = ceil((n * (1 / pi * (1 - beta) ** (-0.278465) - beta * log(1 - beta))) / epsilon) if m is None else m
+        t = floor(m * (1 - (1 - beta) ** (1 / n))) if t is None else t
+        small_roots = herrmann_may_multivariate.modular_multivariate
 
-        m += 1
+    x = Zmod(N)[tuple(f"x{i}" for i in range(n))].gens()
+    f = partial_p.sub(x)
+    X = partial_p.get_unknown_bounds()
+    logging.info(f"Trying m = {m}, t = {t}...")
+    for roots in small_roots(f, N, m, t, X):
+        p = partial_p.sub(roots)
+        if p != 0 and N % p == 0:
+            return p, N // p
+
+    return None
 
 
 def factorize_bivariate(N, p_bitsize, p_msb_known, p_msb, p_lsb_known, p_lsb, q_bitsize, q_msb_known, q_msb, q_lsb_known, q_lsb, k_start=1):
