@@ -34,8 +34,7 @@ def attack(P, R, max_k=6, max_tries=10):
     for _ in range(max_tries):
         S = Ek.random_point()
         T = Ek.random_point()
-        gamma = Pk.tate_pairing(S, n, k) / Pk.tate_pairing(T, n, k)
-        if gamma == 1:
+        if (gamma := Pk.tate_pairing(S, n, k) / Pk.tate_pairing(T, n, k)) == 1:
             continue
 
         delta = Rk.tate_pairing(S, n, k) / Rk.tate_pairing(T, n, k)

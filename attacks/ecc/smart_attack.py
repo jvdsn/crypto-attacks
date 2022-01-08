@@ -7,7 +7,7 @@ from sage.all import ZZ
 def _lift(E, P, gf):
     x, y = map(ZZ, P.xy())
     for point_ in E.lift_x(x, all=True):
-        x_, y_ = map(gf, point_.xy())
+        _, y_ = map(gf, point_.xy())
         if y == y_:
             return point_
 

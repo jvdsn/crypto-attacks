@@ -39,8 +39,7 @@ def attack(P, R, max_k=6, max_tries=10):
         if Q.order() != n:
             continue
 
-        alpha = Pk.weil_pairing(Q, n)
-        if alpha == 1:
+        if (alpha := Pk.weil_pairing(Q, n)) == 1:
             continue
 
         beta = Rk.weil_pairing(Q, n)

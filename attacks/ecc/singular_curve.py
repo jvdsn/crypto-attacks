@@ -15,8 +15,7 @@ def attack(p, a2, a4, a6, Gx, Gy, Px, Py):
     :param Py: the point multiplication result y value
     :return: l such that l * G == P
     """
-    gf = GF(p)
-    x = gf["x"].gen()
+    x = GF(p)["x"].gen()
     f = x ** 3 + a2 * x ** 2 + a4 * x + a6
     roots = f.roots()
 
