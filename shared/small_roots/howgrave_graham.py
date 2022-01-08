@@ -11,8 +11,8 @@ def modular_univariate(f, N, m, t, X):
     More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods" (Section 3.2)
     :param f: the polynomial
     :param N: the modulus
-    :param m: the amount of g shifts to use
-    :param t: the amount of h shifts to use
+    :param m: the amount of normal shifts to use
+    :param t: the amount of additional shifts to use
     :param X: an approximate bound on the roots
     :return: a generator generating small roots of the polynomial
     """

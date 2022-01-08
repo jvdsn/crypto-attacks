@@ -100,10 +100,10 @@ def integer_multivariate(f, m, W, X, strategy, roots_method="resultants"):
     :param f: the polynomial
     :param m: the parameter m
     :param W: the parameter W
-    :param X: a list of approximate bound on the roots for each variable
+    :param X: a list of approximate bounds on the roots for each variable
     :param strategy: the strategy to use (Appendix B)
     :param roots_method: the method to use to find roots (default: "resultants")
-    :return: a generator generating small roots (tuples roots) of the polynomial
+    :return: a generator generating small roots (tuples) of the polynomial
     """
     pr = f.parent()
     x = pr.gens()

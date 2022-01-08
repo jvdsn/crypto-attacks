@@ -97,6 +97,17 @@ class BlomerMayStrategy(Strategy):
 
 
 def modular_multivariate(f, N, m, X, strategy, roots_method="groebner"):
+    """
+    Computes small integer roots of a multivariate polynomial.
+    More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.1)
+    :param f: the polynomial
+    :param N: the modulus
+    :param m: the parameter m
+    :param X: a list of approximate bounds on the roots for each variable
+    :param strategy: the strategy to use (Appendix A)
+    :param roots_method: the method to use to find roots (default: "groebner")
+    :return: a generator generating small roots (tuples) of the polynomial
+    """
     f = f.change_ring(ZZ)
     pr = f.parent()
     x = pr.gens()
