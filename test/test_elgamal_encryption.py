@@ -1,7 +1,7 @@
 import os
 import sys
 from random import getrandbits
-from random import randint
+from random import randrange
 from unittest import TestCase
 
 from sage.all import legendre_symbol
@@ -19,9 +19,9 @@ class TestElgamalEncryption(TestCase):
         # Safe prime.
         p = 16902648776703029279
         g = 3
-        d = randint(1, p - 1)
+        d = randrange(1, p)
         h = pow(g, d, p)
-        l = randint(1, p - 1)
+        l = randrange(1, p)
         s = pow(h, p, l)
         c = pow(g, l, p)
         m1 = getrandbits(p.bit_length())
@@ -38,12 +38,12 @@ class TestElgamalEncryption(TestCase):
         # Unsafe generator, generates the entire group.
         g = 7
         for i in range(100):
-            x = randint(1, p - 1)
+            x = randrange(1, p)
             h = pow(g, x, p)
-            y = randint(1, p - 1)
+            y = randrange(1, p)
             s = pow(h, y, p)
             c1 = pow(g, y, p)
-            m = randint(1, p - 1)
+            m = randrange(1, p)
             c2 = m * s % p
             k = unsafe_generator.attack(p, h, c1, c2)
             self.assertIsInstance(k, int)

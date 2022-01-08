@@ -1,7 +1,7 @@
 import os
 import sys
 from random import choices
-from random import randint
+from random import randrange
 from unittest import TestCase
 
 from Crypto.Cipher import AES
@@ -45,5 +45,5 @@ class TestECB(TestCase):
         key = self._randbytes(16)
         for i in [0, 1, 2, 15, 16, 17, 31, 32]:
             s = self._randbytes(i)
-            s_ = plaintext_recovery_hardest.attack(lambda p: self._encrypt(key, pad(self._randbytes(randint(0, 15)) + p + s, 16)))
+            s_ = plaintext_recovery_hardest.attack(lambda p: self._encrypt(key, pad(self._randbytes(randrange(0, 16)) + p + s, 16)))
             self.assertEqual(s, s_)

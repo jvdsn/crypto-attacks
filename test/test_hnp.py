@@ -1,7 +1,7 @@
 import os
 import sys
 from random import getrandbits
-from random import randint
+from random import randrange
 from unittest import TestCase
 
 path = os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__))))
@@ -15,7 +15,7 @@ from shared.partial_integer import PartialInteger
 class TestHNP(TestCase):
     def _dsa(self, p, g, x):
         h = getrandbits(p.bit_length())
-        k = randint(1, p - 1)
+        k = randrange(1, p)
         r = pow(g, k, p)
         s = (pow(k, -1, p) * (h + x * r)) % p
         return h, r, s, k
@@ -24,7 +24,7 @@ class TestHNP(TestCase):
         # Not a safe prime, but it doesn't really matter.
         p = 299182277398782807472682876223275635417
         g = 5
-        x = randint(1, p - 1)
+        x = randrange(1, p)
 
         nonce_bit_length = p.bit_length()
         msb_known = 7

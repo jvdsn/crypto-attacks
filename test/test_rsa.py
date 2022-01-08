@@ -2,7 +2,7 @@ import os
 import sys
 from math import lcm
 from random import getrandbits
-from random import randint
+from random import randrange
 from unittest import TestCase
 
 from Crypto.Cipher import PKCS1_v1_5
@@ -159,7 +159,7 @@ class TestRSA(TestCase):
         N3 = p3 * q3
         N = [N1, N2, N3]
         e = 3
-        m = randint(1, min(N))
+        m = randrange(1, min(N))
         c = [pow(m, e, n) for n in N]
         m_ = hastad_attack.attack(N, e, c)
         self.assertIsInstance(m_, int)
@@ -233,7 +233,7 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1)
         e = 65537
         d = pow(e, -1, phi)
-        m = randint(1, N)
+        m = randrange(1, N)
         c = pow(m, e, N)
         m_ = lsb_oracle.attack(N, e, c, lambda c: pow(c, d, N) & 1)
         self.assertIsInstance(m_, int)
@@ -264,7 +264,7 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1)
 
         for e in [3, 7, 31, 397]:
-            m = randint(1, N)
+            m = randrange(1, N)
             c = pow(m, e, N)
             for m_ in non_coprime_exponent.attack(N, e, phi, c):
                 self.assertIsInstance(m_, int)
@@ -393,7 +393,7 @@ class TestRSA(TestCase):
         q = 11870402454659943941264241250285724555674252791764405289506083966512661811544805338494879563927626484667192683911307016139516417804102333067626665881499791
         N = p * q
         e = 7
-        m = randint(2 ** 1023, N)
+        m = randrange(2 ** 1023, N)
         c = pow(m, e, N)
 
         m_ = stereotyped_message.attack(N, e, c, 1024, 0, m >> (1024 - 0), 950, m % (2 ** 950), m_start=2)

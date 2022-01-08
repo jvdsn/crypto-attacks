@@ -2,7 +2,7 @@ import os
 import sys
 from random import choice
 from random import choices
-from random import randint
+from random import randrange
 from unittest import TestCase
 
 path = os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__))))
@@ -18,7 +18,7 @@ class LWE(TestCase):
         b = []
         for i in range(m):
             e = choice(E)
-            A.append([randint(0, q - 1) for _ in range(n)])
+            A.append([randrange(0, q) for _ in range(n)])
             b.append(e)
             for j in range(n):
                 b[i] = (b[i] + A[i][j] * s[j]) % q

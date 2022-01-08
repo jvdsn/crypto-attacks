@@ -1,5 +1,5 @@
 from math import gcd
-from random import randint
+from random import randrange
 
 
 def attack(N, e, d):
@@ -16,7 +16,7 @@ def attack(N, e, d):
         t += 1
 
     while True:
-        g = randint(1, N)
+        g = randrange(1, N)
         for s in range(1, t + 1):
             x = pow(g, k // (2 ** s), N)
             p = gcd(x - 1, N)

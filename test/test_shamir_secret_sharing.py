@@ -1,7 +1,7 @@
 import os
 import sys
 from hashlib import sha256
-from random import randint
+from random import randrange
 from unittest import TestCase
 
 from sage.all import GF
@@ -25,7 +25,7 @@ class ShamirSecretSharing(TestCase):
         p = 3615438361
         k = 15
         n = 20
-        s = randint(1, p - 1)
+        s = randrange(1, p)
         f = lambda ai: int.from_bytes(sha256(ai.to_bytes(32, byteorder="big")).digest(), byteorder="big")
 
         a = [s]
@@ -36,7 +36,7 @@ class ShamirSecretSharing(TestCase):
         xs = []
         ys = []
         for i in range(n):
-            x = randint(1, p - 1)
+            x = randrange(1, p)
             xs.append(x)
             y = self._eval(p, a, x)
             ys.append(y)
@@ -49,18 +49,18 @@ class ShamirSecretSharing(TestCase):
         p = 4224273359
         k = 15
         n = 20
-        s = randint(1, p - 1)
-        s_ = randint(1, p - 1)
+        s = randrange(1, p)
+        s_ = randrange(1, p)
 
         a = [s]
         for i in range(1, n + 1):
-            a.append(randint(1, p - 1))
+            a.append(randrange(1, p))
         a = a[:k]
 
         xs = []
         ys = []
         for i in range(n):
-            x = randint(1, p - 1)
+            x = randrange(1, p)
             xs.append(x)
             y = self._eval(p, a, x)
             ys.append(y)

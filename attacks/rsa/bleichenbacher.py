@@ -1,7 +1,7 @@
 import logging
 import os
 import sys
-from random import randint
+from random import randrange
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
 if sys.path[1] != path:
@@ -28,7 +28,7 @@ def _step_1(padding_oracle, n, e, c):
     s0 = 1
     c0 = c
     while not padding_oracle(c0):
-        s0 = randint(2, n)
+        s0 = randrange(2, n)
         c0 = (c * pow(s0, e, n)) % n
 
     return s0, c0

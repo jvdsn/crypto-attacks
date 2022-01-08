@@ -1,7 +1,7 @@
 import os
 import sys
 from random import getrandbits
-from random import randint
+from random import randrange
 from unittest import TestCase
 
 from sage.all import EllipticCurve
@@ -66,8 +66,8 @@ class TestECC(TestCase):
         p_256 = EllipticCurve(GF(p), [a, b])
         G = p_256.gen(0)
         n = int(G.order())
-        x = randint(1, n - 1)
-        k = randint(1, n - 1)
+        x = randrange(1, n)
+        k = randrange(1, n)
         r = int((k * G).xy()[0])
         m1 = getrandbits(n.bit_length())
         s1 = pow(k, -1, n) * (m1 + r * x) % n
@@ -214,7 +214,7 @@ class TestECC(TestCase):
         Gx = 13284247619583658910
         Gy = 3629049282720081919
         # We don't know the order of the base point, so we keep l pretty low to make sure we don't exceed it.
-        l = randint(1, 4096)
+        l = randrange(1, 4096)
         Px, Py = self._double_and_add(p, a2, a4, (Gx, Gy), l)
         l_ = singular_curve.attack(p, a2, a4, a6, Gx, Gy, Px, Py)
         self.assertIsInstance(l_, int)
@@ -228,7 +228,7 @@ class TestECC(TestCase):
         Gx = 16369123140759309684
         Gy = 5098114980663762719
         # We don't know the order of the base point, so we keep l pretty low to make sure we don't exceed it.
-        l = randint(1, 4096)
+        l = randrange(1, 4096)
         Px, Py = self._double_and_add(p, a2, a4, (Gx, Gy), l)
         l_ = singular_curve.attack(p, a2, a4, a6, Gx, Gy, Px, Py)
         self.assertIsInstance(l_, int)
@@ -238,7 +238,7 @@ class TestECC(TestCase):
         E = EllipticCurve(GF(23304725718649417969), [8820341459377516260, 5880227639585010840])
         G = E.gen(0)
         n = int(G.order())
-        l = randint(1, n - 1)
+        l = randrange(1, n)
         l_ = smart_attack.attack(G, l * G)
         self.assertIsInstance(l_, int)
         self.assertEqual(l, l_)

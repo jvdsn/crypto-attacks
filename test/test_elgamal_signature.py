@@ -2,7 +2,7 @@ import os
 import sys
 from math import gcd
 from random import getrandbits
-from random import randint
+from random import randrange
 from unittest import TestCase
 
 path = os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__))))
@@ -17,10 +17,10 @@ class TestElgamalSignature(TestCase):
         # Safe prime.
         p = 16902648776703029279
         g = 3
-        x = randint(1, p - 2)
+        x = randrange(1, p - 1)
         k = p - 1
         while gcd(k, p - 1) != 1:
-            k = randint(2, p - 2)
+            k = randrange(2, p - 1)
 
         r = pow(g, k, p)
         m1 = getrandbits(p.bit_length())
