@@ -30,7 +30,7 @@ def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
         logging.debug(f"Bound check failed for m = {m}, t = {t}")
         return
 
-    R = f.constant_coefficient()
+    R = int(f.constant_coefficient())
     assert R != 0
     while gcd(R, X) != 1:
         X += 1
@@ -103,7 +103,7 @@ def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
         logging.debug(f"Bound check failed for m = {m}, t = {t}")
         return
 
-    R = f.constant_coefficient()
+    R = int(f.constant_coefficient())
     assert R != 0
     while gcd(R, X) != 1:
         X += 1

@@ -115,7 +115,7 @@ def integer_multivariate(f, m, W, X, strategy, roots_method="resultants"):
         for j, xj in enumerate(x):
             l[j] = max(l[j], monomial.degree(xj))
 
-    a0 = f.constant_coefficient()
+    a0 = int(f.constant_coefficient())
     assert a0 != 0
     while gcd(a0, W) != 1:
         W += 1
