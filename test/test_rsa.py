@@ -7,7 +7,6 @@ from unittest import TestCase
 
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
-from Crypto.Util.number import long_to_bytes
 from sage.all import crt
 
 path = os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__))))
@@ -43,7 +42,7 @@ class TestRSA(TestCase):
         return crt([sp, sq ^ 1], [p, q])
 
     def _valid_padding_v1_5(self, cipher, k, c):
-        return cipher.decrypt(long_to_bytes(c, k), b"") != b""
+        return cipher.decrypt(c.to_bytes(k, byteorder="big"), b"") != b""
 
     def _valid_padding_oaep(self, n, d, B, c):
         return pow(c, d, n) < B
