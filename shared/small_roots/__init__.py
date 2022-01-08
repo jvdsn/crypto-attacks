@@ -3,6 +3,7 @@ import logging
 from sage.all import QQ
 from sage.all import Sequence
 from sage.all import ZZ
+from sage.all import gcd
 from sage.all import matrix
 
 DEBUG_ROOTS = None
@@ -88,6 +89,30 @@ def find_roots_univariate(polynomial, x):
     for root in polynomial.roots(multiplicities=False):
         if root != 0:
             yield {x: int(root)}
+
+
+def find_roots_gcd(polynomials, pr):
+    """
+    Returns a generator generating all roots of a polynomial in some unknowns.
+    Uses pairwise gcds to find trivial roots.
+    :param polynomials: the reconstructed polynomials
+    :param pr: the polynomial ring
+    :return: a generator generating dicts of (x0: x0root, x1: x1root, ...) entries
+    """
+    if pr.ngens() != 2:
+        return
+
+    logging.debug("Computing pairwise gcds to find trivial roots...")
+    x, y = pr.gens()
+    for i in range(len(polynomials)):
+        for j in range(i + 1, len(polynomials)):
+            g = gcd(polynomials[i], polynomials[j])
+            if g.degree() == 1 and g.nvariables() == 2 and g.constant_coefficient() == 0:
+                # g = ax + by
+                a = int(g.monomial_coefficient(x))
+                b = int(g.monomial_coefficient(y))
+                yield {x: b, y: a}
+                yield {x: -b, y: a}
 
 
 def find_roots_groebner(polynomials, pr):
@@ -180,6 +205,9 @@ def find_roots(polynomials, pr, method="groebner"):
         for polynomial in polynomials:
             yield from find_roots_univariate(polynomial, pr.gen())
     else:
+        # Always try this method because it can find roots the others can't.
+        yield from find_roots_gcd(polynomials, pr)
+
         if method == "groebner":
             logging.debug("Using Groebner basis method to find roots...")
             yield from find_roots_groebner(polynomials, pr)
