@@ -20,7 +20,7 @@ def modular_bivariate(f, e, m, t, X, Y, roots_method="groebner"):
     """
     f = f.change_ring(ZZ)
 
-    pr = ZZ["u, x, y"]
+    pr = ZZ["u", "x", "y"]
     u, x, y = pr.gens()
     qr = pr.quotient(1 + x * y - u)
     U = X * Y
