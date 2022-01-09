@@ -11,18 +11,19 @@ if sys.path[1] != path:
 from shared.small_roots import herrmann_may
 
 
-def factorize(N, W, L, v, Q, m_start=1):
+def factorize(N, partial_p, Q, m_start=1):
     """
     Recovers the prime factors from a modulus if the modulus is unbalanced and bits are known.
     More information: Brier E. et al., "Factoring Unbalanced Moduli with Known Bits" (Section 4)
     :param N: the modulus: N = p * q > q ** 3
-    :param W: the amount of unknown least significant bits of p
-    :param L: the amount of known bits of p
-    :param v: the known bits of p: p = u * 2^(W + L) + v * 2^W + y
+    :param partial_p: the partial prime factor p (PartialInteger)
     :param Q: the amount of bits of q
     :param m_start: the m value to start at for the small roots method (default: 1)
     :return: a tuple containing the prime factors
     """
+    W = partial_p.get_unknown_lsb()
+    assert W > 0, "Number of unknown lsb must be greater than 0 (try adding a dummy unknown bit)."
+    v, L = partial_p.get_known_middle()
     assert 3 * L ** 2 + (4 * W - 6 * Q) * L + 3 * Q ** 2 - 8 * Q * W > 0, "Bound check failed."
     delta = Q / (W + L)
 

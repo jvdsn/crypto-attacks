@@ -266,28 +266,29 @@ class TestFactorization(TestCase):
         q = 64056043407867714782092549432658752846651715364072065058125051763204024699203
         N = p * q
 
-        W = 10
-        L = 513
-        v = (p >> W) % (2 ** L)
-        p_, q_ = unbalanced.factorize(N, W, L, v, 256)
+        partial_p = PartialInteger.middle_of(p, 768, 1, 253)
+        p_, q_ = unbalanced.factorize(N, partial_p, 256)
         self.assertIsInstance(p_, int)
         self.assertEqual(p, p_)
         self.assertIsInstance(q_, int)
         self.assertEqual(q, q_)
 
-        W = 128
-        L = 513
-        v = (p >> W) % (2 ** L)
-        p_, q_ = unbalanced.factorize(N, W, L, v, 256)
+        partial_p = PartialInteger.middle_of(p, 768, 10, 245)
+        p_, q_ = unbalanced.factorize(N, partial_p, 256)
         self.assertIsInstance(p_, int)
         self.assertEqual(p, p_)
         self.assertIsInstance(q_, int)
         self.assertEqual(q, q_)
 
-        W = 256
-        L = 512
-        v = (p >> W) % (2 ** L)
-        p_, q_ = unbalanced.factorize(N, W, L, v, 256)
+        partial_p = PartialInteger.middle_of(p, 768, 128, 127)
+        p_, q_ = unbalanced.factorize(N, partial_p, 256)
+        self.assertIsInstance(p_, int)
+        self.assertEqual(p, p_)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(q, q_)
+
+        partial_p = PartialInteger.msb_of(p, 768, 512)
+        p_, q_ = unbalanced.factorize(N, partial_p, 256)
         self.assertIsInstance(p_, int)
         self.assertEqual(p, p_)
         self.assertIsInstance(q_, int)
