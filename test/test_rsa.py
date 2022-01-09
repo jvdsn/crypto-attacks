@@ -33,6 +33,7 @@ from attacks.rsa import stereotyped_message
 from attacks.rsa import wiener_attack
 from attacks.rsa import wiener_attack_common_prime
 from attacks.rsa import wiener_attack_lattice
+from shared.partial_integer import PartialInteger
 
 
 class TestRSA(TestCase):
@@ -78,7 +79,7 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1)
         d = 186493804207318317888355025415200212277761144340233864189538741099969492009806507
         e = pow(d, -1, phi)
-        p_, q_ = boneh_durfee.attack(N, e, 512, delta=0.26, m_start=3)
+        p_, q_ = boneh_durfee.attack(N, e, 512, delta=0.26, m=3)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
@@ -89,7 +90,7 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1)
         d = 223183300830113475659369178959679373721083232456560212434233450629223847114638106475011
         e = pow(d, -1, phi)
-        p_, q_ = boneh_durfee.attack(N, e, 512, 128, p % (2 ** 128), delta=0.28, m_start=1)
+        p_, q_ = boneh_durfee.attack(N, e, 512, partial_p=PartialInteger.lsb_of(p, 512, 128), delta=0.28, m=1)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
@@ -102,7 +103,7 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1) * (r - 1) * (s - 1)
         d = 49488085514473555048624238840378082040802728458021785503334637098083
         e = pow(d, -1, phi)
-        p_, q_, r_, s_ = boneh_durfee.attack_multi_prime(N, e, 512, 4, delta=0.1, m_start=6)
+        p_, q_, r_, s_ = boneh_durfee.attack_multi_prime(N, e, 512, 4, delta=0.1, m=6, t=1)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertIsInstance(r_, int)
