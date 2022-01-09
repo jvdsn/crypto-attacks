@@ -67,10 +67,10 @@ class TestRSA(TestCase):
         self.assertEqual(m, m_)
 
     def test_bleichenbacher_signature_forgery(self):
-        suffix_bits = 32
-        suffix = getrandbits(suffix_bits) | 1
-        s = bleichenbacher_signature_forgery.attack(suffix_bits, suffix)
-        self.assertEqual(suffix, (s ** 3) % (2 ** suffix_bits))
+        suffix_bit_length = 32
+        suffix = getrandbits(suffix_bit_length) | 1
+        s = bleichenbacher_signature_forgery.attack(suffix, suffix_bit_length)
+        self.assertEqual(suffix, (s ** 3) % (2 ** suffix_bit_length))
 
     def test_boneh_durfee(self):
         p = 11227048386374621771175649743442169526805922745751610531569607663416378302561807690656370394330458335919244239976798600743588701676542461805061598571009923
@@ -191,16 +191,16 @@ class TestRSA(TestCase):
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_, q_ = next(known_crt_exponents.attack(e, e + 2, dp=dp, dq=dq, p_bitsize=512, q_bitsize=512))
+        p_, q_ = next(known_crt_exponents.attack(e, e + 2, dp=dp, dq=dq, p_bit_length=512, q_bit_length=512))
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
-        p_ = next(known_crt_exponents.attack(e, e + 2, dp=dp, p_bitsize=512))
+        p_ = next(known_crt_exponents.attack(e, e + 2, dp=dp, p_bit_length=512))
         self.assertIsInstance(p_, int)
         self.assertEqual(p, p_)
 
-        q_ = next(known_crt_exponents.attack(e, e + 2, dq=dq, q_bitsize=512))
+        q_ = next(known_crt_exponents.attack(e, e + 2, dq=dq, q_bit_length=512))
         self.assertIsInstance(q_, int)
         self.assertEqual(q, q_)
 

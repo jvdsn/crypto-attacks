@@ -17,7 +17,7 @@ def attack(x, rho):
     Solves the ACD problem using the simultaneous Diophantine approximation approach.
     More information: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 3)
     :param x: the x samples, with xi = p * qi + ri
-    :param rho: the number of bits of the r values
+    :param rho: the bit length of the r values
     :return: the secret integer p and a list containing the r values, or None if p could not be found
     """
     assert len(x) >= 2, "At least two x values are required."

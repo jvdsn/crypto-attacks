@@ -19,7 +19,7 @@ def attack(N, a, rho, t=1, k=1, roots_method="groebner"):
     More information: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 5)
     :param N: N = p * q0
     :param a: the a samples, with ai = p * qi + ri
-    :param rho: the number of bits of the r values
+    :param rho: the bit length of the r values
     :param t: the parameter t (default: 1)
     :param k: the parameter k (default: 1)
     :param roots_method: the method to use to find roots (default: "groebner")

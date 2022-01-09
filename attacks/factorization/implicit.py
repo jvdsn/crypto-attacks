@@ -29,8 +29,8 @@ def factorize_msb(N, n, t):
     Factorizes the moduli when some most significant bits are equal among multiples of a prime factor.
     More information: Nitaj A., Ariffin MRK., "Implicit factorization of unbalanced RSA moduli" (Section 4)
     :param N: the moduli
-    :param n: the amount of bits of the moduli
-    :param t: the amount of shared most significant bits
+    :param n: the bit length of the moduli
+    :param t: the number of shared most significant bits
     :return: a list containing a tuple of the factors of each modulus, or None if the factors were not found
     """
     L = matrix(ZZ, len(N), len(N))
@@ -49,8 +49,8 @@ def factorize_lsb(N, n, t):
     Factorizes the moduli when some least significant bits are equal among multiples of a prime factor.
     More information: Nitaj A., Ariffin MRK., "Implicit factorization of unbalanced RSA moduli" (Section 6)
     :param N: the moduli
-    :param n: the amount of bits of the moduli
-    :param t: the amount of shared least significant bits
+    :param n: the bit length of the moduli
+    :param t: the number of shared least significant bits
     :return: a list containing a tuple of the factors of each modulus, or None if the factors were not found
     """
     L = matrix(ZZ, len(N), len(N))

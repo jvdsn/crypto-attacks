@@ -17,7 +17,7 @@ def factorize(N, partial_p, Q, m=1, t=None):
     More information: Brier E. et al., "Factoring Unbalanced Moduli with Known Bits" (Section 4)
     :param N: the modulus: N = p * q > q ** 3
     :param partial_p: the partial prime factor p (PartialInteger)
-    :param Q: the amount of bits of q
+    :param Q: the bit length of q
     :param m: the m value to use for the small roots method (default: 1)
     :param t: the t value to use for the small roots method (default: automatically computed using m)
     :return: a tuple containing the prime factors, or None if the factors could not be found
