@@ -116,8 +116,8 @@ def dsa_known_middle(n, signature1, partial_nonce1, signature2, partial_nonce2):
 
     h1, r1, s1 = signature1
     h2, r2, s2 = signature2
-    a1 = partial_nonce1.get_shifted_value(1)
-    a2 = partial_nonce2.get_shifted_value(1)
+    a1 = partial_nonce1.get_known_middle()[0] << lsb_bit_length
+    a2 = partial_nonce2.get_known_middle()[0] << lsb_bit_length
     t = -(pow(s1, -1, n) * s2 * r1 * pow(r2, -1, n))
     u = pow(s1, -1, n) * r1 * h2 * pow(r2, -1, n) - pow(s1, -1, n) * h1
     u_ = a1 + t * a2 + u

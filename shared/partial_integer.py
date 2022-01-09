@@ -11,8 +11,8 @@ class PartialInteger:
         Constructs a new PartialInteger with total bit length 0 and no components.
         """
         self.bit_length = 0
-        self.components = []
         self.unknowns = 0
+        self._components = []
 
     def add_known(self, value, bit_length):
         """
@@ -21,8 +21,8 @@ class PartialInteger:
         :param bit_length: the bit length of the component
         :return: this PartialInteger, with the component added to the msb
         """
-        self.components.append((self.bit_length, value, bit_length))
         self.bit_length += bit_length
+        self._components.append((value, bit_length))
         return self
 
     def add_unknown(self, bit_length):
@@ -31,19 +31,10 @@ class PartialInteger:
         :param bit_length: the bit length of the component
         :return: this PartialInteger, with the component added to the msb
         """
-        self.components.append((self.bit_length, None, bit_length))
         self.bit_length += bit_length
         self.unknowns += 1
+        self._components.append((None, bit_length))
         return self
-
-    def get_shifted_value(self, index):
-        """
-        Returns the value of the component at a provided index, shifted by its bit offset in this PartialInteger.
-        :param index: the index of the component
-        :return: the shifted value
-        """
-        assert index < len(self.components)
-        return self.components[index][1] << self.components[index][0]
 
     def get_known_lsb(self):
         """
@@ -53,12 +44,12 @@ class PartialInteger:
         """
         lsb = 0
         lsb_bit_length = 0
-        for start, value, length in self.components:
+        for value, bit_length in self._components:
             if value is None:
                 return lsb, lsb_bit_length
 
-            lsb = lsb + (value << start)
-            lsb_bit_length += length
+            lsb = lsb + (value << lsb_bit_length)
+            lsb_bit_length += bit_length
 
         return lsb, lsb_bit_length
 
@@ -70,14 +61,32 @@ class PartialInteger:
         """
         msb = 0
         msb_bit_length = 0
-        for _, value, length in reversed(self.components):
+        for value, bit_length in reversed(self._components):
             if value is None:
                 return msb, msb_bit_length
 
-            msb = (msb << length) + value
-            msb_bit_length += length
+            msb = (msb << bit_length) + value
+            msb_bit_length += bit_length
 
         return msb, msb_bit_length
+
+    def get_known_middle(self):
+        """
+        Returns all known middle bits in this PartialInteger.
+        This method can cross multiple known components, but stops once an unknown component is encountered.
+        :return: a tuple containing the known middle bits and the bit length of the known middle bits
+        """
+        middle = 0
+        middle_bit_length = 0
+        for value, bit_length in self._components:
+            if value is None:
+                if middle_bit_length > 0:
+                    return middle, middle_bit_length
+            else:
+                middle = middle + (value << middle_bit_length)
+                middle_bit_length += bit_length
+
+        return middle, middle_bit_length
 
     def get_unknown_lsb(self):
         """
@@ -86,11 +95,11 @@ class PartialInteger:
         :return: the bit length of the unknown lsb
         """
         lsb_bit_length = 0
-        for _, value, length in self.components:
+        for value, bit_length in self._components:
             if value is not None:
                 return lsb_bit_length
 
-            lsb_bit_length += length
+            lsb_bit_length += bit_length
 
         return lsb_bit_length
 
@@ -101,11 +110,11 @@ class PartialInteger:
         :return: the bit length of the unknown msb
         """
         msb_bit_length = 0
-        for _, value, length in reversed(self.components):
+        for value, bit_length in reversed(self._components):
             if value is not None:
                 return msb_bit_length
 
-            msb_bit_length += length
+            msb_bit_length += bit_length
 
         return msb_bit_length
 
@@ -115,11 +124,30 @@ class PartialInteger:
         :param i: the integer
         :return: True if this PartialInteger matches i, False otherwise
         """
-        for start, value, bit_length in self.components:
-            if value is not None and (i >> start) % (2 ** bit_length) != value:
+        shift = 0
+        for value, bit_length in self._components:
+            if value is not None and (i >> shift) % (2 ** bit_length) != value:
                 return False
 
+            shift += bit_length
+
         return True
+
+    def get_unknown_middle(self):
+        """
+        Returns the bit length of the unknown middle bits in this PartialInteger.
+        This method can cross multiple unknown components, but stops once a known component is encountered.
+        :return: the bit length of the unknown middle bits
+        """
+        middle_bit_length = 0
+        for value, bit_length in self._components:
+            if value is None:
+                if middle_bit_length > 0:
+                    return middle_bit_length
+            else:
+                middle_bit_length += bit_length
+
+        return middle_bit_length
 
     def sub(self, unknowns):
         """
@@ -131,13 +159,16 @@ class PartialInteger:
         assert len(unknowns) == self.unknowns
         i = 0
         j = 0
-        for start, value, _ in self.components:
+        shift = 0
+        for value, bit_length in self._components:
             if value is None:
                 # We don't shift here because the unknown could be a symbolic variable
-                i += 2 ** start * unknowns[j]
+                i += 2 ** shift * unknowns[j]
                 j += 1
             else:
-                i += value << start
+                i += value << shift
+
+            shift += bit_length
 
         return i
 
@@ -147,7 +178,7 @@ class PartialInteger:
         A bound is simply 2^l with l the bit length of the unknown.
         :return: the list of bounds
         """
-        return [2 ** length for _, value, length in self.components if value is None]
+        return [2 ** bit_length for value, bit_length in self._components if value is None]
 
     def to_int(self):
         """
@@ -170,7 +201,7 @@ class PartialInteger:
         assert len(symbols) >= base
         bits_per_element = int(log2(base))
         chars = []
-        for _, value, bit_length in self.components:
+        for value, bit_length in self._components:
             assert bit_length % bits_per_element == 0, f"Component with bit length {bit_length} can't be represented by base {base} digits"
             for _ in range(bit_length // bits_per_element):
                 if value is None:
