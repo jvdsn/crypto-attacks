@@ -1,5 +1,7 @@
 import logging
 
+from sage.all import ZZ
+
 from shared import small_roots
 
 
@@ -16,6 +18,7 @@ def modular_trivariate(f, N, m, t, X, Y, Z, roots_method="groebner"):
     :param roots_method: the method to use to find roots (default: "groebner")
     :return: a generator generating small roots (tuples of y and z roots) of the polynomial
     """
+    f = f.change_ring(ZZ)
     pr = f.parent()
     x, y, z = pr.gens()
 
@@ -42,13 +45,12 @@ def modular_trivariate(f, N, m, t, X, Y, Z, roots_method="groebner"):
         yield roots[x], roots[y], roots[z]
 
 
-def modular_bivariate(f, e, M, m, t, Y, Z, roots_method="groebner"):
+def modular_bivariate(f, eM, m, t, Y, Z, roots_method="groebner"):
     """
     Computes small modular roots of a bivariate polynomial.
     More information: Blomer J., May A., "New Partial Key Exposure Attacks on RSA" (Section 6)
     :param f: the polynomial
-    :param e: the parameter e
-    :param M: the parameter M
+    :param eM: the modulus
     :param m: the parameter m
     :param t: the parameter t
     :param Y: an approximate bound on the y roots
@@ -56,6 +58,7 @@ def modular_bivariate(f, e, M, m, t, Y, Z, roots_method="groebner"):
     :param roots_method: the method to use to find roots (default: "groebner")
     :return: a generator generating small roots (tuples of y and z roots) of the polynomial
     """
+    f = f.change_ring(ZZ)
     pr = f.parent()
     y, z = pr.gens()
 
@@ -65,12 +68,12 @@ def modular_bivariate(f, e, M, m, t, Y, Z, roots_method="groebner"):
     monomials = set()
     for i in range(m + 1):
         for j in range(i + 1):
-            g = y ** j * (e * M) ** i * f ** (m - i)
+            g = y ** j * eM ** i * f ** (m - i)
             shifts.append(g)
             monomials.update(g.monomials())
 
         for j in range(1, t + 1):
-            h = z ** j * (e * M) ** i * f ** (m - i)
+            h = z ** j * eM ** i * f ** (m - i)
             shifts.append(h)
             monomials.update(h.monomials())
 
