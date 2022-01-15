@@ -22,12 +22,12 @@ def attack(N, e, delta=0.25, m_start=1):
     :param e: the public exponent
     :param delta: a predicted bound on the private exponent (d < N^delta) (default: 0.25)
     :param m_start: the m value to start at for the small roots method (default: 1)
-    :return: a tuple containing the prime factors of the modulus and the private exponent
+    :return: a tuple containing the prime factors and the private exponent
     """
     gamma = 1 - log(e, N)
     assert delta <= 1 / 4 * (4 + 4 * gamma - sqrt(13 + 20 * gamma + 4 * gamma ** 2)), "Bound check failed."
 
-    x, y, z = ZZ["x, y, z"].gens()
+    x, y, z = ZZ["x", "y", "z"].gens()
 
     f = e ** 2 * x ** 2 + e * x * (y + z - 2) - (y + z - 1) - (N - 1) * y * z
 

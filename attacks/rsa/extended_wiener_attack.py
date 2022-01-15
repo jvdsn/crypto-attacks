@@ -21,7 +21,7 @@ def attack(n, e, max_s=20000, max_r=100, max_t=100):
     :param max_s: the amount of s values to try (default: 20000)
     :param max_r: the amount of r values to try for each s value (default: 100)
     :param max_t: the amount of t values to try for each s value (default: 100)
-    :return: a tuple containing the prime factors of the modulus and the private exponent, or None if the private exponent was not found
+    :return: a tuple containing the prime factors and the private exponent, or None if the private exponent was not found
     """
     i_n = ZZ(n)
     i_e = ZZ(e)

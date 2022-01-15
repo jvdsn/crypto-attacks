@@ -19,7 +19,7 @@ def attack(N, e):
     More information: Nguyen P. Q., "Public-Key Cryptanalysis"
     :param N: the modulus
     :param e: the public exponent
-    :return: a tuple containing the prime factors of the modulus and the private exponent, or None if the private exponent was not found
+    :return: a tuple containing the prime factors and the private exponent, or None if the private exponent was not found
     """
     s = isqrt(N)
     L = matrix(ZZ, [[e, s], [N, 0]])
