@@ -442,7 +442,7 @@ class TestRSA(TestCase):
         d = 23036500924799795486061779142562236752665840004239
         e = pow(d, -1, phi)
         delta = 0.1604
-        p_, q_, d_ = wiener_attack_common_prime.attack(N, e, delta)
+        p_, q_, d_ = wiener_attack_common_prime.attack(N, e, delta, m=1, t=0)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
