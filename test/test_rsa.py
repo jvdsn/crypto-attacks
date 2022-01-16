@@ -79,7 +79,7 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1)
         d = 186493804207318317888355025415200212277761144340233864189538741099969492009806507
         e = pow(d, -1, phi)
-        p_, q_ = boneh_durfee.attack(N, e, 512, delta=0.26, m=3)
+        p_, q_ = boneh_durfee.attack(N, e, 512, delta=0.26, m=3, t=1)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
@@ -90,7 +90,7 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1)
         d = 223183300830113475659369178959679373721083232456560212434233450629223847114638106475011
         e = pow(d, -1, phi)
-        p_, q_ = boneh_durfee.attack(N, e, 512, partial_p=PartialInteger.lsb_of(p, 512, 128), delta=0.28, m=1)
+        p_, q_ = boneh_durfee.attack(N, e, 512, partial_p=PartialInteger.lsb_of(p, 512, 128), delta=0.28, m=1, t=0)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)

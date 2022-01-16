@@ -3,7 +3,7 @@ import os
 import sys
 
 from sage.all import RR
-from sage.all import Zmod
+from sage.all import ZZ
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
 if sys.path[1] != path:
@@ -32,7 +32,7 @@ def attack(N, e, factor_bit_length, partial_p=None, delta=0.25, m=1, t=None):
     q_lsb = (pow(p_lsb, -1, 2 ** p_lsb_bit_length) * N) % (2 ** p_lsb_bit_length)
     A = ((N >> p_lsb_bit_length) + pow(2, -p_lsb_bit_length, e) * (p_lsb * q_lsb - p_lsb - q_lsb + 1))
 
-    x, y = Zmod(e)["x", "y"].gens()
+    x, y = ZZ["x", "y"].gens()
     f = x * (A + y) + pow(2, -p_lsb_bit_length, e)
     X = int(RR(e) ** delta)
     Y = int(2 ** (factor_bit_length - p_lsb_bit_length + 1))
@@ -64,7 +64,7 @@ def attack_multi_prime(N, e, factor_bit_length, factors, delta=0.25, m=1, t=None
     :param t: the t value to use for the small roots method (default: automatically computed using m)
     :return: a tuple containing the prime factors
     """
-    x, y = Zmod(e)["x", "y"].gens()
+    x, y = ZZ["x", "y"].gens()
     A = N + 1
     f = x * (A + y) + 1
     X = int(RR(e) ** delta)
