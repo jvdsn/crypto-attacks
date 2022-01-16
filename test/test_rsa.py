@@ -292,81 +292,131 @@ class TestRSA(TestCase):
         N = p * q
         phi = (p - 1) * (q - 1)
 
-        e = 972725013453134125537903033116667927532041104057333884531576436877171871145141135680423077
+        e = 1888808636394051038122079426072690800814635584317577992534820937057888325091552888007695019685284192811882682070476179005
         d = pow(e, -1, phi)
-        d__known = 300
-        d_, phi_ = partial_key_exposure.attack_very_small_e_msb(N, e, (d >> (1024 - d__known)) << (1024 - d__known), d__known, m_start=4)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.lsb_and_msb_of(d, 1024, 300, 400), m=4, t=4)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
         self.assertIsInstance(d_, int)
         self.assertEqual(d, d_)
-        self.assertIsInstance(phi_, int)
-        self.assertEqual(phi, phi_)
 
-        e = 85958455819072243675417254322753950827458610767126860497823611453676758071921964474729424536718043056310204654976414691966438569
+        e = 2537076837624948274678559350627766245659466751393060011134223900150777497232270599983842219210375152450024925559795004985
         d = pow(e, -1, phi)
-        d__known = 600
-        d_, phi_ = partial_key_exposure.attack_very_small_e_msb(N, e, (d >> (1024 - d__known)) << (1024 - d__known), d__known)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.lsb_of(d, 1024, 900), m=3, t=1)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
         self.assertIsInstance(d_, int)
         self.assertEqual(d, d_)
-        self.assertIsInstance(phi_, int)
-        self.assertEqual(phi, phi_)
+
+        e = 2105349305652912552595850746930492757880185195571479788917556245368402422744117397035736756548330291811495322726318885363734942001084342282438104629063513807868365772702460864019481
+        d = pow(e, -1, phi)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.lsb_of(d, 1024, 1000), m=4, t=1)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+        self.assertIsInstance(d_, int)
+        self.assertEqual(d, d_)
+
+        d = 3043512099664998067963851819644406828326540226040840386777757880704658912729542968149616478325704429171610434683689846221877333398784455635377825449441
+        e = pow(d, -1, phi)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.lsb_of(d, 500, 450), m=2, t=1)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+        self.assertIsInstance(d_, int)
+        self.assertEqual(d, d_)
 
         e = 13
         d = pow(e, -1, phi)
-        d0_known = 300
-        d_, phi_ = partial_key_exposure.attack_very_small_e_lsb(N, e, d % (2 ** d0_known), d0_known, m_start=4)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.lsb_of(d, 1024, 300), m=4, t=4)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
         self.assertIsInstance(d_, int)
         self.assertEqual(d, d_)
-        self.assertIsInstance(phi_, int)
-        self.assertEqual(phi, phi_)
 
-        e = 278749098119858359846103396990240098248206220185288799867582283488837360908826721237254406511367791978546344748762710254040763461281267101454963031593097387192459452354340015944461315930034083390264463273717028194144559
+        e = 1342190465933073539882079424718736636251811109323478531285823066337637602613426487933457123523547784034204609585360266973
         d = pow(e, -1, phi)
-        delta = 0.01
-        d_, phi_ = partial_key_exposure.attack_small_e_msb(N, e, (d >> 10) << 10, delta, m_start=1)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 1024, 400), m=4, t=4)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
         self.assertIsInstance(d_, int)
         self.assertEqual(d, d_)
-        self.assertIsInstance(phi_, int)
-        self.assertEqual(phi, phi_)
 
-        e = 2507705789822022895690444842577473762224429553172733804837385382124356283834959752604649180684310303218218270356191955487
+        e = 2202357547053544325766272244614293754573709727782759369088138744825304061898264253795423228965992747533679851108128668707
         d = pow(e, -1, phi)
-        M = 2 ** 900
-        d_, phi_ = partial_key_exposure.attack_small_e_lsb(N, e, d % M, M, m_start=3)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 1024, 700), factor_e=False)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
         self.assertIsInstance(d_, int)
         self.assertEqual(d, d_)
-        self.assertIsInstance(phi_, int)
-        self.assertEqual(phi, phi_)
 
-        e = 68843516837828436784690883268644707377200017437163732497968992039395363282511144694844648000145457523133371422331826205969445866071724008888695333722132235984885765034815301990078538181897141443765570845100266480547593531174923217901819487206342266138236674349600854052054433744471945862914763382006003960011
+        e = 3570933230773454036103400438523094494860730146879558128058270144959251135492234076661103748194173734451656482351563013457204873521151688759417651289937071689065482923
         d = pow(e, -1, phi)
-        beta = 0.35
-        delta = 0.14
-        d_, phi_ = partial_key_exposure.attack_small_d_msb_1(N, e, (d >> 140) << 140, beta, delta, m_start=1)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 1024, 800), m=1, t=1)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
         self.assertIsInstance(d_, int)
         self.assertEqual(d, d_)
-        self.assertIsInstance(phi_, int)
-        self.assertEqual(phi, phi_)
 
-        e = 80159260530467199799822294910074297515441008792466732635610340297191720447839672811598972619990631764674544264301331962425926213831641203135286921138360261897683799902095078247442269337446867250869189674740006948265223004596104031379157713995963928369913737252538797460742512913479396070892148285203464009279
-        d = pow(e, -1, phi)
-        beta = 0.35
-        delta = 0.14
-        d_, phi_ = partial_key_exposure.attack_small_d_msb_2(N, e, (d >> 140) << 140, beta, delta, m_start=1)
+        d = 1659574478146748254056351432273021460473735684664103384774766229138469185471407591788312141
+        e = pow(d, -1, phi)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 300, 100), m=2, t=0)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
         self.assertIsInstance(d_, int)
         self.assertEqual(d, d_)
-        self.assertIsInstance(phi_, int)
-        self.assertEqual(phi, phi_)
 
-        e = 16723433906261024740041562159371213838653234897448926758765492183033761723861935816748806191077577080403106451487070231371311265966370589999792147135293973178729235800845333648568113671096023840313669295194557473564833370685892624716816613595250857953010718325389588653259477926050545962773479127294891291373
-        d = pow(e, -1, phi)
-        M = 2 ** 220
-        beta = 0.35
-        delta = 0.14
-        d_, phi_ = partial_key_exposure.attack_small_d_lsb(N, e, d % M, M, beta, delta, m_start=1)
+        d = 1996027597381396159237243762593978890017801760275363686545665967267636096782071826097658259
+        e = pow(d, -1, phi)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 300, 200), m=1, t=0)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
         self.assertIsInstance(d_, int)
         self.assertEqual(d, d_)
-        self.assertIsInstance(phi_, int)
-        self.assertEqual(phi, phi_)
+
+        d = 3761842282390824725562943876986788316204251238160857472939673032260930840975186728596615197353278383991036677817804509912115342372613650607583423246001467907396859682584848725034711
+        e = pow(d, -1, phi)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 600, 470), m=2, t=2)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+        self.assertIsInstance(d_, int)
+        self.assertEqual(d, d_)
+
+        d = 3691180879554463786414032222552684036869061510418768071690705916691156971385612730312759706623469266619987662041149793023083742711174850519419974605626258130331917527225448076142783
+        e = pow(d, -1, phi)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 600, 500), m=2, t=0)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+        self.assertIsInstance(d_, int)
+        self.assertEqual(d, d_)
+
+        d = 4905300283357849777532376964856253872884896201321425321351015817211702681734510535471350537031834978240585713416514372877338525414401276727225442844983999756914527067870650280651385699873418363576218246007433933765243491292205
+        e = pow(d, -1, phi)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 750, 745), m=2, t=1)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+        self.assertIsInstance(d_, int)
+        self.assertEqual(d, d_)
+
+        e = 4767842339321110001693689370200744188846086437972267976524065388471471723930990821354799430207822500359946317313395866439324920870720597904488739040160497744807293179379758447729820982374513639776505527597410218540393194583329
+        d = pow(e, -1, phi)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 1024, 1000), m=2, t=1)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+        self.assertIsInstance(d_, int)
+        self.assertEqual(d, d_)
 
     def test_related_message(self):
         p = 10690180235993276891093400056791694809626283946283502730568453512667872959585945785000451667658654678765261068382803043783613229940134674528737814179937039
