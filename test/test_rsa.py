@@ -459,13 +459,13 @@ class TestRSA(TestCase):
         m = randrange(2 ** 1023, N)
         c = pow(m, e, N)
 
-        m_ = stereotyped_message.attack(N, e, c, 1024, 0, m >> (1024 - 0), 950, m % (2 ** 950), m_start=2)
+        m_ = stereotyped_message.attack(N, e, c, PartialInteger.lsb_of(m, 1024, 950), m=2)
         self.assertIsInstance(m_, int)
         self.assertEqual(m, m_)
-        m_ = stereotyped_message.attack(N, e, c, 1024, 475, m >> (1024 - 475), 475, m % (2 ** 475), m_start=2)
+        m_ = stereotyped_message.attack(N, e, c, PartialInteger.lsb_and_msb_of(m, 1024, 475, 475), m=2)
         self.assertIsInstance(m_, int)
         self.assertEqual(m, m_)
-        m_ = stereotyped_message.attack(N, e, c, 1024, 950, m >> (1024 - 950), 0, m % (2 ** 0), m_start=2)
+        m_ = stereotyped_message.attack(N, e, c, PartialInteger.msb_of(m, 1024, 950), m=2)
         self.assertIsInstance(m_, int)
         self.assertEqual(m, m_)
 
