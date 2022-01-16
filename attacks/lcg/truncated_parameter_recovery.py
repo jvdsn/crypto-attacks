@@ -79,8 +79,8 @@ def attack(y, k, s, m=None, a=None, check_modulus=None):
     Also recovers an increment from the outputs.
     The resulting parameters may not match the original parameters, but the generated sequence should be the same up to some small error.
     :param y: the sequential output values obtained from the truncated LCG (the states truncated to s most significant bits)
-    :param k: the size in bits of the states
-    :param s: the size in bits of the outputs
+    :param k: the bit length of the states
+    :param s: the bit length of the outputs
     :param m: the modulus of the LCG (can be None)
     :param a: the multiplier of the LCG (can be None)
     :param check_modulus: a function which checks if a possible value can be the modulus (default: compare the bit length with k)

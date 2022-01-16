@@ -9,21 +9,21 @@ def attack(y, k, s, m, a, c):
     Recovers the states associated with the outputs from a truncated linear congruential generator.
     More information: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"
     :param y: the sequential output values obtained from the truncated LCG (the states truncated to s most significant bits)
-    :param k: the size in bits of the states
-    :param s: the size in bits of the outputs
+    :param k: the bit length of the states
+    :param s: the bit length of the outputs
     :param m: the modulus of the LCG
     :param a: the multiplier of the LCG
     :param c: the increment of the LCG
     :return: a list containing the states associated with the provided outputs
     """
-    diff_bitsize = k - s
+    diff_bit_length = k - s
 
     # Preparing for the lattice reduction.
     delta = c % m
     y = vector(ZZ, y)
     for i in range(len(y)):
         # Shift output value to the MSBs and remove the increment.
-        y[i] = (y[i] << diff_bitsize) - delta
+        y[i] = (y[i] << diff_bit_length) - delta
         delta = (a * delta + c) % m
 
     # This lattice only works for increment = 0.

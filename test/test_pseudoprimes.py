@@ -32,7 +32,7 @@ class Pseudoprimes(TestCase):
 
     def test_miller_rabin(self):
         bases = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
-        n, p1, p2, p3 = miller_rabin.generate_pseudoprime(bases, min_bitsize=400)
+        n, p1, p2, p3 = miller_rabin.generate_pseudoprime(bases, min_bit_length=400)
         self.assertIsInstance(n, int)
         self.assertIsInstance(p1, int)
         self.assertIsInstance(p2, int)
@@ -42,7 +42,7 @@ class Pseudoprimes(TestCase):
         self.assertTrue(self._miller_rabin(n, bases))
 
         bases = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61]
-        n, p1, p2, p3 = miller_rabin.generate_pseudoprime(bases, min_bitsize=600)
+        n, p1, p2, p3 = miller_rabin.generate_pseudoprime(bases, min_bit_length=600)
         self.assertIsInstance(n, int)
         self.assertIsInstance(p1, int)
         self.assertIsInstance(p2, int)
