@@ -171,6 +171,10 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [ ] Blum-Kalai-Wasserman attack
 * [ ] Lattice reduction attack
 
+# Mersenne Twister
+
+* [x] [State recovery](attacks/mersenne_twister/state_recovery.py)
+
 ### One-time Pad
 
 * [x] [Key reuse](attacks/otp/key_reuse.py)
