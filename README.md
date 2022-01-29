@@ -2,10 +2,16 @@
 Python implementations of cryptographic attacks and utilities.
 
 ## Requirements
-* Python 3.9
+* [SageMath](https://www.sagemath.org/) with Python 3.9
 * [PyCryptodome](https://pycryptodome.readthedocs.io/)
-* [SageMath](https://www.sagemath.org/)
 * [Hilbert Class Polynomial database](https://doc.sagemath.org/html/en/reference/databases/sage/databases/db_class_polynomials.html) (Only required for complex multiplication)
+
+You can check your SageMath Python version using the following command:
+```
+$ sage -python --version
+Python 3.9.0
+```
+If your SageMath version is older than 3.9.0, some features in some scripts might not work.
 
 ## Usage
 Unit tests are located in the `test` directory and can be executed using the `unittest` module or using `pytest`. This should not take very long, perhaps a few minutes depending on your machine.
