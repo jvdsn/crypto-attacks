@@ -1,4 +1,5 @@
 import os
+import random
 import sys
 from unittest import TestCase
 
@@ -18,7 +19,7 @@ class MersenneTwister(TestCase):
         mt_ = state_recovery.attack_mt19937(y)
         self.assertEqual(mt.mt, mt_.mt)
         self.assertEqual(mt.index, mt_.index)
-        for i in range(1):
+        for i in range(mt.n):
             self.assertEqual(next(mt), next(mt_))
 
         mt = mersenne_twister.mt19937()
@@ -27,8 +28,14 @@ class MersenneTwister(TestCase):
         mt_ = state_recovery.attack_mt19937(y)
         self.assertEqual(mt.mt, mt_.mt)
         self.assertEqual(mt.index, mt_.index)
-        for i in range(1):
+        for i in range(mt.n):
             self.assertEqual(next(mt), next(mt_))
+
+        random.seed(1234567)
+        y = [random.getrandbits(32) for _ in range(624)]
+        mt_ = state_recovery.attack_mt19937(y)
+        for i in range(624):
+            self.assertEqual(random.getrandbits(32), next(mt_))
 
         mt = mersenne_twister.mt19937_64()
         mt.seed(6364136223846793005, 0)
@@ -36,7 +43,7 @@ class MersenneTwister(TestCase):
         mt_ = state_recovery.attack_mt19937_64(y)
         self.assertEqual(mt.mt, mt_.mt)
         self.assertEqual(mt.index, mt_.index)
-        for i in range(1):
+        for i in range(mt.n):
             self.assertEqual(next(mt), next(mt_))
 
         mt = mersenne_twister.mt19937_64()
@@ -45,5 +52,5 @@ class MersenneTwister(TestCase):
         mt_ = state_recovery.attack_mt19937_64(y)
         self.assertEqual(mt.mt, mt_.mt)
         self.assertEqual(mt.index, mt_.index)
-        for i in range(1):
+        for i in range(mt.n):
             self.assertEqual(next(mt), next(mt_))
