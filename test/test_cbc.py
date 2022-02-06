@@ -30,8 +30,7 @@ class TestCBC(TestCase):
 
     def _valid_padding(self, key, iv, c):
         try:
-            cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
-            unpad(cipher.decrypt(c), 16)
+            unpad(self._decrypt(key, iv, c), 16)
             return True
         except ValueError:
             return False

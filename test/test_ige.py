@@ -33,20 +33,23 @@ class TestIGE(TestCase):
 
         return p0, c0, c
 
+    def _decrypt(self, key, p0, c0, c):
+        cipher = AES.new(key, mode=AES.MODE_ECB)
+        p_last = p0
+        c_last = c0
+        p = bytearray()
+        for i in range(0, len(c), 16):
+            c_i = c[i:i + 16]
+            p_i = strxor(cipher.decrypt(strxor(c_i, p_last)), c_last)
+            p_last = p_i
+            c_last = c_i
+            p += p_i
+
+        return p
+
     def _valid_padding(self, key, p0, c0, c):
         try:
-            cipher = AES.new(key, mode=AES.MODE_ECB)
-            p_last = p0
-            c_last = c0
-            p = bytearray()
-            for i in range(0, len(c), 16):
-                c_i = c[i:i + 16]
-                p_i = strxor(cipher.decrypt(strxor(c_i, p_last)), c_last)
-                p_last = p_i
-                c_last = c_i
-                p += p_i
-
-            unpad(p, 16)
+            unpad(self._decrypt(key, p0, c0, c), 16)
             return True
         except ValueError:
             return False
