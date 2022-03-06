@@ -99,8 +99,8 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 ### CBC + CBC-MAC
 * [x] [Key reuse attack (encrypt-and-MAC)](attacks/cbc_and_cbc_mac/eam_key_reuse.py)
-* [x] [Key reuse attack (encrypt-then-MAC)](attacks/cbc_and_cbc_mac/eam_key_reuse.py)
-* [x] [Key reuse attack (MAC-then-encrypt)](attacks/cbc_and_cbc_mac/eam_key_reuse.py)
+* [x] [Key reuse attack (encrypt-then-MAC)](attacks/cbc_and_cbc_mac/etm_key_reuse.py)
+* [x] [Key reuse attack (MAC-then-encrypt)](attacks/cbc_and_cbc_mac/mte_key_reuse.py)
 
 ### CBC-MAC
 * [x] [Length extension attack](attacks/cbc_mac/length_extension.py)
