@@ -199,7 +199,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Known CRT exponents attack](attacks/rsa/known_crt_exponents.py) [More information: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"]
 * [x] [Known private exponent attack](attacks/rsa/known_d.py)
 * [x] [Low public exponent attack](attacks/rsa/low_exponent.py)
-* [x] [LSB oracle attack](attacks/rsa/lsb_oracle.py)
+* [x] [LSB oracle (parity oracle) attack](attacks/rsa/lsb_oracle.py)
 * [x] [Manger's attack](attacks/rsa/manger.py) [More information: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"]
 * [x] [Nitaj's CRT-RSA attack](attacks/rsa/nitaj_crt_rsa.py) [More information: Nitaj A., "A new attack on RSA and CRT-RSA"]
 * [x] [Non coprime public exponent attack](attacks/rsa/non_coprime_exponent.py) [More information: Shumow D., "Incorrectly Generated RSA Keys: How To Recover Lost Plaintexts"]
