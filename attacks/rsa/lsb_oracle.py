@@ -3,7 +3,7 @@ from sage.all import ZZ
 
 def attack(N, e, c, oracle):
     """
-    Recovers the plaintext from the ciphertext using the LSB oracle attack.
+    Recovers the plaintext from the ciphertext using the LSB oracle (parity oracle) attack.
     :param N: the modulus
     :param e: the public exponent
     :param c: the encrypted message
