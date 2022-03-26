@@ -43,8 +43,8 @@ class TestRSA(TestCase):
         # Random bitflip?
         return crt([sp, sq ^ 1], [p, q])
 
-    def _valid_padding_v1_5(self, cipher, k, c):
-        return cipher.decrypt(c.to_bytes(k, byteorder="big"), b"") != b""
+    def _valid_padding_v1_5(self, cipher, k, c, sentinel):
+        return cipher.decrypt(c.to_bytes(k, byteorder="big"), sentinel) != sentinel
 
     def _valid_padding_oaep(self, n, d, B, c):
         return pow(c, d, n) < B
@@ -58,11 +58,12 @@ class TestRSA(TestCase):
         d = pow(e, -1, phi)
         k = 128
         cipher = PKCS1_v1_5.new(RSA.construct((n, e, d)))
+        sentinel = b"\x00" * k;
 
-        # We know it doesn't take too long to decrypt this c using Bleichenbacher's attack (~7500 queries).
+        # We know it doesn't take too long to decrypt this c using Bleichenbacher's attack (~7700 queries).
         c = 41825379700061736537842449489601003429572348310436151924728709132681706878857980459161227458335791180711615257337302674792944628957924785690808047623816090305399357488221035015598239161665727483209037254608986214222956682098319678174134123989991914343760644546568563066348494878863941359213637733834134515197
         m = pow(c, d, n)
-        m_ = bleichenbacher.attack(lambda c: self._valid_padding_v1_5(cipher, k, c), n, e, c)
+        m_ = bleichenbacher.attack(lambda c: self._valid_padding_v1_5(cipher, k, c, sentinel), n, e, c)
         self.assertIsInstance(m_, int)
         self.assertEqual(m, m_)
 
