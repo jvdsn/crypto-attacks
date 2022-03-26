@@ -13,9 +13,9 @@ from shared import floor
 
 def _insert(M, a, b):
     for i, (a_, b_) in enumerate(M):
-        if b >= a_ and a <= b_:
+        if a_ <= b and a <= b_:
             a = min(a, a_)
-            b = min(b, b_)
+            b = max(b, b_)
             M[i] = (a, b)
             return
 
