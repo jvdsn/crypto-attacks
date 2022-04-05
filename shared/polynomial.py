@@ -52,7 +52,7 @@ def fast_polynomial_gcd(a0, a1):
 
     # Optimize recursive tail call.
     while True:
-        logging.debug("deg(a0) = {a0.degree()}, deg(a1) = {a1.degree()}")
+        logging.debug(f"deg(a0) = {a0.degree()}, deg(a1) = {a1.degree()}")
         _, r = a0.quo_rem(a1)
         if r == 0:
             return a1.monic()
