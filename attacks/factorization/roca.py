@@ -56,7 +56,7 @@ def _greedy_find_M_(n, M):
         M = best_M_
 
 
-def factorize(N, M, m, t):
+def factorize(N, M, m, t, g=65537):
     """
     Recovers the prime factors from a modulus using the ROCA method.
     More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"
@@ -64,20 +64,21 @@ def factorize(N, M, m, t):
     :param M: the primorial used to generate the primes
     :param m: the m parameter for Coppersmith's method
     :param t: the t parameter for Coppersmith's method
+    :param g: the generator value (default: 65537)
     :return: a tuple containing the prime factors
     """
     logging.info("Generating M'...")
     M_ = _greedy_find_M_(N, M)
     ZmodM_ = Zmod(M_)
-    e = ZmodM_(65537)
-    c_ = ZmodM_(N).log(e)
-    ord_ = e.multiplicative_order()
+    g = ZmodM_(g)
+    c_ = ZmodM_(N).log(g)
+    ord_ = g.multiplicative_order()
 
     x = Zmod(N)["x"].gen()
     X = int(2 * N ** 0.5 // M_)
     logging.info("Starting exhaustive a' search...")
     for a_ in range(c_ // 2, (c_ + ord_) // 2 + 1):
-        f = M_ * x + int(e ** a_)
+        f = M_ * x + int(g ** a_)
         for k_, in howgrave_graham.modular_univariate(f, N, m, t, X):
             p = int(f(k_))
             if N % p == 0:
