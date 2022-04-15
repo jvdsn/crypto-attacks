@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-from sage.all import Zmod
+from sage.all import ZZ
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
 if sys.path[1] != path:
@@ -28,7 +28,7 @@ def factorize(N, partial_p, Q, m=1, t=None):
     assert 3 * L ** 2 + (4 * W - 6 * Q) * L + 3 * Q ** 2 - 8 * Q * W > 0, "Bound check failed."
     delta = Q / (W + L)
 
-    x, y = Zmod(2 ** (W + L))["x", "y"].gens()
+    x, y = ZZ["x", "y"].gens()
     a = v * 2 ** W
     f = x * (a + y) - N
     X = 2 ** Q
