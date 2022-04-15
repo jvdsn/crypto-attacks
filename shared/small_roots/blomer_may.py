@@ -13,10 +13,11 @@ def modular_trivariate(f, N, m, t, X, Y, Z, roots_method="groebner"):
     :param N: the modulus
     :param m: the parameter m
     :param t: the parameter t
+    :param X: an approximate bound on the x roots
     :param Y: an approximate bound on the y roots
     :param Z: an approximate bound on the z roots
     :param roots_method: the method to use to find roots (default: "groebner")
-    :return: a generator generating small roots (tuples of y and z roots) of the polynomial
+    :return: a generator generating small roots (tuples of x, y, and z roots) of the polynomial
     """
     f = f.change_ring(ZZ)
     pr = f.parent()

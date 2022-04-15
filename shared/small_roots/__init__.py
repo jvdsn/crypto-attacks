@@ -5,6 +5,8 @@ from sage.all import Sequence
 from sage.all import ZZ
 from sage.all import gcd
 from sage.all import matrix
+from sage.all import solve
+from sage.all import var
 
 DEBUG_ROOTS = None
 
@@ -125,11 +127,13 @@ def find_roots_groebner(polynomials, pr):
     """
     # We need to change the ring to QQ because groebner_basis is much faster over a field.
     # We also need to change the term order to lexicographic to allow for elimination.
+    gens = pr.gens()
     s = Sequence(polynomials, pr.change_ring(QQ, order="lex"))
     while len(s) > 0:
         G = s.groebner_basis()
-        logging.debug(f"Groebner basis length: {len(G)}")
-        if len(G) == pr.ngens():
+        logging.debug(f"Sequence length: {len(s)}, Groebner basis length: {len(G)}")
+        if len(G) == len(gens):
+            logging.debug(f"Found Groebner basis with length {len(gens)}, trying to find roots...")
             roots = {}
             for polynomial in G:
                 vars = polynomial.variables()
@@ -139,6 +143,26 @@ def find_roots_groebner(polynomials, pr):
 
             if len(roots) == pr.ngens():
                 yield roots
+                return
+
+            logging.debug(f"System is underdetermined, trying to find constant root...")
+            G = Sequence(s, pr.change_ring(ZZ, order="lex")).groebner_basis()
+            vars = tuple(map(lambda x: var(x), gens))
+            for solution_dict in solve([polynomial(*vars) for polynomial in G], vars, solution_dict=True):
+                logging.debug(solution_dict)
+                found = False
+                roots = {}
+                for i, v in enumerate(vars):
+                    s = solution_dict[v]
+                    if s.is_constant():
+                        if not s.is_zero():
+                            found = True
+                        roots[gens[i]] = int(s) if s.is_integer() else int(s) + 1
+                    else:
+                        roots[gens[i]] = 0
+                if found:
+                    yield roots
+                    return
 
             return
         else:
@@ -146,24 +170,24 @@ def find_roots_groebner(polynomials, pr):
             s.pop()
 
 
-def find_roots_resultants(polynomials, x):
+def find_roots_resultants(polynomials, gens):
     """
     Returns a generator generating all roots of a polynomial in some unknowns.
     Recursively computes resultants to find the roots.
     :param polynomials: the reconstructed polynomials
-    :param x: the unknowns
+    :param gens: the unknowns
     :return: a generator generating dicts of (x0: x0root, x1: x1root, ...) entries
     """
-    if len(x) == 1:
+    if len(gens) == 1:
         if polynomials[0].is_univariate():
-            yield from find_roots_univariate(polynomials[0].univariate_polynomial(), x[0])
+            yield from find_roots_univariate(polynomials[0].univariate_polynomial(), gens[0])
     else:
-        resultants = [polynomials[0].resultant(polynomials[i], x[0]) for i in range(1, len(x))]
-        for roots in find_roots_resultants(resultants, x[1:]):
+        resultants = [polynomials[0].resultant(polynomials[i], gens[0]) for i in range(1, len(gens))]
+        for roots in find_roots_resultants(resultants, gens[1:]):
             for polynomial in polynomials:
                 polynomial = polynomial.subs(roots)
                 if polynomial.is_univariate():
-                    for root in find_roots_univariate(polynomial.univariate_polynomial(), x[0]):
+                    for root in find_roots_univariate(polynomial.univariate_polynomial(), gens[0]):
                         yield roots | root
 
 
@@ -181,6 +205,7 @@ def find_roots_variety(polynomials, pr):
         s.append(polynomial)
         I = s.ideal()
         dim = I.dimension()
+        logging.debug(f"Sequence length: {len(s)}, Ideal dimension : {dim}")
         if dim == -1:
             s.pop()
         elif dim == 0:

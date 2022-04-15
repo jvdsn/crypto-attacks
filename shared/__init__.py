@@ -77,6 +77,20 @@ def solve_congruence(a, b, m):
         yield (pow(a, -1, n) * b + i * n) % m
 
 
+def divisors(factors):
+    divisors = [1]
+    yield 1
+    for p, e in factors:
+        new = []
+        for d in divisors:
+            for k in range(1, e + 1):
+                d_ = p ** k * d
+                new.append(d_)
+                yield d_
+
+        divisors += new
+
+
 def roots_of_unity(r, Fq):
     """
     Generates rth roots of unity in Fq, with r | q - 1.

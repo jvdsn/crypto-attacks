@@ -20,7 +20,7 @@ def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
     :param Z: an approximate bound on the z roots
     :param check_bounds: whether or not we should check bounds (default: True)
     :param roots_method: the method to use to find roots (default: "groebner")
-    :return: a generator generating small roots (tuples of x and y roots) of the polynomial
+    :return: a generator generating small roots (tuples of x, y, and z roots) of the polynomial
     """
     pr = f.parent()
     x, y, z = pr.gens()
@@ -93,7 +93,7 @@ def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
     :param Z: an approximate bound on the z roots
     :param check_bounds: whether or not we should check bounds (default: True)
     :param roots_method: the method to use to find roots (default: "groebner")
-    :return: a generator generating small roots (tuples of x and y roots) of the polynomial
+    :return: a generator generating small roots (tuples of x, y, and z roots) of the polynomial
     """
     pr = f.parent()
     x, y, z = pr.gens()

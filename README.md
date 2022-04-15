@@ -245,4 +245,4 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Howgrave-Graham method](shared/small_roots/howgrave_graham.py) [More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods" (Section 3.2)]
 * [x] [Jochemsz-May method (modular roots)](shared/small_roots/jochemsz_may_modular.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.1)]
 * [x] [Jochemsz-May method (integer roots)](shared/small_roots/jochemsz_may_integer.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.2)]
-* [ ] [Nitaj-Fouotsa method](shared/small_roots/nitaj_fouotsa.py) [More information: Nitaj A., Fouotsa E., "A New Attack on RSA and Demytko's Elliptic Curve Cryptosystem"]
+* [x] [Nitaj-Fouotsa method](shared/small_roots/nitaj_fouotsa.py) [More information: Nitaj A., Fouotsa E., "A New Attack on RSA and Demytko's Elliptic Curve Cryptosystem"]
