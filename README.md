@@ -106,6 +106,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Length extension attack](attacks/cbc_mac/length_extension.py)
 
 ### CTR
+* [x] [Bit flipping attack](attacks/ctr/bit_flipping.py)
 * [x] [CRIME attack](attacks/ctr/crime.py)
 * [x] [Separator oracle attack](attacks/ctr/separator_oracle.py)
 
