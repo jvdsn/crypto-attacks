@@ -1,9 +1,13 @@
+import logging
+
+
 def shortest_vectors(B):
     """
     Computes the shortest non-zero vectors in a lattice.
     :param B: the basis of the lattice
     :return: a generator generating the shortest non-zero vectors
     """
+    logging.debug(f"Computing shortest vectors in {B.nrows()} x {B.ncols()} matrix...")
     B = B.LLL()
 
     for row in B.rows():
@@ -18,7 +22,7 @@ def _closest_vectors_babai(B, t):
     for G in B.gram_schmidt():
         b = t
         for j in reversed(range(B.nrows())):
-            b = b - round((b * G[j]) / (G[j] * G[j])) * B[j]
+            b -= round((b * G[j]) / (G[j] * G[j])) * B[j]
 
         yield t - b
 
@@ -44,6 +48,7 @@ def closest_vectors(B, t, algorithm="embedding"):
     :param algorithm: the algorithm to use, can be "babai" or "embedding" (default: "embedding")
     :return: a generator generating the shortest non-zero vectors
     """
+    logging.debug(f"Computing closest vectors in {B.nrows()} x {B.ncols()} matrix...")
     if algorithm == "babai":
         yield from _closest_vectors_babai(B, t)
     elif algorithm == "embedding":
