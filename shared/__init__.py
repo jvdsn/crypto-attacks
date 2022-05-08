@@ -78,6 +78,11 @@ def solve_congruence(a, b, m):
 
 
 def divisors(factors):
+    """
+    Computes all divisors from a list of factors
+    :param factors: the factors (tuples of primes and exponents)
+    :return: a generator generating divisors
+    """
     divisors = [1]
     yield 1
     for p, e in factors:
