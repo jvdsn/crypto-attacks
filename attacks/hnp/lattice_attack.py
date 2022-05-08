@@ -47,77 +47,84 @@ def attack(a, b, m, X):
             yield xs, ys
 
 
-def dsa_known_msb(n, signatures, partial_nonces):
+def dsa_known_msb(n, h, r, s, k):
     """
     Recovers the (EC)DSA private key and nonces if the most significant nonce bits are known.
     :param n: the modulus
-    :param signatures: a list containing the signatures (a tuple of the message (hash), the r value, the s value)
-    :param partial_nonces: a list containing the partial nonces (PartialIntegers)
+    :param h: a list containing the hashed messages
+    :param r: a list containing the r values
+    :param s: a list containing the s values
+    :param k: a list containing the partial nonces (PartialIntegers)
     :return: a generator generating tuples containing the possible private key and a list of nonces
     """
+    assert len(h) == len(r) == len(s) == len(k), "h, r, s, and k lists should be of equal length."
     a = []
     b = []
     X = 0
-    for (h, r, s), partial_nonce in zip(signatures, partial_nonces):
-        msb, msb_bit_length = partial_nonce.get_known_msb()
-        shift = 2 ** partial_nonce.get_unknown_lsb()
-        a.append([pow(s, -1, n) * r])
-        b.append(pow(s, -1, n) * h - shift * msb)
+    for hi, ri, si, ki in zip(h, r, s, k):
+        msb, msb_bit_length = ki.get_known_msb()
+        shift = 2 ** ki.get_unknown_lsb()
+        a.append([(pow(si, -1, n) * ri) % n])
+        b.append((pow(si, -1, n) * hi - shift * msb) % n)
         X = max(X, shift)
 
-    for nonce_lsbs, private_key in attack(a, b, n, X):
-        nonces = [partial_nonce.sub([lsb]) for partial_nonce, lsb in zip(partial_nonces, nonce_lsbs)]
-        yield private_key[0], nonces
+    for k_, x in attack(a, b, n, X):
+        yield x[0], [ki.sub([ki_]) for ki, ki_ in zip(k, k_)]
 
 
-def dsa_known_lsb(n, signatures, partial_nonces):
+def dsa_known_lsb(n, h, r, s, k):
     """
     Recovers the (EC)DSA private key and nonces if the least significant nonce bits are known.
     :param n: the modulus
-    :param signatures: a list containing the signatures (a tuple of the message (hash), the r value, the s value, and the known lsbs)
-    :param partial_nonces: a list containing the partial nonces (PartialIntegers)
+    :param h: a list containing the hashed messages
+    :param r: a list containing the r values
+    :param s: a list containing the s values
+    :param k: a list containing the partial nonces (PartialIntegers)
     :return: a generator generating tuples containing the possible private key and a list of nonces
     """
+    assert len(h) == len(r) == len(s) == len(k), "h, r, s, and k lists should be of equal length."
     a = []
     b = []
     X = 0
-    for (h, r, s), partial_nonce in zip(signatures, partial_nonces):
-        lsb, lsb_bit_length = partial_nonce.get_known_lsb()
-        invshift = pow(2 ** lsb_bit_length, -1, n)
-        a.append([invshift * pow(s, -1, n) * r])
-        b.append(invshift * pow(s, -1, n) * h - invshift * lsb)
-        X = max(X, 2 ** partial_nonce.get_unknown_msb())
+    for hi, ri, si, ki in zip(h, r, s, k):
+        lsb, lsb_bit_length = ki.get_known_lsb()
+        inv_shift = pow(2 ** lsb_bit_length, -1, n)
+        a.append([(inv_shift * pow(si, -1, n) * ri) % n])
+        b.append((inv_shift * pow(si, -1, n) * hi - inv_shift * lsb) % n)
+        X = max(X, 2 ** ki.get_unknown_msb())
 
-    for nonce_msbs, private_key in attack(a, b, n, X):
-        nonces = [partial_nonce.sub([msb]) for partial_nonce, msb in zip(partial_nonces, nonce_msbs)]
-        yield private_key[0], nonces
+    for k_, x in attack(a, b, n, X):
+        nonces = [ki.sub([ki_]) for ki, ki_ in zip(k, k_)]
+        yield x[0], nonces
 
 
-def dsa_known_middle(n, signature1, partial_nonce1, signature2, partial_nonce2):
+def dsa_known_middle(n, h1, r1, s1, k1, h2, r2, s2, k2):
     """
     Recovers the (EC)DSA private key and nonces if the middle nonce bits are known.
     This is a heuristic extension which might perform worse than the methods to solve the Extended Hidden Number Problem.
     More information: De Micheli G., Heninger N., "Recovering cryptographic keys from partial information, by example" (Section 5.2.3)
     :param n: the modulus
-    :param signature1: the first signature (a tuple of the message (hash), the r value, the s value)
-    :param partial_nonce1: the first partial nonce (PartialInteger)
-    :param signature2: the second signature (a tuple of the message (hash), the r value, the s value)
-    :param partial_nonce2: the second partial nonce (PartialInteger)
+    :param h1: the first hashed message
+    :param r1: the first r value
+    :param s1: the first s value
+    :param k1: the first partial nonce (PartialInteger)
+    :param h2: the second hashed message
+    :param r2: the second r value
+    :param s2: the second s value
+    :param k2: the second partial nonce (PartialInteger)
     :return: a tuple containing the private key, the nonce of the first signature, and the nonce of the second signature
     """
-    nonce_bit_length = partial_nonce1.bit_length
-    assert nonce_bit_length == partial_nonce2.bit_length
-    lsb_bit_length = partial_nonce1.get_unknown_lsb()
-    assert lsb_bit_length == partial_nonce2.get_unknown_lsb()
-    msb_bit_length = partial_nonce1.get_unknown_msb()
-    assert msb_bit_length == partial_nonce2.get_unknown_msb()
-    K = 2 ** max(lsb_bit_length, msb_bit_length)
-    l = nonce_bit_length - msb_bit_length
+    k_bit_length = k1.bit_length
+    assert k_bit_length == k2.bit_length
+    lsb_unknown = k1.get_unknown_lsb()
+    assert lsb_unknown == k2.get_unknown_lsb()
+    msb_unknown = k1.get_unknown_msb()
+    assert msb_unknown == k2.get_unknown_msb()
+    K = 2 ** max(lsb_unknown, msb_unknown)
+    l = k_bit_length - msb_unknown
 
-    h1, r1, s1 = signature1
-    h2, r2, s2 = signature2
-    a1 = partial_nonce1.get_known_middle()[0] << lsb_bit_length
-    a2 = partial_nonce2.get_known_middle()[0] << lsb_bit_length
+    a1 = k1.get_known_middle()[0] << lsb_unknown
+    a2 = k2.get_known_middle()[0] << lsb_unknown
     t = -(pow(s1, -1, n) * s2 * r1 * pow(r2, -1, n))
     u = pow(s1, -1, n) * r1 * h2 * pow(r2, -1, n) - pow(s1, -1, n) * h1
     u_ = a1 + t * a2 + u
@@ -141,9 +148,9 @@ def dsa_known_middle(n, signature1, partial_nonce1, signature2, partial_nonce2):
     x1, y1, x2, y2 = A.solve_right(vector(ZZ, b))
     assert (x1 + 2 ** l * y1 + t * x2 + 2 ** l * t * y2 + u_) % n == 0
 
-    k1 = partial_nonce1.sub([int(x1), int(y1)])
-    k2 = partial_nonce2.sub([int(x2), int(y2)])
-    private_key1 = pow(r1, -1, n) * (s1 * k1 - h1) % n
-    private_key2 = pow(r2, -1, n) * (s2 * k2 - h2) % n
+    k1 = k1.sub([int(x1), int(y1)])
+    k2 = k2.sub([int(x2), int(y2)])
+    private_key1 = (pow(r1, -1, n) * (s1 * k1 - h1)) % n
+    private_key2 = (pow(r2, -1, n) * (s2 * k2 - h2)) % n
     assert private_key1 == private_key2
     return int(private_key1), int(k1), int(k2)

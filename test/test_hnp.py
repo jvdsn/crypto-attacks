@@ -26,57 +26,63 @@ class TestHNP(TestCase):
         g = 5
         x = randrange(1, p)
 
-        nonce_bit_length = p.bit_length()
+        k_bit_length = p.bit_length()
         msb_known = 7
         n_signatures = 25
-        nonces = []
-        signatures = []
-        partial_nonces = []
+        h = []
+        r = []
+        s = []
+        k = []
+        partial_k = []
         for i in range(n_signatures):
-            h, r, s, k = self._dsa(p, g, x)
-            nonces.append(k)
-            signatures.append((h, r, s))
-            partial_nonces.append(PartialInteger.msb_of(k, nonce_bit_length, msb_known))
+            hi, ri, si, ki = self._dsa(p, g, x)
+            h.append(hi)
+            r.append(ri)
+            s.append(si)
+            k.append(ki)
+            partial_k.append(PartialInteger.msb_of(ki, k_bit_length, msb_known))
 
-        x_, nonces_ = next(lattice_attack.dsa_known_msb(p, signatures, partial_nonces))
+        x_, k_ = next(lattice_attack.dsa_known_msb(p, h, r, s, partial_k))
         self.assertIsInstance(x_, int)
-        self.assertIsInstance(nonces_, list)
+        self.assertIsInstance(k_, list)
         self.assertEqual(x, x_)
         for i in range(n_signatures):
-            self.assertIsInstance(nonces_[i], int)
-            self.assertEqual(nonces[i], nonces_[i])
+            self.assertIsInstance(k_[i], int)
+            self.assertEqual(k[i], k_[i])
 
-        nonce_bit_length = p.bit_length()
+        k_bit_length = p.bit_length()
         lsb_known = 7
         n_signatures = 25
-        nonces = []
-        signatures = []
-        partial_nonces = []
+        h = []
+        r = []
+        s = []
+        k = []
+        partial_k = []
         for i in range(n_signatures):
-            h, r, s, k = self._dsa(p, g, x)
-            nonces.append(k)
-            signatures.append((h, r, s))
-            partial_nonces.append(PartialInteger.lsb_of(k, nonce_bit_length, lsb_known))
+            hi, ri, si, ki = self._dsa(p, g, x)
+            h.append(hi)
+            r.append(ri)
+            s.append(si)
+            k.append(ki)
+            partial_k.append(PartialInteger.lsb_of(ki, k_bit_length, lsb_known))
 
-        x_, nonces_ = next(lattice_attack.dsa_known_lsb(p, signatures, partial_nonces))
+        x_, k_ = next(lattice_attack.dsa_known_lsb(p, h, r, s, partial_k))
         self.assertIsInstance(x_, int)
-        self.assertIsInstance(nonces_, list)
+        self.assertIsInstance(k_, list)
         self.assertEqual(x, x_)
         for i in range(n_signatures):
-            self.assertIsInstance(nonces_[i], int)
-            self.assertEqual(nonces[i], nonces_[i])
+            self.assertIsInstance(k_[i], int)
+            self.assertEqual(k[i], k_[i])
 
-        nonce_bit_length = p.bit_length()
+        k_bit_length = p.bit_length()
         lsb_unknown = 20
         msb_unknown = 10
         h1, r1, s1, k1 = self._dsa(p, g, x)
-        signature1 = (h1, r1, s1)
-        partial_nonce1 = PartialInteger.middle_of(k1, nonce_bit_length, lsb_unknown, msb_unknown)
+        partial_k1 = PartialInteger.middle_of(k1, k_bit_length, lsb_unknown, msb_unknown)
         h2, r2, s2, k2 = self._dsa(p, g, x)
-        signature2 = (h2, r2, s2)
-        partial_nonce2 = PartialInteger.middle_of(k2, nonce_bit_length, lsb_unknown, msb_unknown)
+        partial_k2 = PartialInteger.middle_of(k2, k_bit_length, lsb_unknown, msb_unknown)
 
-        x_, k1_, k2_ = lattice_attack.dsa_known_middle(p, signature1, partial_nonce1, signature2, partial_nonce2)
+        x_, k1_, k2_ = lattice_attack.dsa_known_middle(p, h1, r1, s1, partial_k1, h2, r2, s2, partial_k2)
         self.assertIsInstance(x_, int)
         self.assertIsInstance(k1_, int)
         self.assertIsInstance(k2_, int)
