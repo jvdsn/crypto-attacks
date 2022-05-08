@@ -8,6 +8,7 @@ path = os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__
 if sys.path[1] != path:
     sys.path.insert(1, path)
 
+from attacks.hnp import extended_hnp
 from attacks.hnp import lattice_attack
 from shared.partial_integer import PartialInteger
 
@@ -19,6 +20,33 @@ class TestHNP(TestCase):
         r = pow(g, k, p)
         s = (pow(k, -1, p) * (h + x * r)) % p
         return h, r, s, k
+
+    def test_extended_hnp(self):
+        # Not a safe prime, but it doesn't really matter.
+        p = 299182277398782807472682876223275635417
+        g = 5
+        x = randrange(1, p)
+
+        k_bit_length = p.bit_length()
+        lsb_unknown = 50
+        msb_unknown = 50
+        n_signatures = 5
+        h = []
+        r = []
+        s = []
+        k = []
+        partial_k = []
+        for i in range(n_signatures):
+            hi, ri, si, ki = self._dsa(p, g, x)
+            h.append(hi)
+            r.append(ri)
+            s.append(si)
+            k.append(ki)
+            partial_k.append(PartialInteger.middle_of(ki, k_bit_length, lsb_unknown, msb_unknown))
+
+        x_ = next(extended_hnp.dsa_known_bits(p, h, r, s, PartialInteger.unknown(k_bit_length), partial_k))
+        self.assertIsInstance(x_, int)
+        self.assertEqual(x, x_)
 
     def test_lattice_attack(self):
         # Not a safe prime, but it doesn't really matter.

@@ -118,21 +118,6 @@ class PartialInteger:
 
         return msb_bit_length
 
-    def matches(self, i):
-        """
-        Returns whether this PartialInteger matches an integer, that is, all known bits are equal.
-        :param i: the integer
-        :return: True if this PartialInteger matches i, False otherwise
-        """
-        shift = 0
-        for value, bit_length in self._components:
-            if value is not None and (i >> shift) % (2 ** bit_length) != value:
-                return False
-
-            shift += bit_length
-
-        return True
-
     def get_unknown_middle(self):
         """
         Returns the bit length of the unknown middle bits in this PartialInteger.
@@ -148,6 +133,21 @@ class PartialInteger:
                 middle_bit_length += bit_length
 
         return middle_bit_length
+
+    def matches(self, i):
+        """
+        Returns whether this PartialInteger matches an integer, that is, all known bits are equal.
+        :param i: the integer
+        :return: True if this PartialInteger matches i, False otherwise
+        """
+        shift = 0
+        for value, bit_length in self._components:
+            if value is not None and (i >> shift) % (2 ** bit_length) != value:
+                return False
+
+            shift += bit_length
+
+        return True
 
     def sub(self, unknowns):
         """
@@ -171,6 +171,26 @@ class PartialInteger:
             shift += bit_length
 
         return i
+
+    def get_known_and_unknowns(self):
+        """
+        Returns i_, o, and l such that this integer i = i_ + sum(2^(o_j) * i_j) with i_j < 2^(l_j).
+        :return: a tuple of i_, o, and l
+        """
+        i_ = 0
+        o = []
+        l = []
+        offset = 0
+        for value, bit_length in self._components:
+            if value is None:
+                o.append(offset)
+                l.append(bit_length)
+            else:
+                i_ += 2 ** offset * value
+
+            offset += bit_length
+
+        return i_, o, l
 
     def get_unknown_bounds(self):
         """
@@ -254,6 +274,10 @@ class PartialInteger:
         :return: the list of hex characters, with '?' representing an unknown nibble
         """
         return self.to_hex_le(symbols)[::-1]
+
+    @staticmethod
+    def unknown(bit_length):
+        return PartialInteger().add_unknown(bit_length)
 
     @staticmethod
     def parse_le(digits, base):

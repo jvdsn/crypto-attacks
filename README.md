@@ -150,7 +150,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Forbidden attack](attacks/gcm/forbidden_attack.py) [More information: Joux A., "Authentication Failures in NIST version of GCM"]
 
 ### Hidden Number Problem
-* [ ] Extended hidden number problem [More information: Hlavac M., Rosa T., "Extended Hidden Number Problem and Its Cryptanalytic Applications" (Section 4)]
+* [x] [Extended hidden number problem](attacks/hnp/extended_hnp.py) [More information: Hlavac M., Rosa T., "Extended Hidden Number Problem and Its Cryptanalytic Applications" (Section 4)]
 * [ ] Fourier analysis attack
 * [x] [Lattice-based attack](attacks/hnp/lattice_attack.py)
 
