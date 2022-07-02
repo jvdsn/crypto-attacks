@@ -1,4 +1,13 @@
+import os
+import sys
+
 from math import isqrt
+
+path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
+if sys.path[1] != path:
+    sys.path.insert(1, path)
+
+from shared import is_square
 
 
 def factorize(N):
@@ -9,7 +18,7 @@ def factorize(N):
     """
     a = isqrt(N)
     b = a * a - N
-    while b < 0 or isqrt(b) ** 2 != b:
+    while b < 0 or not is_square(b):
         a += 1
         b = a * a - N
 

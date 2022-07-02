@@ -152,6 +152,14 @@ class TestFactorization(TestCase):
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
+        p = 59
+        q = 101
+        N = p * q
+        p_, q_ = fermat.factorize(N)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+
     def test_gaa(self):
         rp = 34381
         rq = 34023

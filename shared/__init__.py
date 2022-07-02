@@ -1,5 +1,6 @@
 import logging
 from math import gcd
+from math import isqrt
 
 
 def int_to_bits_le(i, count):
@@ -49,6 +50,16 @@ def ceil(a, b):
     :return: ceil(a / b)
     """
     return a // b + (a % b > 0)
+
+
+def is_square(x):
+    """
+    Returns the square root of x if x is a perfect square, or None otherwise.
+    :param x: x
+    :return: the square root of x or None
+    """
+    y = isqrt(x)
+    return y if y ** 2 == x else None
 
 
 def symmetric_mod(x, m):
