@@ -6,6 +6,9 @@ from sage.all import EllipticCurve
 from sage.all import GF
 from sage.all import hilbert_class_polynomial
 from sage.all import is_prime
+from sage.all import is_prime_power
+from sage.all import kronecker
+from sage.all import next_prime
 
 from shared import is_square
 
@@ -36,7 +39,7 @@ def solve_cm(D, q, c=None):
     :param c: an optional parameter c which is used to generate random a and b values (default: random element in Zmod(q))
     :return: a generator generating elliptic curves in Zmod(q) with random a and b values
     """
-    assert is_prime(q)
+    assert is_prime_power(q)
 
     logging.debug(f"Solving CM equation for q = {q} using D = {D} and c = {c}")
     gf = GF(q)
@@ -48,7 +51,8 @@ def solve_cm(D, q, c=None):
             c_ = c if c is not None else gf.random_element()
             a = 3 * k * c_ ** 2
             b = 2 * k * c_ ** 3
-            yield EllipticCurve(gf, [a, b])
+            if a > 0 or b > 0:
+                yield EllipticCurve(gf, [a, b])
 
 
 def generate_anomalous(q=None, q_bit_length=None, D=None, c=None):
@@ -84,3 +88,47 @@ def generate_anomalous(q=None, q_bit_length=None, D=None, c=None):
         else:
             E = E.quadratic_twist()
             yield E
+
+
+def generate_supersingular(q, c=None):
+    """
+    Generates random supersingular elliptic curves.
+    More information: Broker R., "Constructing Supersingular Elliptic Curves"
+    :param q: a prime power q
+    :param c: the parameter c to use in the CM method (default: random value)
+    :return: a generator generating random supersingular elliptic curves
+    """
+    gfq = GF(q)
+    p = gfq.characteristic()
+    if p == 2:
+        # E with j-invariant 0 are singular (Silverman, Arithmetic of Elliptic Curves, Appendix A).
+        while True:
+            a3 = gfq.random_element()
+            a4 = gfq.random_element()
+            a6 = gfq.random_element()
+            if a3 > 0:
+                yield EllipticCurve(gfq, [0, 0, a3, a4, a6])
+    if p == 3:
+        # E with j-invariant 0 are singular (Silverman, Arithmetic of Elliptic Curves, Appendix A).
+        while True:
+            a = gfq.random_element()
+            b = gfq.random_element()
+            if a > 0:
+                yield EllipticCurve(gfq, [a, b])
+    if p % 3 == 2:
+        # E with j-invariant 0 are singular.
+        while True:
+            b = gfq.random_element()
+            if b > 0:
+                yield EllipticCurve(gfq, [0, b])
+    if p % 4 == 3:
+        # E with j-invariant 1728 are singular.
+        while True:
+            a = gfq.random_element()
+            if a > 0:
+                yield EllipticCurve(gfq, [a, 0])
+    D = 3
+    while D % 4 != 3 or kronecker(-D, p) != -1:
+        D = next_prime(D)
+
+    yield from solve_cm(D, q, c)

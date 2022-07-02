@@ -232,7 +232,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [ ] MNT curves
 * [ ] Prescribed order
 * [ ] Prescribed trace
-* [ ] Supersingular curves
+* [x] [Supersingular curves](shared/ecc.py)
 
 ### Small Roots
 * [x] [Polynomial roots using Groebner bases](shared/small_roots/__init__.py)
