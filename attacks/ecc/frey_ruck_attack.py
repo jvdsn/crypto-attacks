@@ -1,8 +1,17 @@
 import logging
+import os
+import sys
+
 from math import gcd
 
 from sage.all import GF
 from sage.all import discrete_log
+
+path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
+if sys.path[1] != path:
+    sys.path.insert(1, path)
+
+from shared.ecc import get_embedding_degree
 
 
 def attack(P, R, max_k=6, max_tries=10):
@@ -18,13 +27,11 @@ def attack(P, R, max_k=6, max_tries=10):
     E = P.curve()
     q = E.base_ring().order()
     n = P.order()
-    assert gcd(n, q) == 1, "GCD of generator order and curve base ring order should be 1."
+    assert gcd(n, q) == 1, "GCD of base point order and curve base ring order should be 1."
 
     logging.info("Calculating embedding degree...")
-    for k in range(1, max_k + 1):
-        if q ** k % n == 1:
-            break
-    else:
+    k = get_embedding_degree(q, n, max_k)
+    if k is None:
         return None
 
     logging.info(f"Found embedding degree {k}")

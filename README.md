@@ -227,6 +227,8 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Fast polynomial GCD using half GCD](shared/polynomial.py)
 
 ### Elliptic Curve Generation
+* [x] [Complex multiplication](shared/ecc.py)
+* [x] [Anomalous curves](shared/ecc.py)
 * [ ] MNT curves
 * [ ] Prescribed order
 * [ ] Prescribed trace
