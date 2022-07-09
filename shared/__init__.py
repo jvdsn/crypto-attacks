@@ -107,6 +107,21 @@ def divisors(factors):
         divisors += new
 
 
+def make_square_free(x, factors):
+    """
+    For any integer x, removes all square factors.
+    :param x: the value x
+    :param factors: the factors of x
+    :return: a square-free integer y, corresponding to x with all square factors removed
+    """
+    for p, e in factors:
+        while e > 0 and e % 2 == 0:
+            e -= 2
+            x //= p
+            x //= p
+    return x
+
+
 def roots_of_unity(r, Fq):
     """
     Generates rth roots of unity in Fq, with r | q - 1.

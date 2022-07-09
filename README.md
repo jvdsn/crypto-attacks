@@ -4,7 +4,6 @@ Python implementations of cryptographic attacks and utilities.
 ## Requirements
 * [SageMath](https://www.sagemath.org/) with Python 3.9
 * [PyCryptodome](https://pycryptodome.readthedocs.io/)
-* [Hilbert Class Polynomial database](https://doc.sagemath.org/html/en/reference/databases/sage/databases/db_class_polynomials.html) (Only required for complex multiplication)
 
 You can check your SageMath Python version using the following command:
 ```
