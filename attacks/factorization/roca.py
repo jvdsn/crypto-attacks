@@ -69,9 +69,9 @@ def factorize(N, M, m, t, g=65537):
     """
     logging.info("Generating M'...")
     M_ = _greedy_find_M_(N, M)
-    ZmodM_ = Zmod(M_)
-    g = ZmodM_(g)
-    c_ = ZmodM_(N).log(g)
+    zmodm_ = Zmod(M_)
+    g = zmodm_(g)
+    c_ = zmodm_(N).log(g)
     ord_ = g.multiplicative_order()
 
     x = Zmod(N)["x"].gen()
