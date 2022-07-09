@@ -129,35 +129,35 @@ def generate_supersingular(q, c=None):
     :param c: the parameter c to use in the CM method (default: random value)
     :return: a generator generating random supersingular elliptic curves
     """
-    gfq = GF(q)
-    p = gfq.characteristic()
+    gf = GF(q)
+    p = gf.characteristic()
     if p == 2:
         # E with j-invariant 0 are singular (Silverman, Arithmetic of Elliptic Curves, Appendix A).
         while True:
-            a3 = gfq.random_element()
-            a4 = gfq.random_element()
-            a6 = gfq.random_element()
+            a3 = gf.random_element()
+            a4 = gf.random_element()
+            a6 = gf.random_element()
             if a3 > 0:
-                yield EllipticCurve(gfq, [0, 0, a3, a4, a6])
+                yield EllipticCurve(gf, [0, 0, a3, a4, a6])
     if p == 3:
         # E with j-invariant 0 are singular (Silverman, Arithmetic of Elliptic Curves, Appendix A).
         while True:
-            a = gfq.random_element()
-            b = gfq.random_element()
+            a = gf.random_element()
+            b = gf.random_element()
             if a > 0:
-                yield EllipticCurve(gfq, [a, b])
+                yield EllipticCurve(gf, [a, b])
     if p % 3 == 2:
         # E with j-invariant 0 are singular.
         while True:
-            b = gfq.random_element()
+            b = gf.random_element()
             if b > 0:
-                yield EllipticCurve(gfq, [0, b])
+                yield EllipticCurve(gf, [0, b])
     if p % 4 == 3:
         # E with j-invariant 1728 are singular.
         while True:
-            a = gfq.random_element()
+            a = gf.random_element()
             if a > 0:
-                yield EllipticCurve(gfq, [a, 0])
+                yield EllipticCurve(gf, [a, 0])
     D = 3
     while D % 4 != 3 or kronecker(-D, p) != -1:
         D = next_prime(D)
