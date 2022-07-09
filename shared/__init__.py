@@ -102,7 +102,7 @@ def divisors(factors):
             for k in range(1, e + 1):
                 d_ = p ** k * d
                 new.append(d_)
-                yield d_
+                yield int(d_)
 
         divisors += new
 
@@ -119,7 +119,7 @@ def make_square_free(x, factors):
             e -= 2
             x //= p
             x //= p
-    return x
+    return int(x)
 
 
 def roots_of_unity(r, Fq):
