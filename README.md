@@ -230,7 +230,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Anomalous curves](shared/ecc.py)
 * [ ] MNT curves
 * [ ] Prescribed order
-* [ ] Prescribed trace
+* [x] [Prescribed trace](shared/ecc.py)
 * [x] [Supersingular curves](shared/ecc.py)
 
 ### Small Roots
