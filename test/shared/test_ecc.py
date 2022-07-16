@@ -9,6 +9,8 @@ if sys.path[1] != path:
 from shared.ecc import generate_anomalous
 from shared.ecc import generate_anomalous_q
 from shared.ecc import generate_supersingular
+from shared.ecc import generate_with_order
+from shared.ecc import generate_with_order_q
 from shared.ecc import generate_with_trace
 from shared.ecc import generate_with_trace_q
 
@@ -41,6 +43,21 @@ class TestECC(TestCase):
         for _ in range(4):
             E = next(gen)
             self.assertEqual(E.trace_of_frobenius(), t)
+
+    def test_generate_with_order_q(self):
+        m = 548567 + 1 - 1234
+        q = 548567
+        gen = generate_with_order_q(m, q)
+        for _ in range(4):
+            E = next(gen)
+            self.assertEqual(E.order(), m)
+
+    def test_generate_with_order(self):
+        m = 2 ** 64 + 1
+        gen = generate_with_order(m)
+        for _ in range(4):
+            E = next(gen)
+            self.assertEqual(E.order(), m)
 
     def test_generate_supersingular(self):
         for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]:

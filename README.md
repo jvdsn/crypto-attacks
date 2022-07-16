@@ -229,7 +229,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Complex multiplication](shared/ecc.py)
 * [x] [Anomalous curves](shared/ecc.py)
 * [ ] MNT curves
-* [ ] Prescribed order
+* [x] [Prescribed order](shared/ecc.py)
 * [x] [Prescribed trace](shared/ecc.py)
 * [x] [Supersingular curves](shared/ecc.py)
 
