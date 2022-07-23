@@ -9,10 +9,10 @@ from sage.all import factor
 from sage.all import is_prime
 from sage.all import kronecker
 from sage.all import next_prime
+from sage.all import pari
 
 from shared import is_square
 from shared import make_square_free
-from shared.complex_multiplication import cornacchia
 from shared.complex_multiplication import solve_cm
 
 
@@ -114,7 +114,7 @@ def generate_with_trace(t, q_bit_length, D=None, c=None):
         while D % 4 != 3 or t % D == 0:
             D = next_prime(D)
         D = int(-D)
-        logging.info(f"Found appropriate value D = {D}")
+        logging.info(f"Found appropriate D value = {D}")
     else:
         assert (-D) % 4 == 3 and t % (-D) != 0 and is_prime(-D), "Invalid values for t and D."
 
@@ -156,20 +156,31 @@ def generate_with_order(m, D=None, c=None):
         D = -5
         while True:
             if D % 4 == 0 or D % 4 == 1:
+                if -D >= 4 * m:
+                    logging.info(f"Unable to find appropriate D value for m = {m}")
+                    return
+
                 found = False
-                for t, _ in cornacchia(-D, 4 * m):
+                # TODO: use qfbcornacchia when PARI 2.14.0 is released.
+                for sols in pari.qfbsolve(pari.Qfb(1, 0, -D), 4 * m, 1):
+                    t = int(sols[0])
                     if is_prime(m + 1 - t) or is_prime(m + 1 + t):
                         found = True
                         break
                 if found:
                     break
             D -= 1
-        logging.info(f"Found appropriate value D = {D}")
+        logging.info(f"Found appropriate D value = {D}")
     else:
-        res = cornacchia(-D, 4 * m)
-        assert res is not None, "Invalid values for m and D."
-        t = res[0]
-        assert is_prime(m + 1 - t) or is_prime(m + 1 + t), "Invalid values for m and D."
+        found = False
+        # TODO: use qfbcornacchia when PARI 2.14.0 is released.
+        for sols in pari.qfbsolve(pari.Qfb(1, 0, -D), 4 * m, 1):
+            t = int(sols[0])
+            if is_prime(m + 1 - t) or is_prime(m + 1 + t):
+                found = True
+                break
+
+        assert found, "Invalid values for m and D."
 
     q = m + 1 - t if is_prime(m + 1 - t) else m + 1 + t
     for E in solve_cm(D, q, c):
