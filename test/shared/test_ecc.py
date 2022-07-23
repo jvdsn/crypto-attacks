@@ -23,8 +23,20 @@ class TestECC(TestCase):
             E = next(gen)
             self.assertEqual(E.trace_of_frobenius(), 1)
 
+        D = -11
+        gen = generate_anomalous_q(q, D)
+        for _ in range(4):
+            E = next(gen)
+            self.assertEqual(E.trace_of_frobenius(), 1)
+
     def test_generate_anomalous(self):
         gen = generate_anomalous(128)
+        for _ in range(4):
+            E = next(gen)
+            self.assertEqual(E.trace_of_frobenius(), 1)
+
+        D = -19
+        gen = generate_anomalous(128, D)
         for _ in range(4):
             E = next(gen)
             self.assertEqual(E.trace_of_frobenius(), 1)
@@ -37,9 +49,21 @@ class TestECC(TestCase):
             E = next(gen)
             self.assertEqual(E.trace_of_frobenius(), t)
 
+        D = -671512
+        gen = generate_with_trace_q(t, q, D)
+        for _ in range(4):
+            E = next(gen)
+            self.assertEqual(E.trace_of_frobenius(), t)
+
     def test_generate_with_trace(self):
         t = 1234
         gen = generate_with_trace(t, 128)
+        for _ in range(4):
+            E = next(gen)
+            self.assertEqual(E.trace_of_frobenius(), t)
+
+        D = -11
+        gen = generate_with_trace(t, 128, D)
         for _ in range(4):
             E = next(gen)
             self.assertEqual(E.trace_of_frobenius(), t)
@@ -52,9 +76,21 @@ class TestECC(TestCase):
             E = next(gen)
             self.assertEqual(E.order(), m)
 
+        D = -671512
+        gen = generate_with_order_q(m, q, D)
+        for _ in range(4):
+            E = next(gen)
+            self.assertEqual(E.order(), m)
+
     def test_generate_with_order(self):
         m = 2 ** 64 + 1
         gen = generate_with_order(m)
+        for _ in range(4):
+            E = next(gen)
+            self.assertEqual(E.order(), m)
+
+        D = -1411
+        gen = generate_with_order(m, D)
         for _ in range(4):
             E = next(gen)
             self.assertEqual(E.order(), m)

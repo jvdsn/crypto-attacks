@@ -47,6 +47,7 @@ def generate_anomalous_q(q, D=None, c=None):
     Ds = [D for D in Ds if (1 - 4 * q) % D == 0 and is_square((1 - 4 * q) // D)]
     assert len(Ds) > 0, "Invalid value for q and default values of D."
     D = choice(Ds)
+    logging.info(f"Found appropriate D value = {D}")
     for E in solve_cm(D, q, c):
         if E.trace_of_frobenius() == 1:
             yield E
@@ -89,6 +90,7 @@ def generate_with_trace_q(t, q, D=None, c=None):
     if D is None:
         D = t ** 2 - 4 * q
         D = make_square_free(D, factor(D))
+        logging.info(f"Found appropriate D value = {D}")
     else:
         assert (t ** 2 - 4 * q) % D == 0 and is_square((t ** 2 - 4 * q) // D), "Invalid values for t, q, and D."
 
