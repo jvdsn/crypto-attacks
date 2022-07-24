@@ -71,7 +71,7 @@ def generate_anomalous(q_bit_length, D=None, c=None):
         m_bit_length = (q_bit_length - D.bit_length()) // 2 + 1
         m = randrange(2 ** (m_bit_length - 1), 2 ** m_bit_length)
         q = -D * m * (m + 1) + (-D + 1) // 4
-        if is_prime(q) and q.bit_length() == q_bit_length:
+        if q.bit_length() == q_bit_length and is_prime(q):
             yield from generate_anomalous_q(q, D, c)
 
 
@@ -126,7 +126,7 @@ def generate_with_trace(t, q_bit_length, D=None, c=None):
     while True:
         v = randrange(2 ** (v_bit_length - 1), 2 ** v_bit_length)
         q4 = t ** 2 - v ** 2 * D
-        if q4 % 4 == 0 and is_prime(q4 // 4) and q4.bit_length() - 2 == q_bit_length:
+        if q4.bit_length() - 2 == q_bit_length and q4 % 4 == 0 and is_prime(q4 // 4):
             q = q4 // 4
             yield from generate_with_trace_q(t, q, D, c)
 
