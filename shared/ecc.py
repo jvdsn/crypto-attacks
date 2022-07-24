@@ -154,43 +154,32 @@ def generate_with_order(m, D=None, c=None):
     :param c: the parameter c to use in the CM method (default: random value)
     :return: a generator generating random elliptic curves
     """
-    if D is None:
-        D = -5
-        while True:
-            if D % 4 == 0 or D % 4 == 1:
-                if -D >= 4 * m:
-                    logging.info(f"Unable to find appropriate D value for m = {m}")
-                    return
-
-                found = False
-                # TODO: use qfbcornacchia when PARI 2.14.0 is released.
-                for sols in pari.qfbsolve(pari.Qfb(1, 0, -D), 4 * m, 1):
-                    t = int(sols[0])
-                    if is_prime(m + 1 - t) or is_prime(m + 1 + t):
-                        found = True
-                        break
-                if found:
-                    break
-            D -= 1
-        logging.info(f"Found appropriate D value = {D}")
-    else:
-        found = False
+    def get_q(m, D):
         # TODO: use qfbcornacchia when PARI 2.14.0 is released.
-        for sols in pari.qfbsolve(pari.Qfb(1, 0, -D), 4 * m, 1):
-            t = int(sols[0])
-            if is_prime(m + 1 - t) or is_prime(m + 1 + t):
-                found = True
+        for t in set(map(lambda sol: int(sol[0]), pari.qfbsolve(pari.Qfb(1, 0, -D), 4 * m, 1))):
+            if is_prime(m + 1 - t):
+                return m + 1 - t
+            if is_prime(m + 1 + t):
+                return m + 1 + t
+
+    q = None
+    if D is None:
+        for D in range(7, 4 * m):
+            if not (D % 4 == 0 or D % 4 == 3):
+                continue
+
+            q = get_q(m, -D)
+            if q is not None:
                 break
 
-        assert found, "Invalid values for m and D."
+        assert q is not None, "Unable to find appropriate D value for m."
+        D = int(-D)
+        logging.info(f"Found appropriate D value = {D}")
+    else:
+        q = get_q(m, D)
+        assert q is not None, "Invalid values for m and D."
 
-    q = m + 1 - t if is_prime(m + 1 - t) else m + 1 + t
-    for E in solve_cm(D, q, c):
-        if E.order() == m:
-            yield E
-        else:
-            E = E.quadratic_twist()
-            yield E
+    yield from generate_with_trace_q(q + 1 - m, q, D, c)
 
 
 def generate_supersingular(q, c=None):
