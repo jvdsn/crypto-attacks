@@ -21,23 +21,17 @@ def hilbert_class_polynomial_roots(D, gf):
         yield int(j)
 
 
-def generate_curve(gf, j, k, c=None):
+def generate_curve(gf, k, c=None):
     """
-    Generates an Elliptic Curve given GF(q), j, k, and parameter c
+    Generates an Elliptic Curve given GF(q), k, and parameter c
     :param gf: the finite field GF(q)
-    :param j: the j-invariant
-    :param k: j / (j - 1728) if j != 0 and j != 1728, otherwise None
+    :param k: j / (j - 1728)
     :param c: an optional parameter c which is used to generate random a and b values (default: random element in Zmod(q))
     :return:
     """
     c_ = c if c is not None else 0
     while c_ == 0:
         c_ = gf.random_element()
-
-    if j == 0:
-        return EllipticCurve(gf, [0, c_])
-    if j == gf(1728):
-        return EllipticCurve(gf, [c_, 0])
 
     a = 3 * k * c_ ** 2
     b = 2 * k * c_ ** 3
@@ -59,16 +53,13 @@ def solve_cm(D, q, c=None):
     if gf.characteristic() == 2 or gf.characteristic() == 3:
         return
 
-    jk = []
+    ks = []
     for j in hilbert_class_polynomial_roots(D, gf):
-        if j == 0 or j == gf(1728):
-            yield generate_curve(gf, j, None, c)
-            jk.append((j, None))
-        else:
+        if j != 0 and j != gf(1728):
             k = gf(j) / (1728 - j)
-            yield generate_curve(gf, j, k, c)
-            jk.append((j, k))
+            yield generate_curve(gf, k, c)
+            ks.append(k)
 
-    while len(jk) > 0:
-        for j, k in jk:
-            yield generate_curve(gf, j, k, c)
+    while len(ks) > 0:
+        for k in ks:
+            yield generate_curve(gf, k, c)

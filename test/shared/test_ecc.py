@@ -2,17 +2,22 @@ import os
 import sys
 from unittest import TestCase
 
+from sage.all import factor
+
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
 if sys.path[1] != path:
     sys.path.insert(1, path)
 
 from shared.ecc import generate_anomalous
 from shared.ecc import generate_anomalous_q
+from shared.ecc import generate_mnt
+from shared.ecc import generate_mnt_k2
 from shared.ecc import generate_supersingular
 from shared.ecc import generate_with_order
 from shared.ecc import generate_with_order_q
 from shared.ecc import generate_with_trace
 from shared.ecc import generate_with_trace_q
+from shared.ecc import get_embedding_degree
 
 
 class TestECC(TestCase):
@@ -123,3 +128,36 @@ class TestECC(TestCase):
             E = next(gen)
             self.assertEqual(E.base_ring().order(), q)
             self.assertTrue(E.is_supersingular())
+
+    def test_generate_mnt(self):
+        for k in {3, 4, 6}:
+            for h in range(1, 5):
+                gen = generate_mnt(k, h_min=h, h_max=h)
+                for _ in range(4):
+                    E = next(gen)
+                    q = E.base_ring().order()
+                    n = E.order()
+                    r, _ = factor(n)[-1]
+                    self.assertEqual(n // r, h)
+                    self.assertEqual(get_embedding_degree(q, r, 10), k)
+
+    def test_generate_mnt_k2(self):
+        q_bit_length = 128
+        gen = generate_mnt_k2(q_bit_length)
+        for _ in range(4):
+            E = next(gen)
+            q = E.base_ring().order()
+            n = E.order()
+            r, _ = factor(n)[-1]
+            self.assertEqual(q.nbits(), q_bit_length)
+            self.assertEqual(get_embedding_degree(q, r, 10), 2)
+
+        D = -19
+        gen = generate_mnt_k2(q_bit_length, D)
+        for _ in range(4):
+            E = next(gen)
+            q = E.base_ring().order()
+            n = E.order()
+            r, _ = factor(n)[-1]
+            self.assertEqual(q.nbits(), q_bit_length)
+            self.assertEqual(get_embedding_degree(q, r, 10), 2)

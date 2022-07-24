@@ -5,6 +5,7 @@ from random import randrange
 
 from sage.all import EllipticCurve
 from sage.all import GF
+from sage.all import cyclotomic_polynomial
 from sage.all import factor
 from sage.all import is_prime
 from sage.all import kronecker
@@ -154,6 +155,7 @@ def generate_with_order(m, D=None, c=None):
     :param c: the parameter c to use in the CM method (default: random value)
     :return: a generator generating random elliptic curves
     """
+
     def get_q(m, D):
         # TODO: use qfbcornacchia when PARI 2.14.0 is released.
         for t in set(map(lambda sol: int(sol[0]), pari.qfbsolve(pari.Qfb(1, 0, -D), 4 * m, 1))):
@@ -224,3 +226,82 @@ def generate_supersingular(q, c=None):
         D = next_prime(D)
 
     yield from solve_cm(-D, q, c)
+
+
+def generate_mnt(k, h_min=1, h_max=4, D_min=7, D_max=10000, c=None):
+    """
+    Generates random MNT curves.
+    More information: Scott M., Barreto P. S. L. M., "Generating more MNT elliptic curves"
+    :param k: the embedding degree (3, 4, or 6)
+    :param h_min: the minimum cofactor to try (inclusive, default: 1)
+    :param h_max: the maximum cofactor to try (inclusive, default: 4)
+    :param D_min: the minimum D value to try (inclusive, default: 7)
+    :param D_max: the maximum D value to try (inclusive, default: 10000)
+    :param c: the parameter c to use in the CM method (default: random value)
+    :return: a generator generating random MNT curves with embedding degree k
+    """
+    assert k in {3, 4, 6}
+
+    phi = cyclotomic_polynomial(k)
+    l = -2 * (k // 2) + 4
+    for h in range(h_min, h_max + 1):
+        for d in range(1, 4 * h):
+            if k == 4 and not (d % 4 == 1 or d % 4 == 2):
+                continue
+            if (k == 3 or k == 6) and not (d % 6 == 1 or d % 6 == 3):
+                continue
+
+            a = l * h + d
+            b = 4 * h - d
+            f = a ** 2 - b ** 2
+            for D in range(D_min, D_max + 1):
+                if not (D % 4 == 0 or D % 4 == 3):
+                    continue
+
+                g = d * b * D
+                if is_square(g):
+                    continue
+
+                ys = set(map(lambda sol: int(sol[0]), pari.qfbsolve(pari.Qfb(1, 0, -g), f, 1)))
+                for y in ys:
+                    if (y - a) % b != 0:
+                        continue
+                    x = (y - a) // b
+                    if phi(x) % d != 0:
+                        continue
+                    r = int(phi(x) // d)
+                    n = h * r
+                    q = n + x
+                    # Unfortunately, this sanity check is needed in some cases.
+                    if all((q ** i - 1) % r == 0 for i in range(1, k)):
+                        continue
+                    if is_prime(r) and is_prime(q):
+                        logging.info(f"Found appropriate D value = {-D}")
+                        yield from generate_with_order_q(n, q, -D, c)
+
+
+def generate_mnt_k2(q_bit_length, D=None, c=None):
+    """
+    Generates random MNT curves with embedding degree 2.
+    More information: Scott M., Barreto P. S. L. M., "Generating more MNT elliptic curves" (Section 5)
+    :param q_bit_length: the bit length of the modulus, used to generate a random q
+    :param D: the (negative) CM discriminant to use (default: -7)
+    :param c: the parameter c to use in the CM method (default: random value)
+    :return: a generator generating random MNT curves with embedding degree k
+    """
+    if D is None:
+        D = -7
+        logging.info(f"Found appropriate D value = {D}")
+    else:
+        assert D < 0 and (D % 4 == 0 or D % 4 == 1), "Invalid value for D."
+
+    x_bit_length = (q_bit_length + 2) // 2
+    z_bit_length = (x_bit_length - 1 - D.bit_length()) // 2 + 1
+    assert z_bit_length > 0, "Invalid values for D and q bit length."
+    while True:
+        z = randrange(2 ** (z_bit_length - 1), 2 ** z_bit_length)
+        x = 2 * (-D) * z ** 2 + 1
+        q = (x ** 2 + 4 * x - 1) // 4
+        r = (x + 1) // 2
+        if q.bit_length() == q_bit_length and is_prime(r) and is_prime(q):
+            yield from generate_with_trace_q(x + 1, q, D, c)
