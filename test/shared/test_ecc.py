@@ -21,24 +21,29 @@ class TestECC(TestCase):
         gen = generate_anomalous_q(q)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order(), q)
             self.assertEqual(E.trace_of_frobenius(), 1)
 
         D = -11
         gen = generate_anomalous_q(q, D)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order(), q)
             self.assertEqual(E.trace_of_frobenius(), 1)
 
     def test_generate_anomalous(self):
-        gen = generate_anomalous(128)
+        q_bit_length = 128
+        gen = generate_anomalous(q_bit_length)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order().nbits(), q_bit_length)
             self.assertEqual(E.trace_of_frobenius(), 1)
 
         D = -19
-        gen = generate_anomalous(128, D)
+        gen = generate_anomalous(q_bit_length, D)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order().nbits(), q_bit_length)
             self.assertEqual(E.trace_of_frobenius(), 1)
 
     def test_generate_with_trace_q(self):
@@ -47,25 +52,30 @@ class TestECC(TestCase):
         gen = generate_with_trace_q(t, q)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order(), q)
             self.assertEqual(E.trace_of_frobenius(), t)
 
         D = -671512
         gen = generate_with_trace_q(t, q, D)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order(), q)
             self.assertEqual(E.trace_of_frobenius(), t)
 
     def test_generate_with_trace(self):
         t = 1234
-        gen = generate_with_trace(t, 128)
+        q_bit_length = 128
+        gen = generate_with_trace(t, q_bit_length)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order().nbits(), q_bit_length)
             self.assertEqual(E.trace_of_frobenius(), t)
 
         D = -11
-        gen = generate_with_trace(t, 128, D)
+        gen = generate_with_trace(t, q_bit_length, D)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order().nbits(), q_bit_length)
             self.assertEqual(E.trace_of_frobenius(), t)
 
     def test_generate_with_order_q(self):
@@ -74,12 +84,14 @@ class TestECC(TestCase):
         gen = generate_with_order_q(m, q)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order(), q)
             self.assertEqual(E.order(), m)
 
         D = -671512
         gen = generate_with_order_q(m, q, D)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order(), q)
             self.assertEqual(E.order(), m)
 
     def test_generate_with_order(self):
@@ -102,10 +114,12 @@ class TestECC(TestCase):
                 gen = generate_supersingular(q)
                 for _ in range(4):
                     E = next(gen)
+                    self.assertEqual(E.base_ring().order(), q)
                     self.assertTrue(E.is_supersingular())
 
         q = 214667031558479219841849884722475668069
         gen = generate_supersingular(q)
         for _ in range(4):
             E = next(gen)
+            self.assertEqual(E.base_ring().order(), q)
             self.assertTrue(E.is_supersingular())
