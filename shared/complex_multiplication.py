@@ -6,6 +6,25 @@ from sage.all import hilbert_class_polynomial
 from sage.all import is_prime_power
 
 
+def elementary_symmetric_function(x, k):
+    assert k > 0
+
+    if k > len(x):
+        return 0
+
+    e = [0] * k
+    for i, xi in enumerate(x):
+        ej = e[0]
+        e[0] += xi
+        ej_1 = ej
+        for j in range(1, min(k, i + 1)):
+            ej = e[j]
+            e[j] += xi * ej_1
+            ej_1 = ej
+
+    return e[k - 1]
+
+
 def hilbert_class_polynomial_roots(D, gf):
     """
     Computes the roots of H_D(X) mod q given D and GF(q).
