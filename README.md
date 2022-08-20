@@ -217,6 +217,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 ## Other interesting implementations
 * [x] [Adleman-Manders-Miller root extraction method](shared/__init__.py) [More information: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)]
 * [x] [Fast CRT using divide-and-conquer](shared/crt.py)
+* [x] [Fast modular inverses](shared/__init__.py)
 * [x] [Linear Hensel lifting](shared/hensel.py)
 * [ ] Quadratic Hensel lifting
 * [x] [Babai's Nearest Plane Algorithm](shared/lattice.py)

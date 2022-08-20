@@ -184,3 +184,44 @@ def rth_roots(delta, r, Fq):
     root = int(delta ** alpha * h)
     for primitive_root in roots_of_unity(r, Fq):
         yield root * primitive_root % q
+
+
+def modinv_range(n, p):
+    """
+    Computes the modular inverses of the numbers in the range (1, n] (exclusive), mod p.
+    More information: grhkm, "[Tutorial] Calculate modulo inverses efficiently!" (Codeforces)
+    :param n: the n
+    :param p: the modulus
+    :return: a generator generating the modular inverses of 1, 2... n - 1 mod p
+    """
+    inv = [0] * n
+    inv[1] = 1
+    yield inv[1]
+    for i in range(2, n):
+        inv[i] = (p - p // i) * inv[p % i] % p
+        yield inv[i]
+
+
+def modinv(a, p):
+    """
+    Computes the modular inverses a list of numbers mod p.
+    More information: grhkm, "[Tutorial] Calculate modulo inverses efficiently!" (Codeforces)
+    :param a: the list of numbers
+    :param p: the modulus
+    :return: a generator generating the modular inverses of a1, a2... mod p
+    """
+    n = len(a)
+    pre = [0] * n
+    pre[0] = 1
+    suf = [0] * n
+    suf[n - 1] = 1
+    prod = 1
+    for i in range(n - 1):
+        pre[i + 1] = pre[i] * a[i] % p
+        suf[n - i - 2] = suf[n - i - 1] * a[n - i - 1] % p
+        prod = prod * a[i] % p
+
+    prod = prod * a[n - 1] % p
+    prod = pow(prod, -1, p)
+    for i in range(n):
+        yield (pre[i] * suf[i] % p) * prod % p
