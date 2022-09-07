@@ -86,11 +86,11 @@ def generate_with_trace_q(t, q, D=None, c=None):
     :param c: the parameter c to use in the CM method (default: random value)
     :return: a generator generating random elliptic curves
     """
-    assert abs(t) <= 2 * isqrt(q), "Invalid values for t and q"
+    assert t ** 2 < 4 * q, f"Trace {t} is outside Hasse's interval for GF({q})"
 
     if D is None:
         D = t ** 2 - 4 * q
-        D = make_square_free(D, factor(D))
+        # We don't make D square-free because that removes solutions.
         logging.info(f"Found appropriate D value = {D}")
     else:
         assert (t ** 2 - 4 * q) % D == 0 and is_square((t ** 2 - 4 * q) // D), "Invalid values for t, q, and D."

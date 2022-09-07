@@ -33,11 +33,11 @@ def hilbert_class_polynomial_roots(D, gf):
     :param gf: the finite field GF(q)
     :return: a generator generating the roots (values j)
     """
-    assert D < 0 and (D % 4 == 0 or D % 4 == 1)
+    assert D < 0 and (D % 4 == 0 or D % 4 == 1), "D must be negative and a discriminant"
     H = hilbert_class_polynomial(D)
     pr = gf["x"]
     for j in pr(H).roots(multiplicities=False):
-        yield int(j)
+        yield j
 
 
 def generate_curve(gf, k, c=None):
@@ -75,7 +75,7 @@ def solve_cm(D, q, c=None):
     ks = []
     for j in hilbert_class_polynomial_roots(D, gf):
         if j != 0 and j != gf(1728):
-            k = gf(j) / (1728 - j)
+            k = j / (1728 - j)
             yield generate_curve(gf, k, c)
             ks.append(k)
 
