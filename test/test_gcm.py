@@ -14,6 +14,7 @@ from attacks.gcm import forbidden_attack
 
 class TestGCM(TestCase):
     def test_forbidden_attack(self):
+        # Test full GCM
         key = randbytes(16)
         iv = randbytes(16)
         aes = AES.new(key, AES.MODE_GCM, nonce=iv)
@@ -34,6 +35,32 @@ class TestGCM(TestCase):
                 aes = AES.new(key, AES.MODE_GCM, nonce=iv)
                 aes.update(target_a)
                 aes.decrypt_and_verify(target_c, forged_t)
+                break
+            except ValueError:
+                # Authentication failed, so we try the next authentication key.
+                continue
+        else:
+            self.fail()
+
+        # Test MAC only (sometimes known as GMAC)
+        key = randbytes(16)
+        iv = randbytes(16)
+        aes = AES.new(key, AES.MODE_GCM, nonce=iv)
+        a1 = randbytes(16)
+        aes.update(a1)
+        t1 = aes.digest()
+        aes = AES.new(key, AES.MODE_GCM, nonce=iv)
+        a2 = randbytes(16)
+        aes.update(a2)
+        t2 = aes.digest()
+        for h in forbidden_attack.recover_possible_auth_keys(a1, [], t1, a2, [], t2):
+            target_a = randbytes(16)
+            target_c = []
+            forged_t = forbidden_attack.forge_tag(h, a1, [], t1, target_a, target_c)
+            try:
+                aes = AES.new(key, AES.MODE_GCM, nonce=iv)
+                aes.update(target_a)
+                aes.verify(forged_t)
                 break
             except ValueError:
                 # Authentication failed, so we try the next authentication key.
