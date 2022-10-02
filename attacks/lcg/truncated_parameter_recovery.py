@@ -8,6 +8,7 @@ from math import sqrt
 
 from sage.all import ZZ
 from sage.all import Zmod
+from sage.all import factor
 from sage.all import matrix
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
@@ -45,7 +46,8 @@ def _recover_modulus_and_multiplier(polynomials, m=None, a=None, check_modulus=N
         m_ = gcd(P0.resultant(P1), P1.resultant(P2), P0.resultant(P2))
         if (m is None and check_modulus(m_)) or m_ == m:
             if a is None:
-                g = polynomial_gcd_crt(P0, polynomial_gcd_crt(P1, P2, m_), m_)
+                factors = factor(m_)
+                g = polynomial_gcd_crt(P0, polynomial_gcd_crt(P1, P2, factors), factors)
                 for a_ in g.change_ring(Zmod(m_)).roots(multiplicities=False):
                     yield int(m_), int(a_)
             else:

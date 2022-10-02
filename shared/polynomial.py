@@ -71,19 +71,19 @@ def fast_polynomial_gcd(a0, a1):
         a1 = r
 
 
-def polynomial_gcd_crt(a, b, m):
+def polynomial_gcd_crt(a, b, factors):
     """
     Uses the Chinese Remainder Theorem to compute the polynomial gcd modulo a composite number.
     :param a: the first polynomial
     :param b: the second polynomial
-    :param m: the polynomial modulus
+    :param factors: the factors of m (tuples of primes and exponents)
     :return: the polynomial gcd modulo m
     """
     assert a.base_ring() == b.base_ring() == ZZ
 
     gs = []
     ps = []
-    for p, _ in factor(m):
+    for p, _ in factors:
         zmodp = Zmod(p)
         gs.append(fast_polynomial_gcd(a.change_ring(zmodp), b.change_ring(zmodp)).change_ring(ZZ))
         ps.append(p)
