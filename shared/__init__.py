@@ -122,32 +122,32 @@ def make_square_free(x, factors):
     return int(x)
 
 
-def roots_of_unity(r, Fq):
+def roots_of_unity(ring, l, r):
     """
-    Generates rth roots of unity in Fq, with r | q - 1.
-    :param r: the r
-    :param Fq: the field Fq
+    Generates r-th roots of unity in a ring, with r | l.
+    :param ring: the ring, with order n
+    :param l: the Carmichael lambda of n
+    :param r: r
     :return: a generator generating the roots of unity
     """
-    q = Fq.order()
-    assert (q - 1) % r == 0, "r should divide q - 1"
+    assert l % r == 0, "r should divide l"
 
-    x = Fq(q - 2)
-    while x ** ((q - 1) // r) == 1:
-        x -= 1
+    x = ring(2)
+    while x ** l != 1:
+        x += 1
 
-    g = x ** ((q - 1) // r)
+    g = x ** (l // r)
     for i in range(r):
         yield int(g ** i)
 
 
-def rth_roots(delta, r, Fq):
+def rth_roots(Fq, delta, r):
     """
-    Uses the Adleman-Manders-Miller algorithm to extract rth roots in Fq, with r | q - 1.
+    Uses the Adleman-Manders-Miller algorithm to extract r-th roots in Fq, with r | q - 1.
     More information: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)
-    :param delta: the rth residue delta
-    :param r: the r
     :param Fq: the field Fq
+    :param delta: the r-th residue delta
+    :param r: the r
     :return: a generator generating the rth roots
     """
     delta = Fq(delta)
@@ -182,7 +182,7 @@ def rth_roots(delta, r, Fq):
         c **= r
 
     root = int(delta ** alpha * h)
-    for primitive_root in roots_of_unity(r, Fq):
+    for primitive_root in roots_of_unity(Fq, q - 1, r):
         yield root * primitive_root % q
 
 

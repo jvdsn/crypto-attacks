@@ -58,9 +58,9 @@ def attack(N, e, phi, c):
         cp = c % p
         cq = c % q
         logging.info(f"Computing {e}-th roots mod {p}...")
-        mps = [pow(cp, pow(e, -1, p - 1), p)] if tp == 0 else list(rth_roots(cp, e, GF(p)))
+        mps = [pow(cp, pow(e, -1, p - 1), p)] if tp == 0 else list(rth_roots(GF(p), cp, e))
         logging.info(f"Computing {e}-th roots mod {q}...")
-        mqs = [pow(cq, pow(e, -1, q - 1), q)] if tq == 0 else list(rth_roots(cq, e, GF(q)))
+        mqs = [pow(cq, pow(e, -1, q - 1), q)] if tq == 0 else list(rth_roots(GF(q), cq, e))
         logging.info(f"Computing {len(mps) * len(mqs)} roots using CRT...")
         for mp in mps:
             for mq in mqs:
