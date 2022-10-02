@@ -14,7 +14,7 @@ from attacks.shamir_secret_sharing import deterministic_coefficients
 from attacks.shamir_secret_sharing import share_forgery
 
 
-class ShamirSecretSharing(TestCase):
+class TestShamirSecretSharing(TestCase):
     def _eval(self, p, a, x):
         y = 0
         for i, ai in enumerate(a):

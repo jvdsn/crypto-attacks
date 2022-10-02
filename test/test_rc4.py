@@ -11,7 +11,7 @@ if sys.path[1] != path:
 from attacks.rc4 import fms
 
 
-class RC4(TestCase):
+class TestRC4(TestCase):
     def _encrypt(self, iv, key, p):
         return ARC4.new(iv + key).encrypt(p)
 

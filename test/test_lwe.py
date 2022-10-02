@@ -12,7 +12,7 @@ if sys.path[1] != path:
 from attacks.lwe import arora_ge
 
 
-class LWE(TestCase):
+class TestLWE(TestCase):
     def _generate_samples(self, q, m, n, E, s):
         A = []
         b = []

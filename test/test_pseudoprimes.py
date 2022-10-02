@@ -9,7 +9,7 @@ if sys.path[1] != path:
 from attacks.pseudoprimes import miller_rabin
 
 
-class Pseudoprimes(TestCase):
+class TestPseudoprimes(TestCase):
     def _miller_rabin(self, n, bases):
         assert n > 3
         r = 0

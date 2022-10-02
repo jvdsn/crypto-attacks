@@ -11,7 +11,7 @@ from attacks.lcg import truncated_parameter_recovery
 from attacks.lcg import truncated_state_recovery
 
 
-class LCG(TestCase):
+class TestLCG(TestCase):
     def test_parameter_recovery(self):
         m = 230565400234205371157763985910524799617
         a = 192101630084837332907895369052393213499

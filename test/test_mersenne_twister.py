@@ -11,7 +11,7 @@ from attacks import mersenne_twister
 from attacks.mersenne_twister import state_recovery
 
 
-class MersenneTwister(TestCase):
+class TestMersenneTwister(TestCase):
     def test_state_recovery(self):
         mt = mersenne_twister.mt19937()
         mt.seed(1812433253, 0)
