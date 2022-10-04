@@ -276,7 +276,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 [^lcg_truncated_parameter_recovery]: Contini S., Shparlinski I. E., "On Stern's Attack Against Secret Truncated Linear Congruential Generators"
 [^lcg_truncated_state_recovery]: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"
 
-[^lwe_arora_ge]: "The Learning with Errors Problem: Algorithms" (Section 1)
+[^lwe_arora_ge]: ["The Learning with Errors Problem: Algorithms"](https://people.csail.mit.edu/vinodv/6876-Fall2018/lecture2.pdf) (Section 1)
 
 [^pseudoprimes_miller_rabin]: R. Albrecht M. et al., "Prime and Prejudice: Primality Testing Under Adversarial Conditions"
 
