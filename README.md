@@ -87,9 +87,9 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 ## Implemented attacks
 ### Approximate Common Divisor
-* [x] [Multivariate polynomial attack](attacks/acd/mp.py) [More information: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 5)]
-* [x] [Orthogonal based attack](attacks/acd/ol.py) [More information: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 4)]
-* [x] [Simultaneous Diophantine approximation attack](attacks/acd/sda.py) [More information: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 3)]
+* [x] [Multivariate polynomial attack](attacks/acd/mp.py) [^acd_mp]
+* [x] [Orthogonal based attack](attacks/acd/ol.py) [^acd_ol]
+* [x] [Simultaneous Diophantine approximation attack](attacks/acd/sda.py) [^acd_sda]
 
 ### CBC
 * [x] [Bit flipping attack](attacks/cbc/bit_flipping.py)
@@ -116,11 +116,11 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 ### Elliptic Curve Cryptography
 * [x] [ECDSA nonce reuse attack](attacks/ecc/ecdsa_nonce_reuse.py)
-* [x] [Frey-Ruck attack](attacks/ecc/frey_ruck_attack.py) [More information: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 3)]
-* [x] [MOV attack](attacks/ecc/mov_attack.py) [More information: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 2)]
+* [x] [Frey-Ruck attack](attacks/ecc/frey_ruck_attack.py) [^ecc_frey_ruck_attack]
+* [x] [MOV attack](attacks/ecc/mov_attack.py) [^ecc_mov_attack]
 * [x] [Parameter recovery](attacks/ecc/parameter_recovery.py)
 * [x] [Singular curve attack](attacks/ecc/singular_curve.py)
-* [x] [Smart's attack](attacks/ecc/smart_attack.py) [More information: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"]
+* [x] [Smart's attack](attacks/ecc/smart_attack.py) [^ecc_smart_attack]
 
 ### ElGamal Encryption
 * [x] [Nonce reuse attack](attacks/elgamal_encryption/nonce_reuse.py)
@@ -133,23 +133,23 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 ### Factorization
 * [x] [Base conversion factorization](attacks/factorization/base_conversion.py)
-* [x] [Branch and prune attack](attacks/factorization/branch_and_prune.py) [More information: Heninger N., Shacham H., "Reconstructing RSA Private Keys from Random Key Bits"]
-* [x] [Complex multiplication (elliptic curve) factorization](attacks/factorization/complex_multiplication.py) [More information: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"]
+* [x] [Branch and prune attack](attacks/factorization/branch_and_prune.py) [^factorization_branch_and_prune]
+* [x] [Complex multiplication (elliptic curve) factorization](attacks/factorization/complex_multiplication.py) [^factorization_complex_multiplication]
 * [x] [Coppersmith factorization](attacks/factorization/coppersmith.py)
 * [x] [Fermat factorization](attacks/factorization/fermat.py)
-* [x] [Ghafar-Ariffin-Asbullah attack](attacks/factorization/gaa.py) [More information: Ghafar AHA. et al., "A New LSB Attack on Special-Structured RSA Primes"]
-* [x] [Implicit factorization](attacks/factorization/implicit.py) [More information: Nitaj A., Ariffin MRK., "Implicit factorization of unbalanced RSA moduli"]
-* [x] [Known phi factorization](attacks/factorization/known_phi.py) [More information: Hinek M. J., Low M. K., Teske E., "On Some Attacks on Multi-prime RSA" (Section 3)]
-* [x] [ROCA](attacks/factorization/roca.py) [More information: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"]
-* [x] [Shor's algorithm (classical)](attacks/factorization/shor.py) [More information: M. Johnston A., "Shor’s Algorithm and Factoring: Don’t Throw Away the Odd Orders"]
+* [x] [Ghafar-Ariffin-Asbullah attack](attacks/factorization/gaa.py) [^factorization_gaa]
+* [x] [Implicit factorization](attacks/factorization/implicit.py) [^factorization_implicit]
+* [x] [Known phi factorization](attacks/factorization/known_phi.py) [^factorization_known_phi]
+* [x] [ROCA](attacks/factorization/roca.py) [^factorization_roca]
+* [x] [Shor's algorithm (classical)](attacks/factorization/shor.py) [^factorization_shor]
 * [x] [Twin primes factorization](attacks/factorization/twin_primes.py)
-* [x] [Factorization of unbalanced moduli](attacks/factorization/unbalanced.py) [More information: Brier E. et al., "Factoring Unbalanced Moduli with Known Bits" (Section 4)]
+* [x] [Factorization of unbalanced moduli](attacks/factorization/unbalanced.py) [^factorization_unbalanced]
 
 ### GCM
-* [x] [Forbidden attack](attacks/gcm/forbidden_attack.py) [More information: Joux A., "Authentication Failures in NIST version of GCM"]
+* [x] [Forbidden attack](attacks/gcm/forbidden_attack.py) [^gcm_forbidden_attack]
 
 ### Hidden Number Problem
-* [x] [Extended hidden number problem](attacks/hnp/extended_hnp.py) [More information: Hlavac M., Rosa T., "Extended Hidden Number Problem and Its Cryptanalytic Applications" (Section 4)]
+* [x] [Extended hidden number problem](attacks/hnp/extended_hnp.py) [^hnp_extended_hnp]
 * [ ] Fourier analysis attack
 * [x] [Lattice-based attack](attacks/hnp/lattice_attack.py)
 
@@ -157,17 +157,17 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Padding oracle attack](attacks/ige/padding_oracle.py)
 
 ### Knapsack Cryptosystems
-* [x] [Low density attack](attacks/knapsack/low_density.py) [More information: Coster M. J. et al., "Improved low-density subset sum algorithms"]
+* [x] [Low density attack](attacks/knapsack/low_density.py) [^knapsack_low_density]
 
 ### Linear Congruential Generators
 
 * [x] [LCG parameter recovery](attacks/lcg/parameter_recovery.py)
-* [x] [Truncated LCG parameter recovery](attacks/lcg/truncated_parameter_recovery.py) [More information: Contini S., Shparlinski I. E., "On Stern's Attack Against Secret Truncated Linear Congruential Generators"]
-* [x] [Truncated LCG state recovery](attacks/lcg/truncated_state_recovery.py) [More information: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"]
+* [x] [Truncated LCG parameter recovery](attacks/lcg/truncated_parameter_recovery.py) [^lcg_truncated_parameter_recovery]
+* [x] [Truncated LCG state recovery](attacks/lcg/truncated_state_recovery.py) [^lcg_truncated_state_recovery]
 
 ### Learning With Errors
 
-* [x] [Arora-Ge attack](attacks/lwe/arora_ge.py) [More information: "The Learning with Errors Problem: Algorithms" (Section 1)]
+* [x] [Arora-Ge attack](attacks/lwe/arora_ge.py) [^lwe_arora_ge]
 * [ ] Blum-Kalai-Wasserman attack
 * [ ] Lattice reduction attack
 
@@ -181,7 +181,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 ### Pseudoprimes
 
-* [x] [Generating Miller-Rabin pseudoprimes](attacks/pseudoprimes/miller_rabin.py) [More information: R. Albrecht M. et al., "Prime and Prejudice: Primality Testing Under Adversarial Conditions"]
+* [x] [Generating Miller-Rabin pseudoprimes](attacks/pseudoprimes/miller_rabin.py) [^pseudoprimes_miller_rabin]
 
 ### RC4
 
@@ -189,33 +189,33 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 ### RSA
 
-* [x] [Bleichenbacher's attack](attacks/rsa/bleichenbacher.py) [More information: Bleichenbacher D., "Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard PKCS #1"]
+* [x] [Bleichenbacher's attack](attacks/rsa/bleichenbacher.py) [^rsa_bleichenbacher]
 * [x] [Bleichenbacher's signature forgery attack](attacks/rsa/bleichenbacher_signature_forgery.py)
-* [x] [Boneh-Durfee attack](attacks/rsa/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
+* [x] [Boneh-Durfee attack](attacks/rsa/boneh_durfee.py) [^rsa_boneh_durfee]
 * [x] [Common modulus attack](attacks/rsa/common_modulus.py)
 * [x] [CRT fault attack](attacks/rsa/crt_fault_attack.py)
-* [x] [Extended Wiener's attack](attacks/rsa/extended_wiener_attack.py) [More information: Dujella A., "Continued fractions and RSA with small secret exponent"]
+* [x] [Extended Wiener's attack](attacks/rsa/extended_wiener_attack.py) [^rsa_extended_wiener_attack]
 * [x] [Hastad's broadcast attack](attacks/rsa/hastad_attack.py)
-* [x] [Known CRT exponents attack](attacks/rsa/known_crt_exponents.py) [More information: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"]
+* [x] [Known CRT exponents attack](attacks/rsa/known_crt_exponents.py) [^rsa_known_crt_exponents]
 * [x] [Known private exponent attack](attacks/rsa/known_d.py)
 * [x] [Low public exponent attack](attacks/rsa/low_exponent.py)
 * [x] [LSB oracle (parity oracle) attack](attacks/rsa/lsb_oracle.py)
-* [x] [Manger's attack](attacks/rsa/manger.py) [More information: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"]
-* [x] [Nitaj's CRT-RSA attack](attacks/rsa/nitaj_crt_rsa.py) [More information: Nitaj A., "A new attack on RSA and CRT-RSA"]
-* [x] [Non coprime public exponent attack](attacks/rsa/non_coprime_exponent.py) [More information: Shumow D., "Incorrectly Generated RSA Keys: How To Recover Lost Plaintexts"]
-* [x] [Partial key exposure](attacks/rsa/partial_key_exposure.py) [More information: Boneh D., Durfee G., Frankel Y., "An Attack on RSA Given a Small Fraction of the Private Key Bits", Ernst M. et al., "Partial Key Exposure Attacks on RSA Up to Full Size Exponents", Blomer J., May A., "New Partial Key Exposure Attacks on RSA"]
+* [x] [Manger's attack](attacks/rsa/manger.py) [^rsa_manger]
+* [x] [Nitaj's CRT-RSA attack](attacks/rsa/nitaj_crt_rsa.py) [^rsa_nitaj_crt_rsa]
+* [x] [Non coprime public exponent attack](attacks/rsa/non_coprime_exponent.py) [^rsa_non_coprime_exponent]
+* [x] [Partial key exposure](attacks/rsa/partial_key_exposure.py) [^rsa_partial_key_exposure1] [^rsa_partial_key_exposure2] [^rsa_partial_key_exposure3] 
 * [x] [Related message attack](attacks/rsa/related_message.py)
 * [x] [Stereotyped message attack](attacks/rsa/stereotyped_message.py)
 * [x] [Wiener's attack](attacks/rsa/wiener_attack.py)
-* [x] [Wiener's attack for Common Prime RSA](attacks/rsa/wiener_attack_common_prime.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 5)]
-* [x] [Wiener's attack (Heuristic lattice variant)](attacks/rsa/wiener_attack_lattice.py) [More information: Nguyen P. Q., "Public-Key Cryptanalysis"]
+* [x] [Wiener's attack for Common Prime RSA](attacks/rsa/wiener_attack_common_prime.py) [^rsa_wiener_attack_common_prime]
+* [x] [Wiener's attack (Heuristic lattice variant)](attacks/rsa/wiener_attack_lattice.py) [^rsa_wiener_attack_lattice]
 
 ### Shamir's Secret Sharing
 * [x] [Deterministic coefficients](attacks/shamir_secret_sharing/deterministic_coefficients.py)
 * [x] [Share forgery](attacks/shamir_secret_sharing/share_forgery.py)
 
 ## Other interesting implementations
-* [x] [Adleman-Manders-Miller root extraction method](shared/__init__.py) [More information: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)]
+* [x] [Adleman-Manders-Miller root extraction method](shared/__init__.py) [^adleman_manders_miller]
 * [x] [Fast CRT using divide-and-conquer](shared/crt.py)
 * [x] [Fast modular inverses](shared/__init__.py)
 * [x] [Linear Hensel lifting](shared/hensel.py)
@@ -238,14 +238,69 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Polynomial roots using Groebner bases](shared/small_roots/__init__.py)
 * [x] [Polynomial roots using resultants](shared/small_roots/__init__.py)
 * [x] [Polynomial roots using Sage variety (triangular decomposition)](shared/small_roots/__init__.py)
-* [x] [Blomer-May method](shared/small_roots/blomer_may.py) [More information: Blomer J., May A., "New Partial Key Exposure Attacks on RSA" (Section 6)]
-* [x] [Boneh-Durfee method](shared/small_roots/boneh_durfee.py) [More information: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"]
-* [x] [Coron method](shared/small_roots/coron.py) [More information: Coron J., "Finding Small Roots of Bivariate Polynomial Equations Revisited"]
-* [x] [Coron method (direct)](shared/small_roots/coron_direct.py) [More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"]
-* [x] [Ernst et al. methods](shared/small_roots/ernst.py) [More information: Ernst M. et al., "Partial Key Exposure Attacks on RSA Up to Full Size Exponents"]
-* [x] [Herrmann-May method (unravelled linearization)](shared/small_roots/herrmann_may.py) [More information: Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"]
-* [x] [Herrmann-May method (modular multivariate)](shared/small_roots/herrmann_may_multivariate.py) [More information: Herrmann M., May A., "Solving Linear Equations Modulo Divisors: On Factoring Given Any Bits" (Section 3 and 4)]
-* [x] [Howgrave-Graham method](shared/small_roots/howgrave_graham.py) [More information: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods" (Section 3.2)]
-* [x] [Jochemsz-May method (modular roots)](shared/small_roots/jochemsz_may_modular.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.1)]
-* [x] [Jochemsz-May method (integer roots)](shared/small_roots/jochemsz_may_integer.py) [More information: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.2)]
-* [x] [Nitaj-Fouotsa method](shared/small_roots/nitaj_fouotsa.py) [More information: Nitaj A., Fouotsa E., "A New Attack on RSA and Demytko's Elliptic Curve Cryptosystem"]
+* [x] [Blomer-May method](shared/small_roots/blomer_may.py) [^small_roots_blomer_may]
+* [x] [Boneh-Durfee method](shared/small_roots/boneh_durfee.py) [^rsa_boneh_durfee]
+* [x] [Coron method](shared/small_roots/coron.py) [^small_roots_coron]
+* [x] [Coron method (direct)](shared/small_roots/coron_direct.py) [^small_roots_coron_direct]
+* [x] [Ernst et al. methods](shared/small_roots/ernst.py) [^rsa_partial_key_exposure2]
+* [x] [Herrmann-May method (unravelled linearization)](shared/small_roots/herrmann_may.py) [^small_roots_herrmann_may]
+* [x] [Herrmann-May method (modular multivariate)](shared/small_roots/herrmann_may_multivariate.py) [^small_roots_herrmann_may_multivariate]
+* [x] [Howgrave-Graham method](shared/small_roots/howgrave_graham.py) [^small_roots_howgrave_graham]
+* [x] [Jochemsz-May method (modular roots)](shared/small_roots/jochemsz_may_modular.py) [^small_roots_jochemsz_may_modular]
+* [x] [Jochemsz-May method (integer roots)](shared/small_roots/jochemsz_may_integer.py) [^small_roots_jochemsz_may_integer]
+* [x] [Nitaj-Fouotsa method](shared/small_roots/nitaj_fouotsa.py) [^small_roots_nitaj_fouotsa]
+
+[^acd_mp]: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 5)
+[^acd_ol]: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 4)
+[^acd_sda]: Galbraith D. S. et al., "Algorithms for the Approximate Common Divisor Problem" (Section 3)
+
+[^ecc_frey_ruck_attack]: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 3)
+[^ecc_mov_attack]: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 2)
+[^ecc_smart_attack]: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"
+
+[^factorization_branch_and_prune]: Heninger N., Shacham H., "Reconstructing RSA Private Keys from Random Key Bits"
+[^factorization_complex_multiplication]: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"
+[^factorization_gaa]: Ghafar AHA. et al., "A New LSB Attack on Special-Structured RSA Primes"
+[^factorization_implicit]: Nitaj A., Ariffin MRK., "Implicit factorization of unbalanced RSA moduli"
+[^factorization_known_phi]: Hinek M. J., Low M. K., Teske E., "On Some Attacks on Multi-prime RSA" (Section 3)
+[^factorization_roca]: Nemec M. et al., "The Return of Coppersmith’s Attack: Practical Factorization of Widely Used RSA Moduli"
+[^factorization_shor]: M. Johnston A., "Shor’s Algorithm and Factoring: Don’t Throw Away the Odd Orders"
+[^factorization_unbalanced]: Brier E. et al., "Factoring Unbalanced Moduli with Known Bits" (Section 4)
+
+[^gcm_forbidden_attack]: Joux A., "Authentication Failures in NIST version of GCM"
+
+[^hnp_extended_hnp]: Hlavac M., Rosa T., "Extended Hidden Number Problem and Its Cryptanalytic Applications" (Section 4) 
+
+[^knapsack_low_density]: Coster M. J. et al., "Improved low-density subset sum algorithms"
+
+[^lcg_truncated_parameter_recovery]: Contini S., Shparlinski I. E., "On Stern's Attack Against Secret Truncated Linear Congruential Generators"
+[^lcg_truncated_state_recovery]: Frieze, A. et al., "Reconstructing Truncated Integer Variables Satisfying Linear Congruences"
+
+[^lwe_arora_ge]: "The Learning with Errors Problem: Algorithms" (Section 1)
+
+[^pseudoprimes_miller_rabin]: R. Albrecht M. et al., "Prime and Prejudice: Primality Testing Under Adversarial Conditions"
+
+[^rsa_bleichenbacher]: Bleichenbacher D., "Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard PKCS #1"
+[^rsa_boneh_durfee]: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"
+[^rsa_extended_wiener_attack]: Dujella A., "Continued fractions and RSA with small secret exponent"
+[^rsa_known_crt_exponents]: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"
+[^rsa_manger]: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"
+[^rsa_nitaj_crt_rsa]: Nitaj A., "A new attack on RSA and CRT-RSA"
+[^rsa_non_coprime_exponent]: Shumow D., "Incorrectly Generated RSA Keys: How To Recover Lost Plaintexts"
+[^rsa_partial_key_exposure1]: Boneh D., Durfee G., Frankel Y., "An Attack on RSA Given a Small Fraction of the Private Key Bits"
+[^rsa_partial_key_exposure2]: Ernst M. et al., "Partial Key Exposure Attacks on RSA Up to Full Size Exponents"
+[^rsa_partial_key_exposure3]: Blomer J., May A., "New Partial Key Exposure Attacks on RSA"
+[^rsa_wiener_attack_common_prime]: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 5)
+[^rsa_wiener_attack_lattice]: Nguyen P. Q., "Public-Key Cryptanalysis"
+
+[^adleman_manders_miller]: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)
+
+[^small_roots_blomer_may]: Blomer J., May A., "New Partial Key Exposure Attacks on RSA" (Section 6)
+[^small_roots_coron]: Coron J., "Finding Small Roots of Bivariate Polynomial Equations Revisited"
+[^small_roots_coron_direct]: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"
+[^small_roots_herrmann_may]: Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"
+[^small_roots_herrmann_may_multivariate]: Herrmann M., May A., "Solving Linear Equations Modulo Divisors: On Factoring Given Any Bits" (Section 3 and 4)
+[^small_roots_howgrave_graham]: May A., "New RSA Vulnerabilities Using Lattice Reduction Methods" (Section 3.2)
+[^small_roots_jochemsz_may_modular]: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.1)
+[^small_roots_jochemsz_may_integer]: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 2.2)
+[^small_roots_nitaj_fouotsa]: Nitaj A., Fouotsa E., "A New Attack on RSA and Demytko's Elliptic Curve Cryptosystem"
