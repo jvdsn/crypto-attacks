@@ -38,7 +38,7 @@ def reduce(B):
     return B.LLL()
 
 
-def reconstruct_polynomials(B, f, monomials, bounds, preprocess_polynomial=lambda x: x, divide_original=True):
+def reconstruct_polynomials(B, f, monomials, bounds, preprocess_polynomial=lambda x: x, divide_original=True, divide_gcd=True):
     """
     Reconstructs polynomials from the lattice basis in the monomials.
     :param B: the lattice basis
@@ -63,7 +63,14 @@ def reconstruct_polynomials(B, f, monomials, bounds, preprocess_polynomial=lambd
             logging.debug(f"Original polynomial divides reconstructed polynomial at row {row}, dividing...")
             polynomial //= f
 
-        # TODO: how to check if the polynomials are pairwise algebraically independent? Divide out GCDs?
+        if divide_gcd:
+            for i in range(len(polynomials)):
+                g = gcd(polynomial, polynomials[i])
+                # TODO: why are we only allowed to divide out g if it is constant?
+                if g != 1 and g.is_constant():
+                    logging.debug(f"Reconstructed polynomial has gcd {g} with polynomial at {i}, dividing...")
+                    polynomial //= g
+                    polynomials[i] //= g
 
         if polynomial.is_constant():
             logging.debug(f"Polynomial at row {row} is constant, ignoring...")
@@ -107,7 +114,7 @@ def find_roots_gcd(polynomials, pr):
     logging.debug("Computing pairwise gcds to find trivial roots...")
     x, y = pr.gens()
     for i in range(len(polynomials)):
-        for j in range(i + 1, len(polynomials)):
+        for j in range(i):
             g = gcd(polynomials[i], polynomials[j])
             if g.degree() == 1 and g.nvariables() == 2 and g.constant_coefficient() == 0:
                 # g = ax + by

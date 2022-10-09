@@ -265,7 +265,7 @@ class TestRSA(TestCase):
         N = p * q
         e = 1908717316858446782674807627631
 
-        p_, q_ = nitaj_crt_rsa.attack(N, e, 0.09, 4, 2)
+        p_, q_ = nitaj_crt_rsa.attack(N, e, 0.09, m=4, t=2)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
@@ -367,7 +367,7 @@ class TestRSA(TestCase):
 
         d = 1659574478146748254056351432273021460473735684664103384774766229138469185471407591788312141
         e = pow(d, -1, phi)
-        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 300, 100), m=2, t=0)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 300, 100), m=1, t=0)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
