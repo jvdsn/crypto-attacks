@@ -1,19 +1,16 @@
 import logging
-from math import isqrt
 from random import choice
 from random import randrange
 
 from sage.all import EllipticCurve
 from sage.all import GF
 from sage.all import cyclotomic_polynomial
-from sage.all import factor
 from sage.all import is_prime
 from sage.all import kronecker
 from sage.all import next_prime
 from sage.all import pari
 
 from shared import is_square
-from shared import make_square_free
 from shared.complex_multiplication import solve_cm
 
 
