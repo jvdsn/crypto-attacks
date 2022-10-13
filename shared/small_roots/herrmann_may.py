@@ -27,27 +27,25 @@ def modular_bivariate(f, e, m, t, X, Y, roots_method="groebner"):
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
-    monomials = set()
+    shifts = []
     for k in range(m + 1):
         for i in range(m - k + 1):
             g = x ** i * f ** k * e ** (m - k)
             g = qr(g).lift()
-            shifts.add(g)
-            monomials.update(g.monomials())
+            shifts.append(g)
 
     for j in range(1, t + 1):
         for k in range(m // t * j, m + 1):
             h = y ** j * f ** k * e ** (m - k)
             h = qr(h).lift()
-            shifts.add(h)
-            monomials.add(u ** k * y ** j)
+            shifts.append(h)
+
+    L, monomials = small_roots.create_lattice(pr, shifts, [U, X, Y])
+    L = small_roots.reduce_lattice(L)
 
     pr = f.parent()
     x, y = pr.gens()
 
-    L = small_roots.fill_lattice(shifts, monomials, [U, X, Y])
-    L = small_roots.reduce(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [U, X, Y], preprocess_polynomial=lambda p: p(1 + x * y, x, y))
-    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield roots[x], roots[y]

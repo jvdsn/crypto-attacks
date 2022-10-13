@@ -23,21 +23,18 @@ def modular_univariate(f, N, m, t, X):
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
-    monomials = set()
+    shifts = []
     for i in range(m):
         for j in range(delta):
             g = x ** j * N ** (m - i) * f ** i
-            shifts.add(g)
-            monomials.update(g.monomials())
+            shifts.append(g)
 
     for i in range(t):
         h = x ** i * f ** m
-        shifts.add(h)
-        monomials.update(h.monomials())
+        shifts.append(h)
 
-    L = small_roots.fill_lattice(shifts, monomials, [X])
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, [X], order=None)
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X])
-    for roots in small_roots.find_roots(polynomials, pr):
+    for roots in small_roots.find_roots(pr, polynomials):
         yield roots[x],

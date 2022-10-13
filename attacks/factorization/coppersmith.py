@@ -76,12 +76,12 @@ def factorize_pq(N, partial_p, partial_q, k=None):
     Xp = partial_p.get_unknown_bounds()
     Xq = partial_q.get_unknown_bounds()
 
-    if np + nq == 2:
+    if np == 1 and nq == 1:
         assert k is not None, "k must be set if the total number of unknown components is two."
         logging.info(f"Trying k = {k}...")
-        for x0, y0 in coron_direct.integer_bivariate(f, k, Xp[0], Xq[0]):
+        for x0, x1 in coron_direct.integer_bivariate(f, k, Xp[0], Xq[0]):
             p = partial_p.sub([x0])
-            q = partial_q.sub([y0])
+            q = partial_q.sub([x1])
             if p * q == N:
                 return p, q
     else:

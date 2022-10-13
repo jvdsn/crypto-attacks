@@ -6,12 +6,12 @@ from sage.all import ZZ
 from shared import small_roots
 
 
-def _get_shifts(m, x, k, shift, j, sum):
+def _get_shifts(m, x, k, shift, j, sum, shifts):
     if j == len(x):
-        yield shift
+        shifts.append(shift)
     else:
         for ij in range(m + 1 - k - sum):
-            yield from _get_shifts(m, x, k, shift * x[j] ** ij, j + 1, sum + ij)
+            _get_shifts(m, x, k, shift * x[j] ** ij, j + 1, sum + ij, shifts)
 
 
 def modular_multivariate(f, N, m, t, X, roots_method="groebner"):
@@ -42,15 +42,12 @@ def modular_multivariate(f, N, m, t, X, roots_method="groebner"):
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
-    monomials = set()
+    shifts = []
     for k in range(m + 1):
-        for g in _get_shifts(m, x, k, f_ ** k * N ** max(t - k, 0), 1, 0):
-            shifts.add(g)
-            monomials.update(g.monomials())
+        _get_shifts(m, x, k, f_ ** k * N ** max(t - k, 0), 1, 0, shifts)
 
-    L = small_roots.fill_lattice(shifts, monomials, X)
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, X)
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, X)
-    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield tuple(roots[xi] for xi in x)

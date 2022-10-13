@@ -25,7 +25,7 @@ def attack(N, a, rho, t=1, k=1, roots_method="groebner"):
     :param roots_method: the method to use to find roots (default: "groebner")
     :return: the secret integer p and a list containing the r values, or None if p could not be found
     """
-    assert len(a) >= 1, "At least one a value is required."
+    assert len(a) > 0, "At least one a value is required."
     assert t >= k, "t must be greater than or equal to k."
 
     R = 2 ** rho
@@ -36,8 +36,7 @@ def attack(N, a, rho, t=1, k=1, roots_method="groebner"):
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
-    monomials = set()
+    shifts = []
     for i in product(*[range(t + 1) for _ in x]):
         if sum(i) <= t:
             l = max(k - sum(i), 0)
@@ -45,13 +44,12 @@ def attack(N, a, rho, t=1, k=1, roots_method="groebner"):
             for m in range(len(i)):
                 fi *= (x[m] - a[m]) ** i[m]
 
-            shifts.add(fi)
-            monomials.update(fi.monomials())
+            shifts.append(fi)
 
-    B = small_roots.fill_lattice(shifts, monomials, X)
-    B = small_roots.reduce(B)
+    B, monomials = small_roots.create_lattice(pr, shifts, X)
+    B = small_roots.reduce_lattice(B)
     polynomials = small_roots.reconstruct_polynomials(B, None, monomials, X, divide_original=False)
-    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         r = [roots[xi] for xi in x]
         if all(-R < ri < R for ri in r):
             return int(gcd(N, a[0] - r[0])), r

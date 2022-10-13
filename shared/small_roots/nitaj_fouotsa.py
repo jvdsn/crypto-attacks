@@ -25,28 +25,22 @@ def modular_trivariate(f, e, m, t, X, Y, Z, roots_method="groebner"):
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
-    monomials = set()
+    shifts = []
     for k in range(m + 1):
         for i1 in range(k, m + 1):
             i2 = k
             i3 = m - i1
             g = x ** (i1 - k) * z ** i3 * f ** k * e ** (m - k)
-            shifts.add(g)
-            monomials.update(g.monomials())
+            shifts.append(g)
 
         i1 = k
         for i2 in range(k + 1, i1 + t + 1):
             i3 = m - i1
             h = y ** (i2 - k) * z ** i3 * f ** k * e ** (m - k)
-            shifts.add(h)
-            monomials.update(h.monomials())
+            shifts.append(h)
 
-    shifts = sorted(shifts)
-    monomials = sorted(monomials)
-    L = small_roots.fill_lattice(shifts, monomials, [X, Y, Z])
-    L = small_roots.reduce(L)
-
+    L, monomials = small_roots.create_lattice(pr, shifts, [X, Y, Z])
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
-    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield roots[x], roots[y], roots[z]

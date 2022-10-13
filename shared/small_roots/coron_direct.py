@@ -54,24 +54,28 @@ def integer_bivariate(p, k, X, Y, echelon_algorithm="default", roots_method="gro
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
+    shifts = []
     for a in range(k):
         for b in range(k):
             s = x ** a * y ** b * p
-            shifts.add(s)
+            shifts.append(s)
 
     for monomial in monomials:
         r = monomial * n
-        shifts.add(r)
+        shifts.append(r)
 
-    L = small_roots.fill_lattice(shifts, monomials, [X, Y])
+    logging.debug(f"Filling the lattice ({len(shifts)} x {len(monomials)})...")
+    L = matrix(ZZ, len(shifts), len(monomials))
+    for row, shift in enumerate(shifts):
+        for col, monomial in enumerate(monomials):
+            L[row, col] = shift.monomial_coefficient(monomial) * monomial(X, Y)
 
     logging.debug("Generating Echelon form...")
     L = L.echelon_form(algorithm=echelon_algorithm)
 
     L2 = L.submatrix(k ** 2, k ** 2, (k + delta) ** 2 - k ** 2)
-    L2 = small_roots.reduce(L2)
+    L2 = small_roots.reduce_lattice(L2)
     # Only use right monomials now (corresponding the the sublattice).
     polynomials = small_roots.reconstruct_polynomials(L2, p, right_monomials, [X, Y])
-    for roots in small_roots.find_roots([p] + polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, [p] + polynomials, method=roots_method):
         yield roots[x], roots[y]

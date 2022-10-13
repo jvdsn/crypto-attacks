@@ -133,23 +133,23 @@ def integer_multivariate(f, m, W, X, strategy, roots_method="resultants"):
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
+    shifts = []
     monomials = set()
     for monomial in S:
         g = monomial * f_
         for xj, Xj, lj in zip(x, X, l):
             g *= Xj ** (lj - monomial.degree(xj))
 
-        shifts.add(g)
+        shifts.append(g)
         monomials.add(monomial)
 
     for monomial in M:
         if monomial not in S:
-            shifts.add(monomial * R)
+            shifts.append(monomial * R)
             monomials.add(monomial)
 
-    L = small_roots.fill_lattice(shifts, monomials, X)
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, X)
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, X)
-    for roots in small_roots.find_roots([f] + polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, [f] + polynomials, method=roots_method):
         yield tuple(roots[xi] for xi in x)

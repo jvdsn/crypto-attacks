@@ -47,36 +47,31 @@ def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
-    monomials = set()
+    shifts = []
     for i in range(m + 1):
         for j in range(m - i + 1):
             for k in range(j + 1):
                 g = x ** i * y ** j * z ** k * f_ * X ** (m - i) * Y ** (m - j) * Z ** (m + t - k)
-                shifts.add(g)
-                monomials.update(g.monomials())
+                shifts.append(g)
 
             for k in range(j + 1, j + t + 1):
                 h = x ** i * y ** j * z ** k * f_ * X ** (m - i) * Y ** (m - j) * Z ** (m + t - k)
-                shifts.add(h)
-                monomials.update(h.monomials())
+                shifts.append(h)
 
     for i in range(m + 2):
         j = m + 1 - i
         for k in range(j + 1):
             g_ = n * x ** i * y ** j * z ** k
-            shifts.add(g_)
-            monomials.update(g_.monomials())
+            shifts.append(g_)
 
         for k in range(j + 1, j + t + 1):
             h_ = n * x ** i * y ** j * z ** k
-            shifts.add(h_)
-            monomials.update(h_.monomials())
+            shifts.append(h_)
 
-    L = small_roots.fill_lattice(shifts, monomials, [X, Y, Z])
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, [X, Y, Z])
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
-    for roots in small_roots.find_roots([f] + polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, [f] + polynomials, method=roots_method):
         yield roots[x], roots[y], roots[z]
 
 
@@ -120,37 +115,32 @@ def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
-    monomials = set()
+    shifts = []
     for i in range(m + 1):
         for j in range(m - i + 1):
             for k in range(m - i + 1):
                 g = x ** i * y ** j * z ** k * f_ * X ** (m - i) * Y ** (m + t - j) * Z ** (m - k)
-                shifts.add(g)
-                monomials.update(g.monomials())
+                shifts.append(g)
 
         for j in range(m - i + 1, m - i + t + 1):
             for k in range(m - i + 1):
                 h = x ** i * y ** j * z ** k * f_ * X ** (m - i) * Y ** (m + t - j) * Z ** (m - k)
-                shifts.add(h)
-                monomials.update(h.monomials())
+                shifts.append(h)
 
     for i in range(m + 2):
         for j in range(m + t + 2 - i):
             k = m + 1 - i
             g_ = n * x ** i * y ** j * z ** k
-            shifts.add(g_)
-            monomials.update(g_.monomials())
+            shifts.append(g_)
 
     for i in range(m + 1):
         j = m + t + 1 - i
         for k in range(m - i + 1):
             h_ = n * x ** i * y ** j * z ** k
-            shifts.add(h_)
-            monomials.update(h_.monomials())
+            shifts.append(h_)
 
-    L = small_roots.fill_lattice(shifts, monomials, [X, Y, Z])
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, [X, Y, Z])
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
-    for roots in small_roots.find_roots([f] + polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, [f] + polynomials, method=roots_method):
         yield roots[x], roots[y], roots[z]

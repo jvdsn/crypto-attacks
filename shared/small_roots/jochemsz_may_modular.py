@@ -126,16 +126,16 @@ def modular_multivariate(f, N, m, X, strategy, roots_method="groebner"):
     logging.debug("Generating shifts...")
 
     M = strategy.generate_M(f, l, m)
-    shifts = set()
+    shifts = []
     monomials = set()
     for k in range(m + 1):
         for monomial in M[k]:
             if monomial not in M[k + 1]:
-                shifts.add(monomial // (l ** k) * f_ ** k * N ** (m - k))
+                shifts.append(monomial // (l ** k) * f_ ** k * N ** (m - k))
                 monomials.add(monomial)
 
-    L = small_roots.fill_lattice(shifts, monomials, X)
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, X)
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, X)
-    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield tuple(roots[xi] for xi in x)

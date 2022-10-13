@@ -26,23 +26,20 @@ def modular_trivariate(f, N, m, t, X, Y, Z, roots_method="groebner"):
     logging.debug("Generating shifts...")
 
     shifts = []
-    monomials = set()
     for i in range(m + 1):
         for j in range(i + 1):
             for k in range(j + 1):
                 g = x ** (j - k) * z ** k * N ** i * f ** (m - i)
                 shifts.append(g)
-                monomials.update(g.monomials())
 
             for k in range(1, t + 1):
                 h = x ** j * y ** k * N ** i * f ** (m - i)
                 shifts.append(h)
-                monomials.update(h.monomials())
 
-    L = small_roots.fill_lattice(shifts, monomials, [X, Y, Z])
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, [X, Y, Z])
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
-    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield roots[x], roots[y], roots[z]
 
 
@@ -66,20 +63,17 @@ def modular_bivariate(f, eM, m, t, Y, Z, roots_method="groebner"):
     logging.debug("Generating shifts...")
 
     shifts = []
-    monomials = set()
     for i in range(m + 1):
         for j in range(i + 1):
             g = y ** j * eM ** i * f ** (m - i)
             shifts.append(g)
-            monomials.update(g.monomials())
 
         for j in range(1, t + 1):
             h = z ** j * eM ** i * f ** (m - i)
             shifts.append(h)
-            monomials.update(h.monomials())
 
-    L = small_roots.fill_lattice(shifts, monomials, [Y, Z])
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, [Y, Z])
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [Y, Z])
-    for roots in small_roots.find_roots(polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield roots[y], roots[z]

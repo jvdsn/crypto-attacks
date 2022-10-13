@@ -41,19 +41,16 @@ def integer_bivariate(p, k, X, Y, roots_method="groebner"):
 
     logging.debug("Generating shifts...")
 
-    shifts = set()
-    monomials = set()
+    shifts = []
     for i in range(k + delta + 1):
         for j in range(k + delta + 1):
             if i <= k and j <= k:
-                shift = x ** i * y ** j * X ** (k - i) * Y ** (k - j) * q
+                shifts.append(x ** i * y ** j * X ** (k - i) * Y ** (k - j) * q)
             else:
-                shift = x ** i * y ** j * n
-            shifts.add(shift)
-            monomials.update(shift.monomials())
+                shifts.append(x ** i * y ** j * n)
 
-    L = small_roots.fill_lattice(shifts, monomials, [X, Y])
-    L = small_roots.reduce(L)
+    L, monomials = small_roots.create_lattice(pr, shifts, [X, Y])
+    L = small_roots.reduce_lattice(L)
     polynomials = small_roots.reconstruct_polynomials(L, p, monomials, [X, Y])
-    for roots in small_roots.find_roots([p] + polynomials, pr, method=roots_method):
+    for roots in small_roots.find_roots(pr, [p] + polynomials, method=roots_method):
         yield roots[x], roots[y]
