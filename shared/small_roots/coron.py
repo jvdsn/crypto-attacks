@@ -10,7 +10,7 @@ from shared.polynomial import max_norm
 def integer_bivariate(p, k, X, Y, roots_method="groebner"):
     """
     Computes small integer roots of a bivariate polynomial.
-    More information: Coron J., "Finding Small Roots of Bivariate Polynomial Equations Revisited"
+    More information: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations Revisited"
     Note: integer_bivariate in the coron_direct will probably be more efficient.
     :param p: the polynomial
     :param k: the amount of shifts to use

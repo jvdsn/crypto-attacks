@@ -296,7 +296,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 [^adleman_manders_miller]: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)
 
 [^small_roots_blomer_may]: Blomer J., May A., "New Partial Key Exposure Attacks on RSA" (Section 6)
-[^small_roots_coron]: Coron J., "Finding Small Roots of Bivariate Polynomial Equations Revisited"
+[^small_roots_coron]: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations Revisited"
 [^small_roots_coron_direct]: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"
 [^small_roots_herrmann_may]: Herrmann M., May A., "Maximizing Small Root Bounds by Linearization and Applications to Small Secret Exponent RSA"
 [^small_roots_herrmann_may_multivariate]: Herrmann M., May A., "Solving Linear Equations Modulo Divisors: On Factoring Given Any Bits" (Section 3 and 4)
