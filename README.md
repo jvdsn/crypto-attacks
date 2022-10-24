@@ -238,6 +238,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Polynomial roots using Groebner bases](shared/small_roots/__init__.py)
 * [x] [Polynomial roots using resultants](shared/small_roots/__init__.py)
 * [x] [Polynomial roots using Sage variety (triangular decomposition)](shared/small_roots/__init__.py)
+* [x] [Aono method (Minkowski sum lattice)](shared/small_roots/aono.py) [^small_roots_aono]
 * [x] [Blomer-May method](shared/small_roots/blomer_may.py) [^small_roots_blomer_may]
 * [x] [Boneh-Durfee method](shared/small_roots/boneh_durfee.py) [^rsa_boneh_durfee]
 * [x] [Coron method](shared/small_roots/coron.py) [^small_roots_coron]
@@ -295,6 +296,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 
 [^adleman_manders_miller]: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)
 
+[^small_roots_aono]: Aono Y., "Minkowski sum based lattice construction for multivariate simultaneous Coppersmith's technique and applications to RSA" (Section 4)
 [^small_roots_blomer_may]: Blomer J., May A., "New Partial Key Exposure Attacks on RSA" (Section 6)
 [^small_roots_coron]: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations Revisited"
 [^small_roots_coron_direct]: Coron J., "Finding Small Roots of Bivariate Integer Polynomial Equations: a Direct Approach"
