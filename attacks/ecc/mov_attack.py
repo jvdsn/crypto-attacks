@@ -1,7 +1,6 @@
 import logging
 import os
 import sys
-
 from math import gcd
 
 from sage.all import GF

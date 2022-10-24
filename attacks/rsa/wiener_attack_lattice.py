@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 from math import isqrt
@@ -11,6 +12,7 @@ if sys.path[1] != path:
 
 from attacks.factorization import known_phi
 from shared.lattice import shortest_vectors
+from shared.small_roots import aono
 
 
 def attack(N, e):
@@ -35,3 +37,32 @@ def attack(N, e):
         factors = known_phi.factorize(N, phi)
         if factors:
             return *factors, int(d)
+
+
+def attack_multiple_exponents(N, e, d_bit_length, m=1):
+    """
+    Recovers the prime factors of a modulus given multiple public exponents with small corresponding private exponents.
+    More information: Aono Y., "Minkowski sum based lattice construction for multivariate simultaneous Coppersmith’s technique and applications to RSA" (Section 4)
+    :param N: the modulus
+    :param e: the public exponent
+    :param d_bit_length: the bit length of the private exponents
+    :param m: the m value to use for the small roots method (default: 1)
+    :return: a tuple containing the prime factors, or None if the prime factors were not found
+    """
+    l = len(e)
+    assert len(set(e)) == l, "All public exponents must be distinct"
+    assert l >= 1, "At least one public exponent is required."
+
+    pr = ZZ[",".join(f"x{i}" for i in range(l)) + ",y"]
+    gens = pr.gens()
+    x = gens[:-1]
+    y = gens[-1]
+    F = [-1 + x[k] * (y + N) for k in range(l)]
+    X = [2 ** d_bit_length for _ in range(l)]
+    Y = 3 * isqrt(N)
+    logging.info(f"Trying m = {m}...")
+    for roots in aono.integer_multivariate(F, e, m, X + [Y]):
+        phi = roots[y] + N
+        factors = known_phi.factorize(N, phi)
+        if factors:
+            return factors

@@ -56,5 +56,7 @@ def integer_multivariate(F, e, m, X, roots_method="groebner"):
 
     L, monomials = small_roots.create_lattice(pr, shifts, X)
     L = small_roots.reduce_lattice(L)
-    polynomials = small_roots.reconstruct_polynomials(L, None, prod(e) ** m, monomials, X)
+    # TODO: why does this not work?
+    # polynomials = small_roots.reconstruct_polynomials(L, None, prod(e) ** m, monomials, X)
+    polynomials = small_roots.reconstruct_polynomials(L, None, None, monomials, X)
     yield from small_roots.find_roots(pr, polynomials, method=roots_method)
