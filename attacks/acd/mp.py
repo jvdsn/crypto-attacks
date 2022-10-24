@@ -48,7 +48,7 @@ def attack(N, a, rho, t=1, k=1, roots_method="groebner"):
 
     B, monomials = small_roots.create_lattice(pr, shifts, X)
     B = small_roots.reduce_lattice(B)
-    polynomials = small_roots.reconstruct_polynomials(B, None, monomials, X, divide_original=False)
+    polynomials = small_roots.reconstruct_polynomials(B, None, N ** k, monomials, X)
     for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         r = [roots[xi] for xi in x]
         if all(-R < ri < R for ri in r):

@@ -412,7 +412,7 @@ class TestRSA(TestCase):
 
         e = 4767842339321110001693689370200744188846086437972267976524065388471471723930990821354799430207822500359946317313395866439324920870720597904488739040160497744807293179379758447729820982374513639776505527597410218540393194583329
         d = pow(e, -1, phi)
-        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 1024, 1000), m=2, t=1)
+        p_, q_, d_ = partial_key_exposure.attack(N, e, PartialInteger.msb_of(d, 1024, 1000), m=2, t=2)
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)

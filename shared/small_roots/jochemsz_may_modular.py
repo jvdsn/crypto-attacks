@@ -136,6 +136,6 @@ def modular_multivariate(f, N, m, X, strategy, roots_method="groebner"):
 
     L, monomials = small_roots.create_lattice(pr, shifts, X)
     L = small_roots.reduce_lattice(L)
-    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, X)
+    polynomials = small_roots.reconstruct_polynomials(L, f, N ** m, monomials, X)
     for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield tuple(roots[xi] for xi in x)

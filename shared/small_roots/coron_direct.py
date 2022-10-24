@@ -76,6 +76,6 @@ def integer_bivariate(p, k, X, Y, echelon_algorithm="default", roots_method="gro
     L2 = L.submatrix(k ** 2, k ** 2, (k + delta) ** 2 - k ** 2)
     L2 = small_roots.reduce_lattice(L2)
     # Only use right monomials now (corresponding the the sublattice).
-    polynomials = small_roots.reconstruct_polynomials(L2, p, right_monomials, [X, Y])
+    polynomials = small_roots.reconstruct_polynomials(L2, p, n, right_monomials, [X, Y])
     for roots in small_roots.find_roots(pr, [p] + polynomials, method=roots_method):
         yield roots[x], roots[y]

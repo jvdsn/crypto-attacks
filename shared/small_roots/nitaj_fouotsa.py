@@ -41,6 +41,6 @@ def modular_trivariate(f, e, m, t, X, Y, Z, roots_method="groebner"):
 
     L, monomials = small_roots.create_lattice(pr, shifts, [X, Y, Z])
     L = small_roots.reduce_lattice(L)
-    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
+    polynomials = small_roots.reconstruct_polynomials(L, f, e ** m, monomials, [X, Y, Z])
     for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield roots[x], roots[y], roots[z]

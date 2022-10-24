@@ -30,7 +30,8 @@ def factorize(N, partial_p, Q, m=1, t=None):
 
     x, y = ZZ["x", "y"].gens()
     a = v * 2 ** W
-    f = x * (a + y) - N
+    b = N % (2 ** (W + L))
+    f = x * (a + y) - b
     X = 2 ** Q
     Y = 2 ** W
     t = int((1 - 2 * delta) * m) if t is None else t

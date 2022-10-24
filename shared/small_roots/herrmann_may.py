@@ -46,6 +46,6 @@ def modular_bivariate(f, e, m, t, X, Y, roots_method="groebner"):
     pr = f.parent()
     x, y = pr.gens()
 
-    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [U, X, Y], preprocess_polynomial=lambda p: p(1 + x * y, x, y))
+    polynomials = small_roots.reconstruct_polynomials(L, f, e ** m, monomials, [U, X, Y], preprocess_polynomial=lambda p: p(1 + x * y, x, y))
     for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield roots[x], roots[y]

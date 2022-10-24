@@ -3,7 +3,6 @@ import os
 import sys
 from math import ceil
 from math import gcd
-from math import isqrt
 from math import sqrt
 
 from sage.all import QQ
@@ -40,16 +39,17 @@ def _bdf_theorem_6(N, e, d_bit_length, d1, d1_bit_length):
         yield d0, k
 
 
-def _bdf_3(N, e, d_bit_length, d0, d0_bit_length, M, m, t):
+def _bdf_3(N, e, d_bit_length, d0, d0_bit_length, r, m, t):
+    n = N.bit_length()
     logging.info(f"Trying m = {m}, t = {t}...")
     p = ZZ["p"].gen()
     x = Zmod(N)["x"].gen()
-    X = 2 * isqrt(N) // M
+    X = int(2 * RR(N) ** (1 / 2) / r)  # Equivalent to 2^(n / 2 + 1) / r
     logging.info("Generating solutions for k candidates...")
     for k in range(1, e):
         f = k * p ** 2 + (e * d0 - (1 + k * (N + 1))) * p + k * N
         for p0 in hensel_roots(f, 2, d0_bit_length):
-            f = x * M + p0
+            f = x * r + p0
             for p_, q_, d_ in _bdf_corollary_1(e, f, N, m, t, X):
                 return p_, q_, d_
 
@@ -60,7 +60,7 @@ def _bdf_4_1(N, e, d_bit_length, d1, d1_bit_length, m, t):
     logging.info(f"Trying m = {m}, t = {t}...")
     p = Zmod(e)["p"].gen()
     x = Zmod(N)["x"].gen()
-    X = 2 * isqrt(N) // e
+    X = int(2 * RR(N) ** (1 / 2) / e)  # Equivalent to 2^(n / 2 + 1) / e
     for _, k in _bdf_theorem_6(N, e, d_bit_length, d1, d1_bit_length):
         f = k * p ** 2 - (1 + k * (N + 1)) * p + k * N
         for p0 in f.roots(multiplicities=False):
@@ -89,15 +89,15 @@ def _bdf_4_2(N, e, d_bit_length, d1, d1_bit_length):
     return None
 
 
-def _bdf_4_3(N, e, d_bit_length, d0, d0_bit_length, d1, d1_bit_length, M, m, t):
+def _bdf_4_3(N, e, d_bit_length, d0, d0_bit_length, d1, d1_bit_length, r, m, t):
     logging.info(f"Trying m = {m}, t = {t}...")
     p = ZZ["p"].gen()
     x = Zmod(N)["x"].gen()
-    X = 2 * isqrt(N) // M
+    X = int(2 * RR(N) ** (1 / 2) / r)  # Equivalent to 2^(n / 2 + 1) / r
     for _, k in _bdf_theorem_6(N, e, d_bit_length, d1, d1_bit_length):
         f = k * p ** 2 + (e * d0 - (1 + k * (N + 1))) * p + k * N
         for p0 in hensel_roots(f, 2, d0_bit_length):
-            f = x * M + p0
+            f = x * r + p0
             for p_, q_, d_ in _bdf_corollary_1(e, f, N, m, t, X):
                 return p_, q_, d_
 
@@ -111,8 +111,8 @@ def _bm_4(N, e, d_bit_length, d1, d1_bit_length, m, t):
     x, y, z = ZZ["x", "y", "z"].gens()
     f = e * x + (k_ + y) * z + e * d_ - 1
     X = 2 ** (d_bit_length - d1_bit_length)  # Equivalent to N^delta
-    Y = 4 * e // isqrt(N)  # Equivalent to 4N^(alpha - 1 / 2)
-    Z = 3 * isqrt(N)
+    Y = int(4 * e / RR(N) ** (1 / 2))  # Equivalent to 4N^(alpha - 1 / 2)
+    Z = int(3 * RR(N) ** (1 / 2))
     logging.info(f"Trying m = {m}, t = {t}...")
     for x0, y0, z0 in blomer_may.modular_trivariate(f, N, m, t, X, Y, Z):
         d = d_ + x0
@@ -129,7 +129,7 @@ def _bm_6(N, e, d_bit_length, d0, d0_bit_length, M, m, t):
     y, z = ZZ["y", "z"].gens()
     f = y * (N - z) - e * d0 + 1
     Y = e  # Equivalent to N^alpha
-    Z = 3 * isqrt(N)
+    Z = int(3 * RR(N) ** (1 / 2))
     logging.info(f"Trying m = {m}, t = {t}...")
     for y0, z0 in blomer_may.modular_bivariate(f, e * M, m, t, Y, Z):
         phi = N - z0
@@ -150,7 +150,7 @@ def _ernst_4_1_1(N, e, d_bit_length, d1, d1_bit_length, m, t):
     f = e * x - N * y + y * z + R
     X = 2 ** (d_bit_length - d1_bit_length)  # Equivalent to N^delta
     Y = 2 ** d_bit_length  # Equivalent to N^beta
-    Z = 3 * isqrt(N)
+    Z = int(3 * RR(N) ** (1 / 2))
     W = N * Y
     logging.info(f"Trying m = {m}, t = {t}...")
     for x0, y0, z0 in ernst.integer_trivariate_1(f, m, t, W, X, Y, Z):
@@ -172,8 +172,8 @@ def _ernst_4_1_2(N, e, d_bit_length, d1, d1_bit_length, m, t):
     x, y, z = ZZ["x", "y", "z"].gens()
     f = e * x - N * y + y * z + k_ * z + R
     X = 2 ** (d_bit_length - d1_bit_length)  # Equivalent to N^delta
-    Y = 4 * max(2 ** (d_bit_length - d1_bit_length), (2 ** d_bit_length) // isqrt(N))  # Equivalent to 4N^max(delta, beta - 1 / 2)
-    Z = 3 * isqrt(N)
+    Y = 4 * int(max(2 ** (d_bit_length - d1_bit_length), 2 ** d_bit_length / RR(N) ** (1 / 2)))  # Equivalent to 4N^max(delta, beta - 1 / 2)
+    Z = int(3 * RR(N) ** (1 / 2))
     W = N * Y
     logging.info(f"Trying m = {m}, t = {t}...")
     for x0, y0, z0 in ernst.integer_trivariate_2(f, m, t, W, X, Y, Z):
@@ -195,8 +195,8 @@ def _ernst_4_2(N, e, d_bit_length, d1, d1_bit_length, m, t):
     x, y, z = ZZ["x", "y", "z"].gens()
     f = e * x - N * y + y * z + k_ * z + R
     X = 2 ** (d_bit_length - d1_bit_length)  # Equivalent to N^delta
-    Y = 4 * max((e * 2 ** (d_bit_length - d1_bit_length)) // N, e // isqrt(N))  # Equivalent to 4N^max(alpha + delta - 1, alpha - 1 / 2)
-    Z = 3 * isqrt(N)
+    Y = 4 * int(max((e * 2 ** (d_bit_length - d1_bit_length)) / N, e / RR(N) ** (1 / 2)))  # Equivalent to 4N^max(alpha + delta - 1, alpha - 1 / 2)
+    Z = int(3 * RR(N) ** (1 / 2))
     W = N * Y
     logging.info(f"Trying m = {m}, t = {t}...")
     for x0, y0, z0 in ernst.integer_trivariate_2(f, m, t, W, X, Y, Z):
@@ -217,7 +217,7 @@ def _ernst_4_3(N, e, d_bit_length, d0, d0_bit_length, M, m, t):
     f = e * M * x - N * y + y * z + R
     X = 2 ** (d_bit_length - d0_bit_length)  # Equivalent to N^delta
     Y = 2 ** d_bit_length  # Equivalent to N^beta
-    Z = 3 * isqrt(N)
+    Z = int(3 * RR(N) ** (1 / 2))
     W = N * Y
     logging.info(f"Trying m = {m}, t = {t}...")
     for x0, y0, z0 in ernst.integer_trivariate_1(f, m, t, W, X, Y, Z):

@@ -51,6 +51,6 @@ def integer_bivariate(p, k, X, Y, roots_method="groebner"):
 
     L, monomials = small_roots.create_lattice(pr, shifts, [X, Y])
     L = small_roots.reduce_lattice(L)
-    polynomials = small_roots.reconstruct_polynomials(L, p, monomials, [X, Y])
+    polynomials = small_roots.reconstruct_polynomials(L, p, n, monomials, [X, Y])
     for roots in small_roots.find_roots(pr, [p] + polynomials, method=roots_method):
         yield roots[x], roots[y]

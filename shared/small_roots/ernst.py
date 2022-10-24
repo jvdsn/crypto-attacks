@@ -70,7 +70,7 @@ def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
 
     L, monomials = small_roots.create_lattice(pr, shifts, [X, Y, Z])
     L = small_roots.reduce_lattice(L)
-    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
+    polynomials = small_roots.reconstruct_polynomials(L, f, n, monomials, [X, Y, Z])
     for roots in small_roots.find_roots(pr, [f] + polynomials, method=roots_method):
         yield roots[x], roots[y], roots[z]
 
@@ -141,6 +141,6 @@ def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
 
     L, monomials = small_roots.create_lattice(pr, shifts, [X, Y, Z])
     L = small_roots.reduce_lattice(L)
-    polynomials = small_roots.reconstruct_polynomials(L, f, monomials, [X, Y, Z])
+    polynomials = small_roots.reconstruct_polynomials(L, f, n, monomials, [X, Y, Z])
     for roots in small_roots.find_roots(pr, [f] + polynomials, method=roots_method):
         yield roots[x], roots[y], roots[z]

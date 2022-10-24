@@ -67,28 +67,40 @@ def reduce_lattice(L):
     return L.LLL()
 
 
-def reconstruct_polynomials(B, f, monomials, bounds, preprocess_polynomial=lambda x: x, divide_original=True, divide_gcd=True):
+def reconstruct_polynomials(B, f, modulus, monomials, bounds, preprocess_polynomial=lambda x: x, divide_gcd=True):
     """
     Reconstructs polynomials from the lattice basis in the monomials.
     :param B: the lattice basis
-    :param f: the original polynomial
+    :param f: the original polynomial (if set to None, polynomials will not be divided by f if possible)
+    :param modulus: the original modulus
     :param monomials: the monomials
     :param bounds: the bounds
     :param preprocess_polynomial: a function which preprocesses a polynomial before it is added to the list (default: identity function)
-    :param divide_original: if set to True, polynomials will be divided by f if possible (default: True)
+    :param divide_gcd: if set to True, polynomials will be pairwise divided by their gcd if possible (default: True)
     :return: a list of polynomials
     """
-    logging.debug(f"Reconstructing polynomials (divide_original = {divide_original}, divide_gcd = {divide_gcd})...")
+    logging.debug(f"Reconstructing polynomials (divide_original = {f is not None}, modulus_bound = {modulus is not None}, divide_gcd = {divide_gcd})...")
     polynomials = []
     for row in range(B.nrows()):
+        norm_squared = 0
+        w = 0
         polynomial = 0
         for col, monomial in enumerate(monomials):
+            if B[row, col] == 0:
+                continue
+            norm_squared += B[row, col] ** 2
+            w += 1
             assert B[row, col] % monomial(*bounds) == 0
             polynomial += B[row, col] * monomial // monomial(*bounds)
 
+        # Equivalent to norm >= modulus / sqrt(w)
+        if modulus is not None and norm_squared * w >= modulus ** 2:
+            logging.debug(f"Row {row} is too large, ignoring...")
+            continue
+
         polynomial = preprocess_polynomial(polynomial)
 
-        if divide_original and polynomial % f == 0:
+        if f is not None and polynomial % f == 0:
             logging.debug(f"Original polynomial divides reconstructed polynomial at row {row}, dividing...")
             polynomial //= f
 
