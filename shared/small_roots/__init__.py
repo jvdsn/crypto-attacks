@@ -57,14 +57,15 @@ def create_lattice(pr, shifts, bounds, order="invlex", sort_shifts_reverse=False
     return L, monomials
 
 
-def reduce_lattice(L):
+def reduce_lattice(L, delta=0.8):
     """
     Reduces a lattice basis using a lattice reduction algorithm (currently LLL).
     :param L: the lattice basis
+    :param delta: the delta parameter for LLL (default: 0.8)
     :return: the reduced basis
     """
     logging.debug(f"Reducing a {L.nrows()} x {L.ncols()} lattice...")
-    return L.LLL()
+    return L.LLL(delta)
 
 
 def reconstruct_polynomials(B, f, modulus, monomials, bounds, preprocess_polynomial=lambda x: x, divide_gcd=True):
