@@ -208,7 +208,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 * [x] [Stereotyped message attack](attacks/rsa/stereotyped_message.py)
 * [x] [Wiener's attack](attacks/rsa/wiener_attack.py)
 * [x] [Wiener's attack for Common Prime RSA](attacks/rsa/wiener_attack_common_prime.py) [^rsa_wiener_attack_common_prime]
-* [x] [Wiener's attack (Heuristic lattice variant)](attacks/rsa/wiener_attack_lattice.py) [^rsa_wiener_attack_lattice]
+* [x] [Wiener's attack (Heuristic lattice variant)](attacks/rsa/wiener_attack_lattice.py) [^rsa_wiener_attack_lattice] [^rsa_wiener_attack_lattice_extended] [^small_roots_aono]
 
 ### Shamir's Secret Sharing
 * [x] [Deterministic coefficients](attacks/shamir_secret_sharing/deterministic_coefficients.py)
@@ -293,6 +293,7 @@ You can also call the attacks from other Python files, but then you'll have to f
 [^rsa_partial_key_exposure3]: Blomer J., May A., "New Partial Key Exposure Attacks on RSA"
 [^rsa_wiener_attack_common_prime]: Jochemsz E., May A., "A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants" (Section 5)
 [^rsa_wiener_attack_lattice]: Nguyen P. Q., "Public-Key Cryptanalysis"
+[^rsa_wiener_attack_lattice_extended]: Howgrave-Graham N., Seifert J., "Extending Wiener’s Attack in the Presence of Many Decrypting Exponents"
 
 [^adleman_manders_miller]: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)
 
