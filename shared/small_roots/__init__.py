@@ -227,6 +227,9 @@ def find_roots_resultants(gens, polynomials):
     :param gens: the unknowns
     :return: a generator generating dicts of (x0: x0root, x1: x1root, ...) entries
     """
+    if len(polynomials) == 0:
+        return
+
     if len(gens) == 1:
         if polynomials[0].is_univariate():
             yield from find_roots_univariate(gens[0], polynomials[0].univariate_polynomial())
