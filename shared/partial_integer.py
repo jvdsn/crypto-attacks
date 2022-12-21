@@ -326,7 +326,7 @@ class PartialInteger:
         :param base: the base (must be a power of two and less than or equal to 36)
         :return: a PartialInteger with known and unknown components as indicated by the digits
         """
-        return PartialInteger.parse_be(reversed(digits), base)
+        return PartialInteger.parse_le(reversed(digits), base)
 
     @staticmethod
     def from_bits_le(bits):
