@@ -1,7 +1,7 @@
 from collections import Counter
 
 
-def possible_key_bit(key, c):
+def _possible_key_bit(key, c):
     s = [i for i in range(256)]
     j = 0
     for i in range(len(key)):
@@ -27,7 +27,7 @@ def attack(encrypt_oracle, key_len):
         for x in range(256):
             key[2] = x
             c = encrypt_oracle(key[:3], b"\x00")
-            possible[possible_key_bit(key, c)] += 1
+            possible[_possible_key_bit(key, c)] += 1
         key.append(possible.most_common(1)[0][0])
 
     return key[3:]
