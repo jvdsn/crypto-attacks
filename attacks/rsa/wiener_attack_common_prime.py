@@ -35,7 +35,7 @@ def attack(N, e, delta=0.25, m=1, t=None, check_bounds=True):
     Y = int(RR(N) ** (delta - 1 / 2) * e)  # Equivalent to N^(delta + 1 / 2 - gamma)
     Z = int(RR(N) ** (delta - 1 / 2) * e)  # Equivalent to N^(delta + 1 / 2 - gamma)
     W = int(RR(N) ** (2 * delta) * e ** 2)  # Equivalent to N^(2 * delta + 2 - 2 * gamma)
-    t = int((1 / 2 + gamma - 4 * delta) / (2 * delta)) * m if t is None else t
+    t = int((1 / 2 + gamma - 4 * delta) / (2 * delta) * m) if t is None else t
     logging.info(f"Trying m = {m}, t = {t}...")
     strategy = jochemsz_may_integer.ExtendedStrategy([t, 0, 0])
     for x0, y0, z0 in jochemsz_may_integer.integer_multivariate(f, m, W, [X, Y, Z], strategy):

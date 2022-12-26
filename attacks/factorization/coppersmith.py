@@ -35,15 +35,15 @@ def factorize_p(N, partial_p, beta=0.5, epsilon=0.125, m=None, t=None):
     assert n > 0
     if n == 1:
         m = ceil(max(beta ** 2 / epsilon, 7 * beta)) if m is None else m
-        t = int(m * (1 / beta - 1)) if t is None else t
+        t = int((1 / beta - 1) * m) if t is None else t
         small_roots = howgrave_graham.modular_univariate
     elif n == 2:
         m = ceil((3 * beta * (1 + sqrt(1 - beta))) / epsilon) if m is None else m
-        t = int(m * (1 - sqrt(1 - beta))) if t is None else t
+        t = int((1 - sqrt(1 - beta)) * m) if t is None else t
         small_roots = herrmann_may_multivariate.modular_multivariate
     else:
         m = ceil((n * (1 / pi * (1 - beta) ** (-0.278465) - beta * log(1 - beta))) / epsilon) if m is None else m
-        t = int(m * (1 - (1 - beta) ** (1 / n))) if t is None else t
+        t = int((1 - (1 - beta) ** (1 / n)) * m) if t is None else t
         small_roots = herrmann_may_multivariate.modular_multivariate
 
     x = Zmod(N)[tuple(f"x{i}" for i in range(n))].gens()
