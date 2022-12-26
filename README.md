@@ -189,6 +189,7 @@ while True:
 * [x] [Bleichenbacher's attack](attacks/rsa/bleichenbacher.py) [^rsa_bleichenbacher]
 * [x] [Bleichenbacher's signature forgery attack](attacks/rsa/bleichenbacher_signature_forgery.py)
 * [x] [Boneh-Durfee attack](attacks/rsa/boneh_durfee.py) [^rsa_boneh_durfee]
+* [x] [Cherkaoui-Semmouni's attack](attacks/rsa/cherkaoui_semmouni.py) [^rsa_cherkaoui_semmouni]
 * [x] [Common modulus attack](attacks/rsa/common_modulus.py)
 * [x] [CRT fault attack](attacks/rsa/crt_fault_attack.py)
 * [x] [Extended Wiener's attack](attacks/rsa/extended_wiener_attack.py) [^rsa_extended_wiener_attack]
@@ -280,6 +281,7 @@ while True:
 
 [^rsa_bleichenbacher]: Bleichenbacher D., "Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard PKCS #1"
 [^rsa_boneh_durfee]: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"
+[^rsa_cherkaoui_semmouni]: Cherkaoui-Semmouni M. et al., "Cryptanalysis of RSA Variants with Primes Sharing Most Significant Bits"
 [^rsa_extended_wiener_attack]: Dujella A., "Continued fractions and RSA with small secret exponent"
 [^rsa_known_crt_exponents]: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"
 [^rsa_manger]: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"

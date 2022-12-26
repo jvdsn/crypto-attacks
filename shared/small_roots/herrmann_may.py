@@ -20,8 +20,8 @@ def modular_bivariate(f, e, m, t, X, Y, roots_method="groebner"):
     """
     f = f.change_ring(ZZ)
 
-    pr = ZZ["u", "x", "y"]
-    u, x, y = pr.gens()
+    pr = ZZ["x", "y", "u"]
+    x, y, u = pr.gens()
     qr = pr.quotient(1 + x * y - u)
     U = X * Y
 
@@ -40,12 +40,12 @@ def modular_bivariate(f, e, m, t, X, Y, roots_method="groebner"):
             h = qr(h).lift()
             shifts.append(h)
 
-    L, monomials = small_roots.create_lattice(pr, shifts, [U, X, Y])
+    L, monomials = small_roots.create_lattice(pr, shifts, [X, Y, U])
     L = small_roots.reduce_lattice(L)
 
     pr = f.parent()
     x, y = pr.gens()
 
-    polynomials = small_roots.reconstruct_polynomials(L, f, e ** m, monomials, [U, X, Y], preprocess_polynomial=lambda p: p(1 + x * y, x, y))
+    polynomials = small_roots.reconstruct_polynomials(L, f, None, monomials, [X, Y, U], preprocess_polynomial=lambda p: p(x, y, 1 + x * y))
     for roots in small_roots.find_roots(pr, polynomials, method=roots_method):
         yield roots[x], roots[y]
