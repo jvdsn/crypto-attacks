@@ -1,10 +1,10 @@
 import os
 import sys
+from hashlib import sha256
 from math import lcm
 from random import getrandbits
 from random import randrange
 from unittest import TestCase
-from hashlib import sha256
 
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
@@ -148,7 +148,12 @@ class TestRSA(TestCase):
         phi = (p - 1) * (q - 1)
         e = 65537
         d = pow(e, -1, phi)
-        p_, q_ = crt_fault_attack.attack(n, e, lambda m: self._crt_faulty_sign(m, p, q, d))
+        p_, q_ = crt_fault_attack.attack_known_m(n, e, 2, self._crt_faulty_sign(2, p, q, d))
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(n, p_ * q_)
+
+        p_, q_ = crt_fault_attack.attack_unknown_m(n, e, pow(2, d, n), self._crt_faulty_sign(2, p, q, d))
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(n, p_ * q_)
