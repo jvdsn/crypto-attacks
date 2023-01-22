@@ -192,6 +192,7 @@ while True:
 * [x] [Cherkaoui-Semmouni's attack](attacks/rsa/cherkaoui_semmouni.py) [^rsa_cherkaoui_semmouni]
 * [x] [Common modulus attack](attacks/rsa/common_modulus.py)
 * [x] [CRT fault attack](attacks/rsa/crt_fault_attack.py)
+* [x] [d fault attack](attacks/rsa/d_fault_attack.py)
 * [x] [Desmedt-Odlyzko attack (selective forgery)](attacks/rsa/desmedt_odlyzko.py) [^rsa_desmedt_odlyzko]
 * [x] [Extended Wiener's attack](attacks/rsa/extended_wiener_attack.py) [^rsa_extended_wiener_attack]
 * [x] [Hastad's broadcast attack](attacks/rsa/hastad_attack.py)

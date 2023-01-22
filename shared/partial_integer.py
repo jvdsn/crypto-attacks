@@ -302,7 +302,8 @@ class PartialInteger:
                     value = 0
                 rc_u += 1
             else:
-                digit = int(digit, base)
+                if isinstance(digit, str):
+                    digit = int(digit, base)
                 assert 0 <= digit < base
                 if rc_u > 0:
                     p.add_unknown(rc_u * bits_per_element)

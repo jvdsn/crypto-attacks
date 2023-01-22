@@ -20,6 +20,7 @@ from attacks.rsa import boneh_durfee
 from attacks.rsa import cherkaoui_semmouni
 from attacks.rsa import common_modulus
 from attacks.rsa import crt_fault_attack
+from attacks.rsa import d_fault_attack
 from attacks.rsa import desmedt_odlyzko
 from attacks.rsa import extended_wiener_attack
 from attacks.rsa import hastad_attack
@@ -157,6 +158,36 @@ class TestRSA(TestCase):
         self.assertIsInstance(p_, int)
         self.assertIsInstance(q_, int)
         self.assertEqual(n, p_ * q_)
+
+    def test_d_fault_attack(self):
+        p = 11711858679422576139240623353912034730578750025305511997160442356437636294934848077337818067479185593605531008093226275733420002636468432350557846723886129
+        q = 11362676749997147110865246846859793005675832462810186294516539616676027025614775954113496330880795201537135407817378604172135795945348591541580522484363839
+        n = p * q
+        phi = (p - 1) * (q - 1)
+        e = 65537
+        d = pow(e, -1, phi)
+        sv = pow(2, d, n)
+        sf = []
+        for i in range(d.bit_length()):
+            sf.append(pow(2, d ^ (2 ** i), n))
+        d_ = d_fault_attack.attack(n, e, sv, sf)
+        self.assertIsInstance(d_, PartialInteger)
+        lsb, lsb_bit_length = d_.get_known_lsb()
+        self.assertIsInstance(lsb, int)
+        self.assertIsInstance(lsb_bit_length, int)
+        self.assertEqual(d, lsb)
+        self.assertEqual(d.bit_length(), lsb_bit_length)
+
+        sf = []
+        for i in range(384):
+            sf.append(pow(2, d ^ (2 ** i), n))
+        d_ = d_fault_attack.attack(n, e, sv, sf)
+        self.assertIsInstance(d_, PartialInteger)
+        lsb, lsb_bit_length = d_.get_known_lsb()
+        self.assertIsInstance(lsb, int)
+        self.assertIsInstance(lsb_bit_length, int)
+        self.assertEqual(d % (2 ** 384), lsb)
+        self.assertEqual(384, lsb_bit_length)
 
     def test_desmedt_odlyzko(self):
         p = 97164923933597891368559775050432519012034358306405340946100833095770328943676411310628656642026913097035188965406025957744495809556827045737345114790763524883526919749849156670762148425581036752109600896844274905771163440683527068529651911795698170268844514398131442858441702974028897564993245872764301596397
