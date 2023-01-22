@@ -192,6 +192,7 @@ while True:
 * [x] [Cherkaoui-Semmouni's attack](attacks/rsa/cherkaoui_semmouni.py) [^rsa_cherkaoui_semmouni]
 * [x] [Common modulus attack](attacks/rsa/common_modulus.py)
 * [x] [CRT fault attack](attacks/rsa/crt_fault_attack.py)
+* [x] [Desmedt-Odlyzko attack (selective forgery)](attacks/rsa/desmedt_odlyzko.py) [^rsa_desmedt_odlyzko]
 * [x] [Extended Wiener's attack](attacks/rsa/extended_wiener_attack.py) [^rsa_extended_wiener_attack]
 * [x] [Hastad's broadcast attack](attacks/rsa/hastad_attack.py)
 * [x] [Known CRT exponents attack](attacks/rsa/known_crt_exponents.py) [^rsa_known_crt_exponents]
@@ -282,6 +283,7 @@ while True:
 [^rsa_bleichenbacher]: Bleichenbacher D., "Chosen Ciphertext Attacks Against Protocols Based on the RSA Encryption Standard PKCS #1"
 [^rsa_boneh_durfee]: Boneh D., Durfee G., "Cryptanalysis of RSA with Private Key d Less than N^0.292"
 [^rsa_cherkaoui_semmouni]: Cherkaoui-Semmouni M. et al., "Cryptanalysis of RSA Variants with Primes Sharing Most Significant Bits"
+[^rsa_desmedt_odlyzko]: Coron J. et al., "Practical Cryptanalysis of ISO 9796-2 and EMV Signatures (Section 3)"
 [^rsa_extended_wiener_attack]: Dujella A., "Continued fractions and RSA with small secret exponent"
 [^rsa_known_crt_exponents]: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"
 [^rsa_manger]: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"
