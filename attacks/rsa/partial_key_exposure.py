@@ -25,7 +25,7 @@ from shared.small_roots import howgrave_graham
 def _bdf_corollary_1(e, f, N, m, t, X):
     for x0, in howgrave_graham.modular_univariate(f, N, m, t, X):
         p = int(f(x0))
-        if p != 0 and N % p == 0:
+        if 1 < p < N and N % p == 0:
             q = N // p
             phi = (p - 1) * (q - 1)
             yield p, q, pow(e, -1, phi)

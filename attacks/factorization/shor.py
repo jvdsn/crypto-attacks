@@ -17,5 +17,5 @@ def factorize(N, a, s):
     for r in divisors(s):
         b_r = pow(a, s // r, N)
         p = gcd(b_r - 1, N)
-        if p != 1 and p != N and N % p == 0:
+        if 1 < p < N and N % p == 0:
             return p, N // p

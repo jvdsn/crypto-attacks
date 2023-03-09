@@ -36,9 +36,9 @@ def attack(N, e, delta, m, t, check_bounds=True):
     Y = int(e * RR(N) ** (delta - 1 / 2))  # Equivalent to N^(alpha + delta - 1 / 2)
     logging.info(f"Trying m = {m}, t = {t}...")
     for x0, y0 in herrmann_may_multivariate.modular_multivariate(f, N, m, t, [X, Y]):
-        z = int(f(x0, y0))
-        p = gcd(z, N)
-        if z != 0 and N % p == 0:
+        pz = int(f(x0, y0))
+        p = gcd(pz, N)
+        if 1 < p < N and N % p == 0:
             return p, N // p
 
     return None

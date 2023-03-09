@@ -52,7 +52,7 @@ def factorize_p(N, partial_p, beta=0.5, epsilon=0.125, m=None, t=None):
     logging.info(f"Trying m = {m}, t = {t}...")
     for roots in small_roots(f, N, m, t, X):
         p = partial_p.sub(roots)
-        if p != 0 and N % p == 0:
+        if 1 < p < N and N % p == 0:
             return p, N // p
 
     return None
