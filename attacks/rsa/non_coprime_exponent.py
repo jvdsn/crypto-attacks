@@ -26,8 +26,8 @@ def attack(N, e, phi, c):
     :return: a generator generating possible plaintexts for c
     """
     assert phi % e == 0, "Public exponent must divide Euler's totient"
-    assert is_prime(e), "Public exponent must be prime"
     if gcd(phi // e, e) == 1:
+        assert is_prime(e), "Public exponent must be prime"
         phi //= e
         # Finding multiplicative generator of subgroup with order e elements (Algorithm 1).
         g = 1

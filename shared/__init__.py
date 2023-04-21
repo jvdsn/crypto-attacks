@@ -133,10 +133,9 @@ def roots_of_unity(ring, l, r):
     assert l % r == 0, "r should divide l"
 
     x = ring(2)
-    while x ** l != 1:
+    while (g := x ** (l // r)) == 1:
         x += 1
 
-    g = x ** (l // r)
     for i in range(r):
         yield int(g ** i)
 
@@ -144,7 +143,7 @@ def roots_of_unity(ring, l, r):
 def rth_roots(Fq, delta, r):
     """
     Uses the Adleman-Manders-Miller algorithm to extract r-th roots in Fq, with r | q - 1.
-    More information: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Section 5)
+    More information: Cao Z. et al., "Adleman-Manders-Miller Root Extraction Method Revisited" (Table 4)
     :param Fq: the field Fq
     :param delta: the r-th residue delta
     :param r: the r
