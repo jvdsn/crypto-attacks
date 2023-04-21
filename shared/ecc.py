@@ -41,6 +41,10 @@ def generate_anomalous_q(q, D=None, c=None):
     :param c: the parameter c to use in the CM method (default: random value)
     :return: a generator generating random anomalous elliptic curves
     """
+    # Idea:
+    # 4q = t^2 - Dv^2
+    # Dv^2 = t^2 - 4q
+    # -> if D divides 1 - 4q and the result is square, it is a good D value
     Ds = [-11, -19, -43, -67, -163] if D is None else [D]
     Ds = [D for D in Ds if (1 - 4 * q) % D == 0 and is_square((1 - 4 * q) // D)]
     assert len(Ds) > 0, "Invalid value for q and default values of D."
@@ -65,6 +69,11 @@ def generate_anomalous(q_bit_length, D=None, c=None):
     """
     Ds = [-11, -19, -43, -67, -163] if D is None else [D]
     while True:
+        # Idea:
+        # 4q = t^2 - Dv^2
+        # 4q = 1 - D(2m + 1)^2
+        # 4q = 1 - D(4m^2 + 4m + 1)
+        # q = -Dm^2 - Dm - (D + 1) / 4
         D = choice(Ds)
         m_bit_length = (q_bit_length - D.bit_length()) // 2 + 1
         m = randrange(2 ** (m_bit_length - 1), 2 ** m_bit_length)
@@ -85,6 +94,10 @@ def generate_with_trace_q(t, q, D=None, c=None):
     """
     assert t ** 2 < 4 * q, f"Trace {t} is outside Hasse's interval for GF({q})"
 
+    # Idea:
+    # 4q = t^2 - Dv^2
+    # Dv^2 = t^2 - 4q
+    # -> D can be immediately computed from t and q
     if D is None:
         D = t ** 2 - 4 * q
         # We don't make D square-free because that removes solutions.
@@ -122,8 +135,11 @@ def generate_with_trace(t, q_bit_length, D=None, c=None):
     assert v_bit_length > 0, "Invalid values for t and q bit length."
 
     while True:
+        # Idea:
+        # 4q = t^2 - Dv^2
+        # -> we simply try random values for v until a suitable q is found
         v = randrange(2 ** (v_bit_length - 1), 2 ** v_bit_length)
-        q4 = t ** 2 - v ** 2 * D
+        q4 = t ** 2 - D * v ** 2
         if q4.bit_length() - 2 == q_bit_length and q4 % 4 == 0 and is_prime(q4 // 4):
             q = q4 // 4
             yield from generate_with_trace_q(t, q, D, c)
@@ -154,7 +170,7 @@ def generate_with_order(m, D=None, c=None):
     """
 
     def get_q(m, D):
-        # TODO: use qfbcornacchia when PARI 2.14.0 is released.
+        # We can't use qfbcornacchia here, because it does not return all (or any) solutions...
         for t in set(map(lambda sol: int(sol[0]), pari.qfbsolve(pari.Qfb(1, 0, -D), 4 * m, 1))):
             if is_prime(m + 1 - t):
                 return m + 1 - t
@@ -184,7 +200,7 @@ def generate_with_order(m, D=None, c=None):
 def generate_supersingular(q, c=None):
     """
     Generates random supersingular elliptic curves.
-    More information: Broker R., "Constructing Supersingular Elliptic Curves"
+    More information: Broeker R., "Constructing Supersingular Elliptic Curves"
     :param q: a prime power q
     :param c: the parameter c to use in the CM method (default: random value)
     :return: a generator generating random supersingular elliptic curves
