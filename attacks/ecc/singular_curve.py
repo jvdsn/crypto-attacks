@@ -1,5 +1,4 @@
 from sage.all import GF
-from sage.all import discrete_log
 
 
 def attack(p, a2, a4, a6, Gx, Gy, Px, Py):
@@ -40,6 +39,6 @@ def attack(p, a2, a4, a6, Gx, Gy, Px, Py):
         t = (alpha - beta).sqrt()
         u = (Gy + t * (Gx - alpha)) / (Gy - t * (Gx - alpha))
         v = (Py + t * (Px - alpha)) / (Py - t * (Px - alpha))
-        return int(discrete_log(v, u))
+        return int(v.log(u))
 
     raise ValueError(f"Unexpected number of roots {len(roots)}.")

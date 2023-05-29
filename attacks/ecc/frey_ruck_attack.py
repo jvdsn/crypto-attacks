@@ -4,7 +4,6 @@ import sys
 from math import gcd
 
 from sage.all import GF
-from sage.all import discrete_log
 
 path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
 if sys.path[1] != path:
@@ -44,8 +43,8 @@ def attack(P, R, max_k=6, max_tries=10):
             continue
 
         delta = Rk.tate_pairing(S, n, k) / Rk.tate_pairing(T, n, k)
-        logging.info(f"Computing discrete_log({delta}, {gamma})...")
-        l = discrete_log(delta, gamma)
+        logging.info(f"Computing {delta}.log({gamma})...")
+        l = delta.log(gamma)
         return int(l)
 
     return None
