@@ -1,6 +1,5 @@
-from sage.all import xgcd, ZZ
-from math import gcd
-
+from sage.all import ZZ
+from sage.all import xgcd
 
 def attack(n, e1, c1, e2, c2):
     """
@@ -12,7 +11,7 @@ def attack(n, e1, c1, e2, c2):
     :param c2: the ciphertext of the second encryption
     :return: the plaintext
     """
-    _, u, v = xgcd(e1, e2)
+    g, u, v = xgcd(e1, e2)
     p1 = pow(c1, u, n) if u > 0 else pow(pow(c1, -1, n), -u, n)
     p2 = pow(c2, v, n) if v > 0 else pow(pow(c2, -1, n), -v, n)
-    return int(ZZ(p1 * p2).nth_root(gcd(e1, e2))) % n
+    return int(ZZ(int(p1 * p2) % n).nth_root(g))

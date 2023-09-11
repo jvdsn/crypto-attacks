@@ -141,6 +141,14 @@ class TestRSA(TestCase):
         m = common_modulus.attack(n, e1, c1, e2, c2)
         self.assertIsInstance(m, int)
         self.assertEqual(2, m)
+        n = p * q
+        e1 = 63
+        c1 = pow(2, e1, n)
+        e2 = 49
+        c2 = pow(2, e2, n)
+        m = common_modulus.attack(n, e1, c1, e2, c2)
+        self.assertIsInstance(m, int)
+        self.assertEqual(2, m)
 
     def test_crt_fault_attack(self):
         p = 8150877473027126093427463792139267852911319917170724105457477564851230704467622727076433793531165751815106108729858930625206375479823641419198589291521783
