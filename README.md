@@ -109,7 +109,7 @@ while True:
 ### ECB
 * [x] [Plaintext recovery attack](attacks/ecb/plaintext_recovery.py)
 * [x] [Plaintext recovery attack (harder variant)](attacks/ecb/plaintext_recovery_harder.py)
-* [x] [Plaintext recovery attack (hardest variant)](attacks/ecb/plaintext_recovery_harder.py)
+* [x] [Plaintext recovery attack (hardest variant)](attacks/ecb/plaintext_recovery_hardest.py)
 
 ### Elliptic Curve Cryptography
 * [x] [ECDSA nonce reuse attack](attacks/ecc/ecdsa_nonce_reuse.py)
