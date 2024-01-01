@@ -142,7 +142,7 @@ def attack_multiple_exponents_2(N, e, d_bit_length, m=1):
     F = [-1 + x[k] * (y + N) for k in range(l)]
     X = [2 ** d_bit_length for _ in range(l)]
     Y = 3 * isqrt(N)
-    logging.info(f"Trying m = {m}...")
+    logging.info(f"Trying {m = }...")
     for roots in aono.integer_multivariate(F, e, m, X + [Y]):
         phi = roots[y] + N
         factors = known_phi.factorize(N, phi)

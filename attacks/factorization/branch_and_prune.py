@@ -221,7 +221,7 @@ def factorize_pqd(N, e, p, q, d):
     # Because e is small, k can be found by brute force.
     logging.info("Brute forcing k...")
     k, d__bits = _find_k(N, e, d_bits)
-    logging.info(f"Found k = {k}")
+    logging.info(f"Found {k = }")
 
     _correct_msb(d_bits, d__bits)
 
@@ -269,7 +269,7 @@ def factorize_pqddpdq(N, e, p, q, d, dp, dq):
     # Because e is small, k can be found by brute force.
     logging.info("Brute forcing k...")
     k, d__bits = _find_k(N, e, d_bits)
-    logging.info(f"Found k = {k}")
+    logging.info(f"Found {k = }")
 
     _correct_msb(d_bits, d__bits)
 
@@ -282,7 +282,7 @@ def factorize_pqddpdq(N, e, p, q, d, dp, dq):
     for kp in f.roots(multiplicities=False):
         kp = int(kp)
         kq = (-pow(kp, -1, e) * k) % e
-        logging.info(f"Trying kp = {kp} and kq = {kq}...")
+        logging.info(f"Trying {kp = } and {kq = }...")
 
         # Make a copy for every try of kp and kq so we are sure these bits are not modified.
         # We don't need to make a copy of p, q, and d bits in this loop because those bits only get modified in the branch and prune.

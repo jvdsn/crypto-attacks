@@ -25,7 +25,7 @@ def attack(N, e, c, partial_m, m=1, t=0):
     x = Zmod(N)["x"].gen()
     f = (partial_m.sub([x])) ** e - c
     X = partial_m.get_unknown_bounds()
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, in howgrave_graham.modular_univariate(f, N, m, t, X):
         if x0 != 0:
             return int(partial_m.sub([x0]))

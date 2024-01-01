@@ -13,7 +13,7 @@ def factorize(N, coefficient_threshold=32):
     R = ZZ["x"]
     base = 2
     while True:
-        logging.debug(f"Trying base {base}...")
+        logging.debug(f"Trying {base = }...")
         poly = R(ZZ(N).digits(base))
         logging.debug(f"Got {len(poly.coefficients())} coefficients")
         if len(poly.coefficients()) < coefficient_threshold:
@@ -32,7 +32,7 @@ def factorize_base_2x(N):
     R = ZZ["x"]
     base = 2
     while True:
-        logging.debug(f"Trying base {base}...")
+        logging.debug(f"Trying {base = }...")
         poly = R(ZZ(N).digits(base))
         facs = poly.factor()
         if len(facs) > 1:

@@ -37,7 +37,7 @@ def create_lattice(pr, shifts, bounds, order="invlex", sort_shifts_reverse=False
     :param sort_monomials_reverse: set to true to sort the monomials in reverse order
     :return: a tuple of lattice and list of monomials
     """
-    logging.debug(f"Creating a lattice with {len(shifts)} shifts (order = {order}, sort_shifts_reverse = {sort_shifts_reverse}, sort_monomials_reverse = {sort_monomials_reverse})...")
+    logging.debug(f"Creating a lattice with {len(shifts)} shifts ({order = }, {sort_shifts_reverse = }, {sort_monomials_reverse = })...")
     if pr.ngens() > 1:
         pr_ = pr.change_ring(ZZ, order=order)
         shifts = [pr_(shift) for shift in shifts]
@@ -80,7 +80,9 @@ def reconstruct_polynomials(B, f, modulus, monomials, bounds, preprocess_polynom
     :param divide_gcd: if set to True, polynomials will be pairwise divided by their gcd if possible (default: True)
     :return: a list of polynomials
     """
-    logging.debug(f"Reconstructing polynomials (divide_original = {f is not None}, modulus_bound = {modulus is not None}, divide_gcd = {divide_gcd})...")
+    divide_original = f is not None
+    modulus_bound = modulus is not None
+    logging.debug(f"Reconstructing polynomials ({divide_original = }, {modulus_bound = }, {divide_gcd = })...")
     polynomials = []
     for row in range(B.nrows()):
         norm_squared = 0
@@ -95,13 +97,13 @@ def reconstruct_polynomials(B, f, modulus, monomials, bounds, preprocess_polynom
             polynomial += B[row, col] * monomial // monomial(*bounds)
 
         # Equivalent to norm >= modulus / sqrt(w)
-        if modulus is not None and norm_squared * w >= modulus ** 2:
+        if modulus_bound and norm_squared * w >= modulus ** 2:
             logging.debug(f"Row {row} is too large, ignoring...")
             continue
 
         polynomial = preprocess_polynomial(polynomial)
 
-        if f is not None and polynomial % f == 0:
+        if divide_original and polynomial % f == 0:
             logging.debug(f"Original polynomial divides reconstructed polynomial at row {row}, dividing...")
             polynomial //= f
 

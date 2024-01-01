@@ -174,7 +174,7 @@ def rth_roots(Fq, delta, r):
     h = 1
     for i in range(1, t):
         d = b ** pow(r, t - 1 - i, q - 1)
-        logging.debug(f"Computing the discrete logarithm for i = {i}, this may take a long time...")
+        logging.debug(f"Computing the discrete logarithm for {i = }, this may take a long time...")
         j = 0 if d == 1 else -d.log(a)
         b *= (c ** r) ** j
         h *= c ** j

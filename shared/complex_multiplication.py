@@ -67,7 +67,7 @@ def solve_cm(D, q, c=None):
     """
     assert is_prime_power(q)
 
-    logging.debug(f"Solving CM equation for q = {q} using D = {D} and c = {c}")
+    logging.debug(f"Solving CM equation for {q = } using {D = } and {c = }")
     gf = GF(q)
     if gf.characteristic() == 2 or gf.characteristic() == 3:
         return

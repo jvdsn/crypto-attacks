@@ -37,7 +37,7 @@ def attack(N, e, factor_bit_length, partial_p=None, delta=0.25, m=1, t=None):
     X = int(RR(e) ** delta)
     Y = int(2 ** (factor_bit_length - p_lsb_bit_length + 1))
     t = int((1 - 2 * delta) * m) if t is None else t
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, y0 in herrmann_may.modular_bivariate(f, e, m, t, X, Y):
         z = int(f(x0, y0))
         if z % e == 0:
@@ -70,7 +70,7 @@ def attack_multi_prime(N, e, factor_bit_length, factors, delta=0.25, m=1, t=None
     X = int(RR(e) ** delta)
     Y = int(2 ** ((factors - 1) * factor_bit_length + 1))
     t = int((1 - 2 * delta) * m) if t is None else t
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, y0 in herrmann_may.modular_bivariate(f, e, m, t, X, Y):
         z = int(f(x0, y0))
         if z % e == 0:

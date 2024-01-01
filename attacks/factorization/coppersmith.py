@@ -49,7 +49,7 @@ def factorize_p(N, partial_p, beta=0.5, epsilon=0.125, m=None, t=None):
     x = Zmod(N)[tuple(f"x{i}" for i in range(n))].gens()
     f = partial_p.sub(x)
     X = partial_p.get_unknown_bounds()
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for roots in small_roots(f, N, m, t, X):
         p = partial_p.sub(roots)
         if 1 < p < N and N % p == 0:
@@ -78,7 +78,7 @@ def factorize_pq(N, partial_p, partial_q, k=None):
 
     if np == 1 and nq == 1:
         assert k is not None, "k must be set if the total number of unknown components is two."
-        logging.info(f"Trying k = {k}...")
+        logging.info(f"Trying {k = }...")
         for x0, x1 in coron_direct.integer_bivariate(f, k, Xp[0], Xq[0]):
             p = partial_p.sub([x0])
             q = partial_q.sub([x1])

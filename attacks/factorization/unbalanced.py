@@ -36,7 +36,7 @@ def factorize(N, partial_p, Q, m=1, t=None, check_bounds=True):
     X = 2 ** Q
     Y = 2 ** W
     t = int((1 - 2 * delta) * m) if t is None else t
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, y0 in herrmann_may.modular_bivariate(f, 2 ** (W + L), m, t, X, Y):
         q = x0
         if q != 0 and N % q == 0:

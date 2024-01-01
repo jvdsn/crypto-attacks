@@ -41,7 +41,7 @@ def _bdf_theorem_6(N, e, d_bit_length, d1, d1_bit_length):
 
 def _bdf_3(N, e, d_bit_length, d0, d0_bit_length, r, m, t):
     n = N.bit_length()
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     p = ZZ["p"].gen()
     x = Zmod(N)["x"].gen()
     X = int(2 * RR(N) ** (1 / 2) / r)  # Equivalent to 2^(n / 2 + 1) / r
@@ -57,7 +57,7 @@ def _bdf_3(N, e, d_bit_length, d0, d0_bit_length, r, m, t):
 
 
 def _bdf_4_1(N, e, d_bit_length, d1, d1_bit_length, m, t):
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     p = Zmod(e)["p"].gen()
     x = Zmod(N)["x"].gen()
     X = int(2 * RR(N) ** (1 / 2) / e)  # Equivalent to 2^(n / 2 + 1) / e
@@ -90,7 +90,7 @@ def _bdf_4_2(N, e, d_bit_length, d1, d1_bit_length):
 
 
 def _bdf_4_3(N, e, d_bit_length, d0, d0_bit_length, d1, d1_bit_length, r, m, t):
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     p = ZZ["p"].gen()
     x = Zmod(N)["x"].gen()
     X = int(2 * RR(N) ** (1 / 2) / r)  # Equivalent to 2^(n / 2 + 1) / r
@@ -113,7 +113,7 @@ def _bm_4(N, e, d_bit_length, d1, d1_bit_length, m, t):
     X = 2 ** (d_bit_length - d1_bit_length)  # Equivalent to N^delta
     Y = int(4 * e / RR(N) ** (1 / 2))  # Equivalent to 4N^(alpha - 1 / 2)
     Z = int(3 * RR(N) ** (1 / 2))
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, y0, z0 in blomer_may.modular_trivariate(f, N, m, t, X, Y, Z):
         d = d_ + x0
         phi = N - z0
@@ -130,7 +130,7 @@ def _bm_6(N, e, d_bit_length, d0, d0_bit_length, M, m, t):
     f = y * (N - z) - e * d0 + 1
     Y = e  # Equivalent to N^alpha
     Z = int(3 * RR(N) ** (1 / 2))
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for y0, z0 in blomer_may.modular_bivariate(f, e * M, m, t, Y, Z):
         phi = N - z0
         d = pow(e, -1, phi)
@@ -152,7 +152,7 @@ def _ernst_4_1_1(N, e, d_bit_length, d1, d1_bit_length, m, t):
     Y = 2 ** d_bit_length  # Equivalent to N^beta
     Z = int(3 * RR(N) ** (1 / 2))
     W = N * Y
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, y0, z0 in ernst.integer_trivariate_1(f, m, t, W, X, Y, Z):
         d = d_ + x0
         phi = N - z0
@@ -175,7 +175,7 @@ def _ernst_4_1_2(N, e, d_bit_length, d1, d1_bit_length, m, t):
     Y = 4 * int(max(2 ** (d_bit_length - d1_bit_length), 2 ** d_bit_length / RR(N) ** (1 / 2)))  # Equivalent to 4N^max(delta, beta - 1 / 2)
     Z = int(3 * RR(N) ** (1 / 2))
     W = N * Y
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, y0, z0 in ernst.integer_trivariate_2(f, m, t, W, X, Y, Z):
         d = d_ + x0
         phi = N - z0
@@ -198,7 +198,7 @@ def _ernst_4_2(N, e, d_bit_length, d1, d1_bit_length, m, t):
     Y = 4 * int(max((e * 2 ** (d_bit_length - d1_bit_length)) / N, e / RR(N) ** (1 / 2)))  # Equivalent to 4N^max(alpha + delta - 1, alpha - 1 / 2)
     Z = int(3 * RR(N) ** (1 / 2))
     W = N * Y
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, y0, z0 in ernst.integer_trivariate_2(f, m, t, W, X, Y, Z):
         d = d_ + x0
         phi = N - z0
@@ -219,7 +219,7 @@ def _ernst_4_3(N, e, d_bit_length, d0, d0_bit_length, M, m, t):
     Y = 2 ** d_bit_length  # Equivalent to N^beta
     Z = int(3 * RR(N) ** (1 / 2))
     W = N * Y
-    logging.info(f"Trying m = {m}, t = {t}...")
+    logging.info(f"Trying {m = }, {t = }...")
     for x0, y0, z0 in ernst.integer_trivariate_1(f, m, t, W, X, Y, Z):
         d = x0 * M + d0
         phi = N - z0

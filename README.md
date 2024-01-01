@@ -39,7 +39,7 @@ delta = 0.26
 
 p, q = attack(N, e, p_bits, delta=delta, m=3)
 assert p * q == N
-print(f"Found p = {p} and q = {q}")
+print(f"Found {p = } and {q = }")
 ```
 
 Then you can simply execute the file using Sage. It does not matter where you execute it from, the Python path is automagically set (

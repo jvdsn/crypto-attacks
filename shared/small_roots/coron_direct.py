@@ -35,7 +35,7 @@ def integer_bivariate(p, k, X, Y, echelon_algorithm="default", roots_method="gro
                     S[a * k + b, i * k + j] = s.coefficient([i0 + i, j0 + j])
 
     n = abs(S.det())
-    logging.debug(f"Found n = {n}")
+    logging.debug(f"Found {n = }")
 
     # Monomials are collected in "left" and "right" lists, which determine where the columns are in relation to each other.
     # This partition ensures the Echelon form will set desired monomial coefficients to zero.

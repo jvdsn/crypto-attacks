@@ -27,7 +27,7 @@ def integer_trivariate_1(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
 
     tau = t / m
     if check_bounds and RR(X) ** (1 + 3 * tau) * RR(Y) ** (2 + 3 * tau) * RR(Z) ** (1 + 3 * tau + 3 * tau ** 2) > RR(W) ** (1 + 3 * tau):
-        logging.debug(f"Bound check failed for m = {m}, t = {t}")
+        logging.debug(f"Bound check failed for {m = }, {t = }")
         return
 
     R = int(f.constant_coefficient())
@@ -95,7 +95,7 @@ def integer_trivariate_2(f, m, t, W, X, Y, Z, check_bounds=True, roots_method="g
 
     tau = t / m
     if check_bounds and RR(X) ** (2 + 3 * tau) * RR(Y) ** (3 + 6 * tau + 3 * tau ** 2) * RR(Z) ** (3 + 3 * tau) > RR(W) ** (2 + 3 * tau):
-        logging.debug(f"Bound check failed for m = {m}, t = {t}")
+        logging.debug(f"Bound check failed for {m = }, {t = }")
         return
 
     R = int(f.constant_coefficient())

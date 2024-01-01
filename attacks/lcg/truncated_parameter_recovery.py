@@ -99,7 +99,7 @@ def attack(y, k, s, m=None, a=None, check_modulus=None):
             logging.info(f"Trying chunk size {chunk_size}...")
             polynomials = []
             for i in range(len(y) // chunk_size):
-                logging.info(f"Generating polynomials for n = {n}, t = {t}...")
+                logging.info(f"Generating polynomials for {n = }, {t = }...")
                 for P in _generate_polynomials(y[chunk_size * i:chunk_size * (i + 1)], n, t):
                     polynomials.append(P)
 

@@ -73,11 +73,11 @@ def generate_pseudoprime(A, k2=None, k3=None, min_bit_length=0):
     if k3 is None:
         k3 = int(next_prime(k2))
     while True:
-        logging.info(f"Trying k2 = {k2} and k3 = {k3}...")
+        logging.info(f"Trying {k2 = } and {k3 = }...")
         X = [pow(-k3, -1, k2), pow(-k2, -1, k3)]
         M = [k2, k3]
         S = _generate_s(A, M)
-        logging.info(f"S = {S}")
+        logging.info(f"{S = }")
         z, m = _backtrack(S, A, X, M, 0)
         if z and m:
             logging.info(f"Found residue {z} and modulus {m}")
