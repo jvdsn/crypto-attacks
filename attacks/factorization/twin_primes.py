@@ -9,5 +9,4 @@ def factorize(N):
     """
     p = isqrt(N + 1) - 1
     q = isqrt(N + 1) + 1
-    if p * q == N:
-        return p, q
+    return p, q if p * q == N else None

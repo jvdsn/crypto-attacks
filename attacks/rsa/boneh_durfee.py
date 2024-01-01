@@ -25,7 +25,7 @@ def attack(N, e, factor_bit_length, partial_p=None, delta=0.25, m=1, t=None):
     :param delta: a predicted bound on the private exponent (d < N^delta) (default: 0.25)
     :param m: the m value to use for the small roots method (default: 1)
     :param t: the t value to use for the small roots method (default: automatically computed using m)
-    :return: a tuple containing the prime factors
+    :return: a tuple containing the prime factors, or None if the factors were not found
     """
     # Use additional information about factors to speed up Boneh-Durfee.
     p_lsb, p_lsb_bit_length = (0, 0) if partial_p is None else partial_p.get_known_lsb()
@@ -62,7 +62,7 @@ def attack_multi_prime(N, e, factor_bit_length, factors, delta=0.25, m=1, t=None
     :param delta: a predicted bound on the private exponent (d < n^delta) (default: 0.25)
     :param m: the m value to use for the small roots method (default: 1)
     :param t: the t value to use for the small roots method (default: automatically computed using m)
-    :return: a tuple containing the prime factors
+    :return: a tuple containing the prime factors, or None if the factors were not found
     """
     x, y = ZZ["x", "y"].gens()
     A = N + 1

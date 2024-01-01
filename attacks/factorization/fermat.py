@@ -24,5 +24,4 @@ def factorize(N):
 
     p = a - isqrt(b)
     q = N // p
-    if p * q == N:
-        return p, q
+    return p, q if p * q == N else None

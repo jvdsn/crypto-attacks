@@ -33,3 +33,5 @@ def attack(N, e, beta, delta, m=1, t=None, check_bounds=True):
         q = int(s + isqrt(d)) // 2
         d = int(f(x0, y0) // e)
         return p, q, d
+
+    return None

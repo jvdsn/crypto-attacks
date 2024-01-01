@@ -65,7 +65,7 @@ def factorize(N, M, m, t, g=65537):
     :param m: the m parameter for Coppersmith's method
     :param t: the t parameter for Coppersmith's method
     :param g: the generator value (default: 65537)
-    :return: a tuple containing the prime factors
+    :return: a tuple containing the prime factors, or None if the factors were not found
     """
     logging.info("Generating M'...")
     M_ = _greedy_find_M_(N, M)
@@ -83,3 +83,5 @@ def factorize(N, M, m, t, g=65537):
             p = int(f(k_))
             if N % p == 0:
                 return p, N // p
+
+    return None

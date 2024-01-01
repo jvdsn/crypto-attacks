@@ -19,3 +19,5 @@ def factorize(N, a, s):
         p = gcd(b_r - 1, N)
         if 1 < p < N and N % p == 0:
             return p, N // p
+
+    return None

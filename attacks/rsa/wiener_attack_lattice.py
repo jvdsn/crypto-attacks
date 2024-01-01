@@ -42,6 +42,8 @@ def attack(N, e):
         if factors:
             return *factors, int(d)
 
+    return None
+
 
 # Construct R_{u, v} for a specific monomial.
 def _construct_relation(N, monomial, x):
@@ -116,9 +118,7 @@ def attack_multiple_exponents_1(N, e, alpha):
     L_ = reduce_lattice(L)
     b = L.solve_left(L_[0])
     phi = round(b[1] / b[0] * e[0])
-    factors = known_phi.factorize(N, phi)
-    if factors:
-        return factors
+    return known_phi.factorize(N, phi)
 
 
 def attack_multiple_exponents_2(N, e, d_bit_length, m=1):
@@ -148,3 +148,5 @@ def attack_multiple_exponents_2(N, e, d_bit_length, m=1):
         factors = known_phi.factorize(N, phi)
         if factors:
             return factors
+
+    return None

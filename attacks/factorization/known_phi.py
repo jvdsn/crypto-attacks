@@ -17,7 +17,7 @@ def factorize(N, phi):
     d = s ** 2 - 4 * N
     p = int(s - isqrt(d)) // 2
     q = int(s + isqrt(d)) // 2
-    return p, q
+    return p, q if p * q == N else None
 
 
 def factorize_multi_prime(N, phi):

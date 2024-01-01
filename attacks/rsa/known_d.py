@@ -8,7 +8,7 @@ def attack(N, e, d):
     :param N: the modulus
     :param e: the public exponent
     :param d: the private exponent
-    :return: a tuple containing the prime factors, or None if the factors were not found
+    :return: a tuple containing the prime factors
     """
     k = e * d - 1
     t = 0
