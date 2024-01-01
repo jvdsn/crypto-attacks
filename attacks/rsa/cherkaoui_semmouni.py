@@ -16,8 +16,20 @@ from shared.small_roots import herrmann_may
 
 
 def attack(N, e, beta, delta, m=1, t=None, check_bounds=True):
+    """
+    Recovers the prime factors of a modulus and the private exponent if |p - q| is sufficiently small.
+    More information: Cherkaoui-Semmouni M. et al., "Cryptanalysis of RSA Variants with Primes Sharing Most Significant Bits"
+    :param N: the modulus
+    :param e: the exponent
+    :param beta: the parameter beta such that |p - q| <= N^beta
+    :param delta: the parameter delta such that d <= N^delta
+    :param m: the m value to use for the small roots method (default: 1)
+    :param t: the t value to use for the small roots method (default: automatically computed using m)
+    :param check_bounds: perform bounds check (default: True)
+    :return: a tuple containing the prime factors and the private exponent, or None if the factors could not be found
+    """
     alpha = log(e, N)
-    assert not check_bounds or delta < 2 - sqrt(2 * alpha * beta), "Bound check failed."
+    assert not check_bounds or delta < 2 - sqrt(2 * alpha * beta), "Bounds check failed."
 
     x, y = ZZ["x", "y"].gens()
     A = -(N - 1) ** 2
