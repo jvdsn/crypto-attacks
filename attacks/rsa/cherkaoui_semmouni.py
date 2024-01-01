@@ -29,7 +29,7 @@ def attack(N, e, beta, delta, m=1, t=None, check_bounds=True):
     :return: a tuple containing the prime factors and the private exponent, or None if the factors could not be found
     """
     alpha = log(e, N)
-    assert not check_bounds or delta < 2 - sqrt(2 * alpha * beta), "Bounds check failed."
+    assert not check_bounds or delta < 2 - sqrt(2 * alpha * beta), f"Bounds check failed ({delta} < {2 - sqrt(2 * alpha * beta)})."
 
     x, y = ZZ["x", "y"].gens()
     A = -(N - 1) ** 2

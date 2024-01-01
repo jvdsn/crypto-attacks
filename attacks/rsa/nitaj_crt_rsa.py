@@ -28,7 +28,7 @@ def attack(N, e, delta, m, t, check_bounds=True):
     :return: a tuple containing the prime factors, or None if the factors could not be found
     """
     alpha = log(e, N)
-    assert not check_bounds or 2 * delta < sqrt(2) / 2 - alpha, "Bounds check failed."
+    assert not check_bounds or 2 * delta < sqrt(2) / 2 - alpha, f"Bounds check failed ({2 * delta} < {sqrt(2) / 2 - alpha})."
 
     x, y = Zmod(N)["x", "y"].gens()
     f = x + e * y

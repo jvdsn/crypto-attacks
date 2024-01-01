@@ -26,7 +26,7 @@ def factorize(N, partial_p, Q, m=1, t=None, check_bounds=True):
     W = partial_p.get_unknown_lsb()
     assert W > 0, "Number of unknown lsb must be greater than 0 (try adding a dummy unknown bit)."
     v, L = partial_p.get_known_middle()
-    assert not check_bounds or 3 * L ** 2 + (4 * W - 6 * Q) * L + 3 * Q ** 2 - 8 * Q * W > 0, "Bounds check failed."
+    assert not check_bounds or 3 * L ** 2 + (4 * W - 6 * Q) * L + 3 * Q ** 2 - 8 * Q * W > 0, f"Bounds check failed ({3 * L ** 2 + (4 * W - 6 * Q) * L + 3 * Q ** 2 - 8 * Q * W} > 0)."
     delta = Q / (W + L)
 
     x, y = ZZ["x", "y"].gens()
