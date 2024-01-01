@@ -288,7 +288,7 @@ while True:
 [^rsa_desmedt_odlyzko]: Coron J. et al., "Practical Cryptanalysis of ISO 9796-2 and EMV Signatures (Section 3)"
 [^rsa_extended_wiener_attack]: Dujella A., "Continued fractions and RSA with small secret exponent"
 [^rsa_known_crt_exponents]: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"
-[^rsa_known_msb_crt_exponents]: Alexander M., Julian N., Santanu S., "Approximate Divisor Multiples - Factoring with Only a Third of the Secret CRT-Exponents"
+[^rsa_known_msb_crt_exponents]: May A., Nowakowski J., Sarkar S., "Approximate Divisor Multiples - Factoring with Only a Third of the Secret CRT-Exponents"
 [^rsa_manger]: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"
 [^rsa_nitaj_crt_rsa]: Nitaj A., "A new attack on RSA and CRT-RSA"
 [^rsa_non_coprime_exponent]: Shumow D., "Incorrectly Generated RSA Keys: How To Recover Lost Plaintexts"
