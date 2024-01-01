@@ -7,8 +7,8 @@ path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.
 if sys.path[1] != path:
     sys.path.insert(1, path)
 
-from shared import ceil
-from shared import floor
+from shared import ceil_div
+from shared import floor_div
 
 
 def _insert(M, a, b):
@@ -36,7 +36,7 @@ def _step_1(padding_oracle, n, e, c):
 
 # Step 2.a.
 def _step_2a(padding_oracle, n, e, c0, B):
-    s = ceil(n, 3 * B)
+    s = ceil_div(n, 3 * B)
     while not padding_oracle((c0 * pow(s, e, n)) % n):
         s += 1
 
@@ -54,10 +54,10 @@ def _step_2b(padding_oracle, n, e, c0, s):
 
 # Step 2.c.
 def _step_2c(padding_oracle, n, e, c0, B, s, a, b):
-    r = ceil(2 * (b * s - 2 * B), n)
+    r = ceil_div(2 * (b * s - 2 * B), n)
     while True:
-        left = ceil(2 * B + r * n, b)
-        right = floor(3 * B + r * n, a)
+        left = ceil_div(2 * B + r * n, b)
+        right = floor_div(3 * B + r * n, a)
         for s in range(left, right + 1):
             if padding_oracle((c0 * pow(s, e, n)) % n):
                 return s
@@ -69,11 +69,11 @@ def _step_2c(padding_oracle, n, e, c0, B, s, a, b):
 def _step_3(n, B, s, M):
     M_ = []
     for (a, b) in M:
-        left = ceil(a * s - 3 * B + 1, n)
-        right = floor(b * s - 2 * B, n)
+        left = ceil_div(a * s - 3 * B + 1, n)
+        right = floor_div(b * s - 2 * B, n)
         for r in range(left, right + 1):
-            a_ = max(a, ceil(2 * B + r * n, s))
-            b_ = min(b, floor(3 * B - 1 + r * n, s))
+            a_ = max(a, ceil_div(2 * B + r * n, s))
+            b_ = min(b, floor_div(3 * B - 1 + r * n, s))
             _insert(M_, a_, b_)
 
     return M_
@@ -89,7 +89,7 @@ def attack(padding_oracle, n, e, c):
     :param c: the ciphertext (integer)
     :return: the plaintext (integer)
     """
-    k = ceil(n.bit_length(), 8)
+    k = ceil_div(n.bit_length(), 8)
     B = 2 ** (8 * (k - 2))
     logging.info("Executing step 1...")
     s0, c0 = _step_1(padding_oracle, n, e, c)

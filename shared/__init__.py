@@ -32,7 +32,7 @@ def bits_to_int_le(bits, count):
     return i
 
 
-def floor(a, b):
+def floor_div(a, b):
     """
     Returns floor(a / b), works with large integers.
     :param a: a
@@ -42,7 +42,7 @@ def floor(a, b):
     return a // b
 
 
-def ceil(a, b):
+def ceil_div(a, b):
     """
     Returns ceil(a / b), works with large integers.
     :param a: a
