@@ -31,6 +31,8 @@ def attack(n, e, max_s=20000, max_r=100, max_t=100):
         if convergents[i + 2] < threshold < convergents[i]:
             m = i
             break
+    else:
+        return None
 
     for s in range(max_s):
         for r in range(max_r):

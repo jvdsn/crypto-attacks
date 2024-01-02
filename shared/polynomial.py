@@ -2,7 +2,6 @@ import logging
 
 from sage.all import ZZ
 from sage.all import Zmod
-from sage.all import factor
 
 from shared.crt import fast_crt
 

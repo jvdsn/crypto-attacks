@@ -1,6 +1,7 @@
 from sage.all import ZZ
 from sage.all import xgcd
 
+
 def attack(n, e1, c1, e2, c2):
     """
     Recovers the plaintext from two ciphertexts, encrypted using the same modulus and different public exponents.

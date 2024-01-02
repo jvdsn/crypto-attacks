@@ -14,7 +14,6 @@ class Strategy(metaclass=ABCMeta):
         """
         Generates the S and M sets.
         :param f: the polynomial
-        :param l: the leading monomial
         :param m: the amount of normal shifts to use
         :return: a tuple containing the S and M sets
         """

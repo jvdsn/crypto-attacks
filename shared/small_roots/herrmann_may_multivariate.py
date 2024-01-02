@@ -21,7 +21,7 @@ def modular_multivariate(f, N, m, t, X, roots_method="groebner"):
     :param f: the polynomial
     :param N: the modulus
     :param m: the the parameter m
-    :param m: the the parameter t
+    :param t: the the parameter t
     :param X: a list of approximate bounds on the roots for each variable
     :param roots_method: the method to use to find roots (default: "groebner")
     :return: a generator generating small roots (tuples) of the polynomial
