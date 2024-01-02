@@ -197,7 +197,7 @@ while True:
 * [x] [Extended Wiener's attack](attacks/rsa/extended_wiener_attack.py) [^rsa_extended_wiener_attack]
 * [x] [Hastad's broadcast attack](attacks/rsa/hastad_attack.py)
 * [x] [Known CRT exponents attack](attacks/rsa/known_crt_exponents.py) [^rsa_known_crt_exponents]
-* [x] [Known MSB CRT exponents attack](attacks/rsa/known_msb_crt_exponents.py) [^rsa_known_msb_crt_exponents]
+* [x] [Partial known CRT exponents attack](attacks/rsa/known_crt_exponents.py) [^rsa_partial_known_crt_exponents]
 * [x] [Known private exponent attack](attacks/rsa/known_d.py)
 * [x] [Low public exponent attack](attacks/rsa/low_exponent.py)
 * [x] [LSB oracle (parity oracle) attack](attacks/rsa/lsb_oracle.py)
@@ -288,7 +288,7 @@ while True:
 [^rsa_desmedt_odlyzko]: Coron J. et al., "Practical Cryptanalysis of ISO 9796-2 and EMV Signatures (Section 3)"
 [^rsa_extended_wiener_attack]: Dujella A., "Continued fractions and RSA with small secret exponent"
 [^rsa_known_crt_exponents]: Campagna M., Sethi A., "Key Recovery Method for CRT Implementation of RSA"
-[^rsa_known_msb_crt_exponents]: May A., Nowakowski J., Sarkar S., "Approximate Divisor Multiples - Factoring with Only a Third of the Secret CRT-Exponents"
+[^rsa_partial_known_crt_exponents]: May A., Nowakowski J., Sarkar S., "Approximate Divisor Multiples - Factoring with Only a Third of the Secret CRT-Exponents"
 [^rsa_manger]: Manger J., "A Chosen Ciphertext Attack on RSA Optimal Asymmetric Encryption Padding (OAEP) as Standardized in PKCS #1 v2.0"
 [^rsa_nitaj_crt_rsa]: Nitaj A., "A new attack on RSA and CRT-RSA"
 [^rsa_non_coprime_exponent]: Shumow D., "Incorrectly Generated RSA Keys: How To Recover Lost Plaintexts"

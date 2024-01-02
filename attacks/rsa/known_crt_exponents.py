@@ -1,7 +1,23 @@
+import logging
+import os
+import sys
+from math import ceil
+from math import gcd
+from math import log
+
+from sage.all import Zmod
 from sage.all import is_prime
+
+path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(os.path.abspath(__file__)))))
+if sys.path[1] != path:
+    sys.path.insert(1, path)
+
+from shared import ceil_div
+from shared.small_roots import howgrave_graham
 
 
 def _get_possible_primes(e, d):
+    logging.debug(f"Looking for possible primes for {e = }, {d = }")
     mul = e * d - 1
     for k in range(3, e):
         if mul % k == 0:
@@ -55,3 +71,90 @@ def attack(e_start, e_end, N=None, dp=None, dq=None, p_bit_length=None, q_bit_le
                         yield q, N // q
 
         return
+
+
+def _factor_msb(N, e, dpM, dp_unknown_lsb, k, m, t):
+    x = Zmod(k * N)["x"].gen()
+    f = x + (e * dpM * 2 ** dp_unknown_lsb + k - 1) * pow(e, -1, k * N)
+    X = 2 ** dp_unknown_lsb
+    logging.info(f"Trying {m = }, {t = }...")
+    for x0, in howgrave_graham.modular_univariate(f, k * N, m, t, X):
+        dp = int(f(x0))
+        p = gcd(dp, N)
+        if N % p == 0:
+            return p, N // p
+
+
+def _factor_lsb(N, e, dpL, dpL_bit_length, dp_unknown_msb, k, m, t):
+    x = Zmod(k * N)["x"].gen()
+    f = x + (e * dpL + k - 1) * pow(2 ** dpL_bit_length * e, -1, k * N)
+    X = 2 ** dp_unknown_msb
+    logging.info(f"Trying {m = }, {t = }...")
+    for x0, in howgrave_graham.modular_univariate(f, k * N, m, t, X):
+        dp = int(f(x0))
+        p = gcd(dp, N)
+        if N % p == 0:
+            return p, N // p
+
+
+def attack_partial(N, e, partial_dp, partial_dq, m=None, t=None, check_bounds=True):
+    """
+    Recovers the prime factors from a modulus if the most or least significant bits of dp and dq are known.
+    More information: Alexander M., Julian N., Santanu S., "Approximate Divisor Multiples - Factoring with Only a Third of the Secret CRT-Exponents"
+    :param N: the modulus
+    :param e: the exponent
+    :param partial_dp: d mod (p - 1) (PartialInteger)
+    :param partial_dq: d mod (q - 1) (PartialInteger)
+    :param m: the parameter m for small roots (default: automatically calculated using beta = 0.5 and epsilon = 0.125)
+    :param t: the parameter t for small roots (default: automatically calculated using beta = 0.5 and epsilon = 0.125)
+    :param check_bounds: perform bounds check (default: True)
+    :return: a tuple containing the prime factors, or None if the factors were not found
+    """
+    alpha = log(e, N)
+    dp_bit_length = partial_dp.bit_length
+    dq_bit_length = partial_dq.bit_length
+    assert dp_bit_length == dq_bit_length, "dp and dq should be of equal bit length."
+
+    beta = 0.5
+    epsilon = 0.125
+    m = ceil(max(beta ** 2 / epsilon, 7 * beta)) if m is None else m
+    t = int((1 / beta - 1) * m) if t is None else t
+
+    dpM, dpM_bit_length = partial_dp.get_known_msb()
+    dqM, dqM_bit_length = partial_dq.get_known_msb()
+    if dpM_bit_length > 0 and dqM_bit_length > 0:
+        # Section 3.1.
+        dp_unknown_lsb = partial_dp.get_unknown_lsb()
+        dq_unknown_lsb = partial_dq.get_unknown_lsb()
+        delta = log(max(2 ** dp_unknown_lsb, 2 ** dq_unknown_lsb), N)
+        assert not check_bounds or delta < min(1 / 4 + alpha, 1 / 2 - 2 * alpha), f"Bounds check failed ({delta} < {min(1 / 4 + alpha, 1 / 2 - 2 * alpha)})."
+        A_ = ceil_div(2 ** (dp_unknown_lsb + dq_unknown_lsb) * e ** 2 * dpM * dqM, N)
+
+        x = Zmod(e)["x"].gen()
+        # First case.
+        f = x ** 2 - (1 - A_ * (N - 1)) * x + A_
+        for k, _ in f.roots():
+            if k == 0:
+                continue
+
+            factors = _factor_msb(N, e, dpM, dp_unknown_lsb, int(k), m, t)
+            if factors:
+                return factors
+            factors = _factor_msb(N, e, dqM, dq_unknown_lsb, int(k), m, t)
+            if factors:
+                return factors
+
+        # Second case.
+        f = x ** 2 + (1 - A_ * (N - 1) + e) * x + A_
+        for k, _ in f.roots():
+            if k == 0:
+                continue
+
+            factors = _factor_msb(N, e, dpM, dp_unknown_lsb, int(k), m, t)
+            if factors:
+                return factors
+            factors = _factor_msb(N, e, dqM, dq_unknown_lsb, int(k), m, t)
+            if factors:
+                return factors
+
+    return None
