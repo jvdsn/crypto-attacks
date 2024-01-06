@@ -23,8 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get install sagemath
-        python -m pip install --upgrade pip
-        pip install pytest
+        sage -pip install pytest
     - name: Test with pytest
       run: |
-        pytest
+        PYTHONPATH="/usr/lib/python3*/dist-packages/sage" pytest
