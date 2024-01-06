@@ -34,4 +34,5 @@ jobs:
         sage -pip list
         pip list --user
         sage -pip list --user
-        $HOME/.sage/local/bin/pytest
+        export DOT_SAGE="$HOME/.sage"
+        PYTHONPATH="$DOT_SAGE/local/lib/python3.10/site-packages" $SAGE_LOCAL/local/bin/pytest
