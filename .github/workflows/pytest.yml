@@ -23,16 +23,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get install sagemath
+        sage -pip install pycryptodome 
         sage -pip install pytest
     - name: Test with pytest
       run: |
-        python -m site
-        sage -python -m site
-        python -m site --user-site
-        sage -python -m site --user-site
-        pip list
-        sage -pip list
-        pip list --user
-        sage -pip list --user
-        export DOT_SAGE="$HOME/.sage"
         PYTHONPATH="$DOT_SAGE/local/lib/python3.10/site-packages" $DOT_SAGE/local/bin/pytest
