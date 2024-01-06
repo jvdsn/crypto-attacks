@@ -26,4 +26,12 @@ jobs:
         sage -pip install pytest
     - name: Test with pytest
       run: |
+        python -m site
+        sage -python -m site
+        python -m site --user-site
+        sage -python -m site --user-site
+        pip list
+        sage -pip list
+        pip list --user
+        sage -pip list --user
         $HOME/.sage/local/bin/pytest
