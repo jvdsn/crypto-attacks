@@ -35,4 +35,4 @@ jobs:
         pip list --user
         sage -pip list --user
         export DOT_SAGE="$HOME/.sage"
-        PYTHONPATH="$DOT_SAGE/local/lib/python3.10/site-packages" $SAGE_LOCAL/local/bin/pytest
+        PYTHONPATH="$DOT_SAGE/local/lib/python3.10/site-packages" $DOT_SAGE/local/bin/pytest
