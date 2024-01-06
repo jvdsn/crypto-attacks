@@ -5,6 +5,7 @@ from random import randrange
 from sage.all import EllipticCurve
 from sage.all import GF
 from sage.all import cyclotomic_polynomial
+from sage.all import factor
 from sage.all import is_prime
 from sage.all import kronecker
 from sage.all import next_prime
@@ -168,10 +169,11 @@ def generate_with_order(m, D=None, c=None):
     :param c: the parameter c to use in the CM method (default: random value)
     :return: a generator generating random elliptic curves
     """
+    factor_4m = factor(4 * m)
 
-    def get_q(m, D):
+    def get_q(D):
         # We can't use qfbcornacchia here, because it does not return all (or any) solutions...
-        for t in set(map(lambda sol: int(sol[0]), pari.qfbsolve(pari.Qfb(1, 0, -D), 4 * m, 1))):
+        for t in set(map(lambda sol: int(sol[0]), pari.qfbsolve(pari.Qfb(1, 0, -D), factor_4m, 1))):
             if is_prime(m + 1 - t):
                 return m + 1 - t
             if is_prime(m + 1 + t):
@@ -183,7 +185,7 @@ def generate_with_order(m, D=None, c=None):
             if not (D % 4 == 0 or D % 4 == 3):
                 continue
 
-            q = get_q(m, -D)
+            q = get_q(-D)
             if q is not None:
                 break
 
@@ -191,7 +193,7 @@ def generate_with_order(m, D=None, c=None):
         D = int(-D)
         logging.info(f"Found appropriate D value = {D}")
     else:
-        q = get_q(m, D)
+        q = get_q(D)
         assert q is not None, "Invalid values for m and D."
 
     yield from generate_with_trace_q(q + 1 - m, q, D, c)
@@ -267,6 +269,7 @@ def generate_mnt(k, h_min=1, h_max=4, D_min=7, D_max=10000, c=None):
             a = l * h + d
             b = 4 * h - d
             f = a ** 2 - b ** 2
+            factor_f = 0 if f == 0 else factor(f)
             for D in range(D_min, D_max + 1):
                 if not (D % 4 == 0 or D % 4 == 3):
                     continue
@@ -275,7 +278,7 @@ def generate_mnt(k, h_min=1, h_max=4, D_min=7, D_max=10000, c=None):
                 if is_square(g):
                     continue
 
-                ys = set(map(lambda sol: int(sol[0]), pari.qfbsolve(pari.Qfb(1, 0, -g), f, 1)))
+                ys = set(map(lambda sol: int(sol[0]), pari.qfbsolve(pari.Qfb(1, 0, -g), factor_f, 1)))
                 for y in ys:
                     if (y - a) % b != 0:
                         continue
