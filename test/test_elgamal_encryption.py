@@ -1,6 +1,5 @@
 import os
 import sys
-from random import getrandbits
 from random import randrange
 from unittest import TestCase
 
@@ -19,31 +18,33 @@ class TestElgamalEncryption(TestCase):
         # Safe prime.
         p = 16902648776703029279
         g = 3
-        d = randrange(1, p)
-        h = pow(g, d, p)
-        l = randrange(1, p)
-        s = pow(h, p, l)
-        c = pow(g, l, p)
-        m1 = getrandbits(p.bit_length())
-        d1 = m1 * s % p
-        m2 = getrandbits(p.bit_length())
-        d2 = m2 * s % p
-        m2_ = nonce_reuse.attack(p, m1, c, d1, c, d2)
-        self.assertIsInstance(m2_, int)
-        self.assertEqual(m2, m2_)
+        for _ in range(100):
+            x = randrange(1, p)
+            h = pow(g, x, p)
+            y = randrange(1, p)
+            s = pow(h, y, p)
+            m = randrange(1, p)
+            c1 = pow(g, y, p)
+            c2 = m * s % p
+            m_ = randrange(1, p)
+            c1_ = pow(g, y, p)
+            c2_ = m_ * s % p
+            m__ = nonce_reuse.attack(p, m, c1, c2, c1_, c2_)
+            self.assertIsInstance(m__, int)
+            self.assertEqual(m_, m__)
 
     def test_unsafe_generator(self):
         # Safe prime.
         p = 16902648776703029279
         # Unsafe generator, generates the entire group.
         g = 7
-        for i in range(100):
+        for _ in range(100):
             x = randrange(1, p)
             h = pow(g, x, p)
             y = randrange(1, p)
             s = pow(h, y, p)
-            c1 = pow(g, y, p)
             m = randrange(1, p)
+            c1 = pow(g, y, p)
             c2 = m * s % p
             k = unsafe_generator.attack(p, h, c1, c2)
             self.assertIsInstance(k, int)
