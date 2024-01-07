@@ -296,6 +296,11 @@ class TestRSA(TestCase):
         self.assertIsInstance(q_, int)
         self.assertEqual(N, p_ * q_)
 
+        p_, q_ = known_crt_exponents.attack_partial(N, e, PartialInteger.lsb_of(dp, 512, 256), PartialInteger.lsb_of(dq, 512, 256), m=12, t=12)
+        self.assertIsInstance(p_, int)
+        self.assertIsInstance(q_, int)
+        self.assertEqual(N, p_ * q_)
+
     def test_known_d(self):
         p = 10999882285407021659159843781080979389814097626452668846482424135627220062700466847567575264657287989126943263999867722090759547565297969535143544253926071
         q = 12894820825544912052042889653649757120734073367261758361676140208842841153775542379620171049124260330205408767340830801133280422958906941622318918402459837

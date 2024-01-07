@@ -13,6 +13,7 @@ if sys.path[1] != path:
     sys.path.insert(1, path)
 
 from shared import ceil_div
+from shared.small_roots import herrmann_may
 from shared.small_roots import howgrave_graham
 
 
@@ -48,7 +49,7 @@ def attack(e_start, e_end, N=None, dp=None, dq=None, p_bit_length=None, q_bit_le
                     if (N is None or p * q == N) and (p_bit_length is None or p.bit_length() == p_bit_length) and (q_bit_length is None or q.bit_length() == q_bit_length):
                         yield p, q
 
-        return
+        return None
 
     if dp is not None:
         for e in range(e_start, e_end, 2):
@@ -59,7 +60,7 @@ def attack(e_start, e_end, N=None, dp=None, dq=None, p_bit_length=None, q_bit_le
                     elif N % p == 0:
                         yield p, N // p
 
-        return
+        return None
 
     if dq is not None:
         for e in range(e_start, e_end, 2):
@@ -70,12 +71,14 @@ def attack(e_start, e_end, N=None, dp=None, dq=None, p_bit_length=None, q_bit_le
                     elif N % q == 0:
                         yield q, N // q
 
-        return
+        return None
 
 
 def _factor_msb(N, e, dpM, dp_unknown_lsb, k, m, t):
+    logging.info(f"Trying {k = }")
+    g = gcd(e, k * N)
     x = Zmod(k * N)["x"].gen()
-    f = x + (e * dpM * 2 ** dp_unknown_lsb + k - 1) * pow(e, -1, k * N)
+    f = x + (e * dpM * 2 ** dp_unknown_lsb + k - 1) * pow(e, -1, k // g * N)
     X = 2 ** dp_unknown_lsb
     logging.info(f"Trying {m = }, {t = }...")
     for x0, in howgrave_graham.modular_univariate(f, k * N, m, t, X):
@@ -86,8 +89,10 @@ def _factor_msb(N, e, dpM, dp_unknown_lsb, k, m, t):
 
 
 def _factor_lsb(N, e, dpL, dpL_bit_length, dp_unknown_msb, k, m, t):
+    logging.info(f"Trying {k = }")
+    g = gcd(2 ** dpL_bit_length * e, k * N)
     x = Zmod(k * N)["x"].gen()
-    f = x + (e * dpL + k - 1) * pow(2 ** dpL_bit_length * e, -1, k * N)
+    f = x + (e * dpL + k - 1) * pow(2 ** dpL_bit_length * e, -1, k // g * N)
     X = 2 ** dp_unknown_msb
     logging.info(f"Trying {m = }, {t = }...")
     for x0, in howgrave_graham.modular_univariate(f, k * N, m, t, X):
@@ -128,9 +133,10 @@ def attack_partial(N, e, partial_dp, partial_dq, m=None, t=None, check_bounds=Tr
         dq_unknown_lsb = partial_dq.get_unknown_lsb()
         delta = log(max(2 ** dp_unknown_lsb, 2 ** dq_unknown_lsb), N)
         assert not check_bounds or delta < min(1 / 4 + alpha, 1 / 2 - 2 * alpha), f"Bounds check failed ({delta} < {min(1 / 4 + alpha, 1 / 2 - 2 * alpha)})."
-        A_ = ceil_div(2 ** (dp_unknown_lsb + dq_unknown_lsb) * e ** 2 * dpM * dqM, N)
 
         x = Zmod(e)["x"].gen()
+        A_ = ceil_div(2 ** (dp_unknown_lsb + dq_unknown_lsb) * e ** 2 * dpM * dqM, N)
+
         # First case.
         f = x ** 2 - (1 - A_ * (N - 1)) * x + A_
         for k, _ in f.roots():
@@ -154,6 +160,33 @@ def attack_partial(N, e, partial_dp, partial_dq, m=None, t=None, check_bounds=Tr
             if factors:
                 return factors
             factors = _factor_msb(N, e, dqM, dq_unknown_lsb, int(k), m, t)
+            if factors:
+                return factors
+
+    dpL, dpL_bit_length = partial_dp.get_known_lsb()
+    dqL, dqL_bit_length = partial_dq.get_known_lsb()
+    if dpL_bit_length > 0 and dqL_bit_length > 0:
+        # Section 3.2.
+        dp_unknown_msb = partial_dp.get_unknown_msb()
+        dq_unknown_msb = partial_dq.get_unknown_msb()
+        assert dpL_bit_length == dqL_bit_length, "dp and dq LSB should be of equal bit length."
+        delta = log(max(2 ** dp_unknown_msb, 2 ** dq_unknown_msb), N)
+        assert not check_bounds or delta < min(1 / 4 + alpha, 1 / 2 - 2 * alpha), f"Bounds check failed ({delta} < {min(1 / 4 + alpha, 1 / 2 - 2 * alpha)})."
+
+        i = dpL_bit_length
+        pr = Zmod(2 ** i * e)["x, y"]
+        x, y = pr.gens()
+        A = -e ** 2 * dpL * dqL + e * dpL + e * dqL - 1
+        f = (N - 1) * x * y - (e * dqL - 1) * x - (e * dpL - 1) * y + A
+        g = f * pow((N - 1) // gcd(N - 1, e * 2 ** i), -1, 2 ** i * e)
+        for k, l in herrmann_may.modular_bivariate(g, 2 ** i * e, 2, 2, e, e):
+            if k == 0 or l == 0:
+                continue
+
+            factors = _factor_lsb(N, e, dpL, dpL_bit_length, dp_unknown_msb, int(k), m, t)
+            if factors:
+                return factors
+            factors = _factor_lsb(N, e, dqL, dqL_bit_length, dq_unknown_msb, int(l), m, t)
             if factors:
                 return factors
 
