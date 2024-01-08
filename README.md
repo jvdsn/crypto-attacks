@@ -42,8 +42,7 @@ assert p * q == N
 print(f"Found {p = } and {q = }")
 ```
 
-Then you can simply execute the file using Sage. It does not matter where you execute it from, the Python path is automagically set (
-you can also call the attacks from other Python files, but then you'll have to fix the Python path yourself):
+Then you can simply execute the file using Sage. It does not matter where you execute it from, the Python path is automagically set (you can also call the attacks from other Python files, but then you'll have to fix the Python path yourself):
 ```commandline
 [crypto-attacks]$ sage -python attacks/rsa/boneh_durfee.py
 INFO:root:Trying m = 3, t = 1...
