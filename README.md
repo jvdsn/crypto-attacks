@@ -143,6 +143,7 @@ while True:
 * [x] [Forbidden attack](attacks/gcm/forbidden_attack.py) [^gcm_forbidden_attack]
 
 ### Hidden Number Problem
+With applications to partial (EC)DSA nonce exposure.
 * [x] [Extended hidden number problem](attacks/hnp/extended_hnp.py) [^hnp_extended_hnp]
 * [ ] Fourier analysis attack
 * [x] [Lattice-based attack](attacks/hnp/lattice_attack.py)
