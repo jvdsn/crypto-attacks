@@ -8,12 +8,14 @@ def hensel_lift_linear(f, p, k, roots):
     :param f: the polynomial
     :param p: the prime
     :param k: the power
-    :param roots: the roots of f mod p^k
-    :return: a generator generating the roots of f mod p^k
+    :param roots: a generator generating the roots of f mod p^k
+    :return: a generator generating the roots of f mod p^(k + 1)
     """
     pk = p ** k
     pk1 = p ** (k + 1)
     for root in roots:
+        # We're really not using Hensel's lemma correctly here...
+        # Maybe this will be fixed later
         for i in range(p):
             new_root = root + i * pk
             if f(new_root) % pk1 == 0:
@@ -26,22 +28,18 @@ def hensel_roots(f, p, k):
     :param f: the polynomial
     :param p: the prime
     :param k: the power
-    :return: a list containing the roots of f mod p^k, or an empty list if no roots were found
+    :return: a generator generating the roots of f mod p^k
     """
     f_ = f.change_ring(Zmod(p))
     if f_ == 0:
-        roots = list(range(p))
+        roots = range(p)
     elif f_.is_constant():
-        return []
+        return
     else:
-        roots = []
-        for root in f_.roots(multiplicities=False):
-            roots.append(int(root))
+        roots = map(int, f_.roots(multiplicities=False))
 
     f = f.change_ring(ZZ)
     for i in range(1, k):
-        roots = list(hensel_lift_linear(f, p, i, roots))
-        if len(roots) == 0:
-            return []
+        roots = hensel_lift_linear(f, p, i, roots)
 
     return roots
