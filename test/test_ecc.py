@@ -235,10 +235,35 @@ class TestECC(TestCase):
         self.assertEqual(l, l_)
 
     def test_smart_attack(self):
-        E = EllipticCurve(GF(23304725718649417969), [8820341459377516260, 5880227639585010840])
+        F = GF(23304725718649417969)
+        E = EllipticCurve(F, [8820341459377516260, 5880227639585010840])
         G = E.gen(0)
-        n = int(G.order())
-        l = randrange(1, n)
+        l = randrange(1, G.order())
+        l_ = smart_attack.attack(G, l * G)
+        self.assertIsInstance(l_, int)
+        self.assertEqual(l, l_)
+
+        F = GF(11 ** 2)
+        g = F.gen()
+        E = EllipticCurve(F, [g, 8 * g])
+        G = E.gen(0)
+        for l in range(1, G.order()):
+            l_ = smart_attack.attack(G, l * G)
+            self.assertIsInstance(l_, int)
+            self.assertEqual(l, l_)
+
+        F = GF(13 ** 3)
+        g = F.gen()
+        E = EllipticCurve(F, [g ** 2, g ** 2 + 9 * g + 8])
+        G = E.gen(0)
+        for l in range(1, G.order()):
+            l_ = smart_attack.attack(G, l * G)
+
+        F = GF(17 ** 4)
+        g = F.gen()
+        E = EllipticCurve(F, [13 * g ** 3 + 5 * g ** 2 + 12 * g + 9, g ** 3 + g ** 2 + 9 * g + 11])
+        G = E.gen(0)
+        l = randrange(1, G.order())
         l_ = smart_attack.attack(G, l * G)
         self.assertIsInstance(l_, int)
         self.assertEqual(l, l_)

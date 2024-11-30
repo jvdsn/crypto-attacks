@@ -114,7 +114,7 @@ while True:
 * [x] [MOV attack](attacks/ecc/mov_attack.py) [^ecc_mov_attack]
 * [x] [Parameter recovery](attacks/ecc/parameter_recovery.py)
 * [x] [Singular curve attack](attacks/ecc/singular_curve.py)
-* [x] [Smart's attack](attacks/ecc/smart_attack.py) [^ecc_smart_attack]
+* [x] [Smart's attack (with curves over extension fields)](attacks/ecc/smart_attack.py) [^ecc_smart_attack1] [^ecc_smart_attack2]
 
 ### ElGamal Encryption
 * [x] [Nonce reuse attack](attacks/elgamal_encryption/nonce_reuse.py)
@@ -256,7 +256,8 @@ With applications to partial (EC)DSA nonce exposure.
 
 [^ecc_frey_ruck_attack]: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 3)
 [^ecc_mov_attack]: Harasawa R. et al., "Comparing the MOV and FR Reductions in Elliptic Curve Cryptography" (Section 2)
-[^ecc_smart_attack]: Smart N. P., "The discrete logarithm problem on elliptic curves of trace one"
+[^ecc_smart_attack1]: Smart N. P., "The Discrete Logarithm Problem on Elliptic Curves of Trace One"
+[^ecc_smart_attack2]: Hofman S. J., "The Discrete Logarithm Problem on Anomalous Elliptic Curves"
 
 [^factorization_branch_and_prune]: Heninger N., Shacham H., "Reconstructing RSA Private Keys from Random Key Bits"
 [^factorization_complex_multiplication]: Sedlacek V. et al., "I want to break square-free: The 4p - 1 factorization method and its RSA backdoor viability"
