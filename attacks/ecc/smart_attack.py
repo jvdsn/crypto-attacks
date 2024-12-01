@@ -6,7 +6,7 @@ from sage.all import ZZ
 
 # Convert a field element to a p-adic number.
 def _gf_to_qq(n, qq, x):
-    return ZZ(x) if n == 1 else qq(list(map(int, x.list())))
+    return ZZ(x) if n == 1 else qq(list(map(int, tuple(x))))
 
 
 # Lift a point to the p-adic numbers.
