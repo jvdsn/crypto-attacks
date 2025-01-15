@@ -4,7 +4,7 @@ from math import log10
 def _hamming_distance(a, b):
     distance = 0
     for x, y in zip(a, b):
-        distance += (x ^ y).bit_count()
+        distance += bin(x ^ y).count("1")
 
     return distance
 
