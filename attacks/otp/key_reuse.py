@@ -1,4 +1,5 @@
 from math import log10
+import string
 
 
 def _hamming_distance(a, b):
@@ -43,10 +44,7 @@ def _score(p, char_frequencies, char_floor):
     score = 0
     for b in p:
         c = chr(b)
-        if not c.isascii():
-            return None
-
-        if not (c.isprintable() or c.isspace()):
+        if not (c in string.printable or c in string.whitespace):
             return None
 
         c = c.lower()
