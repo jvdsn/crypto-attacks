@@ -3,14 +3,32 @@ from sage.all import GF
 x = GF(2)["x"].gen()
 gf2e = GF(2 ** 128, name="y", modulus=x ** 128 + x ** 7 + x ** 2 + x + 1)
 
+MASK128 = (1 << 128) - 1
+
+# Prefer the new API when present
+_HAS_NEW_API = hasattr(gf2e, "from_integer") and hasattr(gf2e(0), "to_integer")
+
+def _reverse_bits_128(n):
+    n &= MASK128
+    rev = 0
+    for _ in range(128):
+        rev = (rev << 1) | (n & 1)
+        n >>= 1
+    return rev
+
 
 # Converts an integer to a gf2e element, little endian.
 def _to_gf2e(n):
+    n = int(n) & MASK128
+    if _HAS_NEW_API:
+        return gf2e.from_integer(_reverse_bits_128(n))
     return gf2e([(n >> i) & 1 for i in range(127, -1, -1)])
 
 
 # Converts a gf2e element to an integer, little endian.
 def _from_gf2e(p):
+    if _HAS_NEW_API:
+        return _reverse_bits_128(int(p.to_integer()) & MASK128)
     n = p.integer_representation()
     ans = 0
     for i in range(128):
